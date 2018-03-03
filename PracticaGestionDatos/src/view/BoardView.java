@@ -112,6 +112,7 @@ public class BoardView extends JPanel implements Observer {
      * @return Array de dos posiciones: posicion actual de la pieza blanca y posicion
      * actual de la pieza que tiene que ser movida.
      */
+
     public int[] movePiece(int posX,int posY){
         int x = posX / anchoImagen;
         int y = posY / altoImagen;

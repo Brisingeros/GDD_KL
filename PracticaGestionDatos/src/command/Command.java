@@ -6,7 +6,10 @@ package command;
  * @author Miguel Ángel
  * @version 1.0
  */
+
 public interface Command {
+    
     public void undoCommand();
     public void redoCommand();
+
 }
