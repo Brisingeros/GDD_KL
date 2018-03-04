@@ -1,3 +1,4 @@
+import command.DisorderCommand;
 import control.AbstractController;
 import control.Controlador;
 import model.Modelo;
@@ -48,8 +49,10 @@ public class PuzzleApp {
         // Obtenemos la vista del tablero
         BoardView b = PuzzleGUI.getInstance().getBoardView();
         // Añadimos un nuevo observador al controlador
-        c.addObserver(m);
+        //c.addObserver(m);
+        DisorderCommand disorder = new DisorderCommand(b);
         c.addObserver(b);
+        c.addDisorder(disorder);
         // Visualizamos la aplicación.
         PuzzleGUI.getInstance().setVisible(true);
     }

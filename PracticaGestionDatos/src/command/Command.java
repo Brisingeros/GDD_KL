@@ -9,6 +9,7 @@ package command;
 
 public interface Command {
     
+    public void execute();
     public void undoCommand();
     public void redoCommand();
 

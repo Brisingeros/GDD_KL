@@ -1,6 +1,7 @@
 package control;
 
-import command.Commands;
+import command.Command;
+import command.DisorderCommand;
 import observer.Observable;
 import observer.Observer;
 
@@ -15,11 +16,10 @@ import java.util.ArrayList;
  */
 public abstract class AbstractController extends MouseAdapter implements ActionListener, Observable {
     protected ArrayList<Observer> observerList;
-    protected ArrayList<Commands> commandList;
+    protected DisorderCommand disorder;
 
     public AbstractController(){
         observerList = new ArrayList<Observer>();
-        commandList = new ArrayList<Commands>();
     }
 
     public void addObserver(Observer observer){
@@ -34,18 +34,8 @@ public abstract class AbstractController extends MouseAdapter implements ActionL
         }
     }
     
-    public void addCommand(Commands command){
-
-        if(command != null)
-            commandList.add(command);
-    
-    }
-    
-    public void removeCommand(Commands command){
-    
-        if(command != null)
-            commandList.remove(command);
-    
+    public void addDisorder(Command command){
+        disorder = (DisorderCommand) command;
     }
 
 }

@@ -19,10 +19,12 @@ public class Controlador extends AbstractController{
         switch (e.getActionCommand()){
             case "clutter":
                 System.out.println("Desordenar");
+                disorder.execute();
             break;
             
             case "solve":
                 System.out.println("Solucionar");
+                disorder.undoCommand();
             break;
             
             default:
@@ -47,6 +49,7 @@ public class Controlador extends AbstractController{
             if(resul != null){
                 
                 notifyObservers(resul[0], resul[1]);
+                disorder.addMov(resul);
             }
         }
     }
