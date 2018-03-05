@@ -1,6 +1,7 @@
 import command.DisorderCommand;
 import control.AbstractController;
 import control.Controlador;
+import java.io.File;
 import model.Modelo;
 import view.BoardView;
 import view.PuzzleGUI;
@@ -27,6 +28,8 @@ import static view.PuzzleGUI.controller;
  * @Author Miguel Ángel
  * @version 1.0
  */
+
+
 public class PuzzleApp {
 
     public static void main(String args[]){
@@ -37,6 +40,7 @@ public class PuzzleApp {
         String fileSeparator = System.getProperty("file.separator");
         String imagePath=System.getProperty("user.dir")+fileSeparator+"resources"+fileSeparator;
 
+        
         String[] imageList={imagePath+"blank.gif",imagePath+"one.gif",imagePath+"two.gif",imagePath+"three.gif",imagePath+ "four.gif",
                 imagePath+"five.gif",imagePath+"six.gif",imagePath+"seven.gif",imagePath+"eight.gif"};
         

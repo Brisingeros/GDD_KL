@@ -6,7 +6,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import javax.imageio.ImageIO;
 
 /**
  * Clase que representa la vista del tablero
@@ -14,6 +16,7 @@ import java.util.ArrayList;
  * @version 1.0
  */
 public class BoardView extends JPanel implements Observer {
+    
     public static final int imageWidth= 96;
     public static final int imageHeight= 96;
     
@@ -48,21 +51,72 @@ public class BoardView extends JPanel implements Observer {
     }
 
     public BoardView(int rowNum, int columnNum, int imageSize, File imageFile){
+        
         super();
+        
     }
 
     //redimensionamos la imagen para 96*96
-    private BufferedImage resizeImage(File fileImage){
-        BufferedImage resizedImage = null;
+    private BufferedImage resizeImage(File fileImage) throws IOException{
+        
+        BufferedImage   resizedImage = null;
+        
+        try{
 
-        return(resizedImage);
+            resizedImage = ImageIO.read(new File(fileImage.getPath()));
+            resizedImage = new BufferedImage(imageWidth,imageHeight,resizedImage.getType());
+            
+        }catch(Exception e){
+        
+            System.out.println("No se puede cargar el archivo: " + e.getMessage());
+        
+        }    
+
+        return resizedImage;
+        
     }
 
     //dividimos la imagen en el número
-    private BufferedImage[] splitImage(BufferedImage image){
+    private BufferedImage[] splitImage(BufferedImage image) throws IOException{
         //Divisor de imágenes
-        BufferedImage images[] = null;
+        
+        //COMO ACTUALIZAMOS LA IMAGEN UNA VEZ CARGADA. ACCEDER A BOARDVIEW Y A SUS METODOS PRIVADOS
+        //NECESITAMOS DEVOLVER UN ARRAY DE PATHS Y DEVOLVEMOS ARRAY DE BUFFERED IMAGES
+        int cuadrados = this.filas * this.columnas;
+
+        int anchoCuadrado = image.getWidth() / this.columnas; // determines the chunk width and height
+        int altoCuadrado = image.getHeight() / this.filas;
+        int count = 0;
+        BufferedImage images[] = new BufferedImage[cuadrados]; //Image array to hold image chunks
+        for (int x = 0; x < this.filas; x++) {
+            for (int y = 0; y < this.columnas; y++) {
+                //Initialize the image array with image chunks
+                images[count] = new BufferedImage(anchoCuadrado, altoCuadrado, image.getType());
+                
+            }
+     
+        }
+        
+        System.out.println("Splitting done");
+        
+        try{
+        
+            for (int i = 0; i < images.length; i++) {
+            
+                ImageIO.write(images[i], "jpg", new File("img" + i + ".jpg"));
+            
+            }
+            
+            System.out.println("Mini images created");
+        
+        }catch(Exception e){
+        
+            System.out.println("Fallo al dividir: " + e.getMessage());        
+        
+        }
+        
         return(images);
+        
     }
 
     public void update(int blankPos, int movedPos){

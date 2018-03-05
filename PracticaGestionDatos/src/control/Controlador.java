@@ -17,6 +17,10 @@ public class Controlador extends AbstractController{
         //System.out.println(e.getActionCommand());
         
         switch (e.getActionCommand()){
+            case "load": 
+                System.out.println("Cargar");
+                disorder.cargarImagen();
+            break;
             case "clutter":
                 System.out.println("Desordenar");
                 disorder.execute();
@@ -34,10 +38,13 @@ public class Controlador extends AbstractController{
 
     @Override
     public void notifyObservers(int blankPos, int movedPos) {
-        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+
         for(Observer o:observerList){
+            
             o.update(blankPos, movedPos);
+            
         }
+        
     }
     
     public void mouseClicked(MouseEvent e) {
