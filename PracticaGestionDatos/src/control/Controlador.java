@@ -2,15 +2,17 @@ package control;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
+import java.util.Random;
+import java.util.Stack;
 import observer.Observer;
 import view.BoardView;
 import view.PuzzleGUI;
 
-/**
- *
- * @author Brisin
- */
+
 public class Controlador extends AbstractController{
+    
+    public Stack<int[]> movs = new Stack();
+    public Random aleatorio = new Random(System.currentTimeMillis());
     
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -19,16 +21,18 @@ public class Controlador extends AbstractController{
         switch (e.getActionCommand()){
             case "load": 
                 System.out.println("Cargar");
-                disorder.cargarImagen();
+                //disorder.cargarImagen();
             break;
             case "clutter":
                 System.out.println("Desordenar");
-                disorder.execute();
+                //disorder.execute();
+                desordenar();
             break;
             
             case "solve":
                 System.out.println("Solucionar");
-                disorder.undoCommand();
+                //disorder.undoCommand();
+                ordenar();
             break;
             
             default:
@@ -40,9 +44,7 @@ public class Controlador extends AbstractController{
     public void notifyObservers(int blankPos, int movedPos) {
 
         for(Observer o:observerList){
-            
             o.update(blankPos, movedPos);
-            
         }
         
     }
@@ -54,10 +56,28 @@ public class Controlador extends AbstractController{
             
             int[] resul = tablero.movePiece(e.getX(), e.getY());
             if(resul != null){
-                
+                movs.push(resul);
                 notifyObservers(resul[0], resul[1]);
-                disorder.addMov(resul);
             }
+        }
+    }
+    
+    public void desordenar(){
+        BoardView tablero = PuzzleGUI.getInstance().getBoardView();
+        
+        for(int i = 0; i < 99; i++){
+            int[] resul = tablero.movePiece(aleatorio.nextInt(97), aleatorio.nextInt(97));
+            if(resul != null){
+                movs.push(resul);
+                notifyObservers(resul[0], resul[1]);
+            }
+        }
+    }
+    
+    public void ordenar(){
+        while(!movs.empty()){
+            int[] movi = movs.pop();
+            notifyObservers(movi[1], movi[0]);
         }
     }
     

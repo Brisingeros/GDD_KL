@@ -16,7 +16,6 @@ import java.util.ArrayList;
  */
 public abstract class AbstractController extends MouseAdapter implements ActionListener, Observable {
     protected ArrayList<Observer> observerList;
-    protected DisorderCommand disorder;
 
     public AbstractController(){
         observerList = new ArrayList<Observer>();
@@ -32,10 +31,6 @@ public abstract class AbstractController extends MouseAdapter implements ActionL
         if(observer!=null){
             observerList.remove(observer);
         }
-    }
-    
-    public void addDisorder(Command command){
-        disorder = (DisorderCommand) command;
     }
 
 }

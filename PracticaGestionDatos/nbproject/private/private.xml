@@ -5,10 +5,13 @@
         <group>
             <file>file:/D:/Git/GDD/GDD_KL/PracticaGestionDatos/src/control/Controlador.java</file>
             <file>file:/D:/Git/GDD/GDD_KL/PracticaGestionDatos/src/PuzzleApp.java</file>
+            <file>file:/D:/Git/GDD/GDD_KL/PracticaGestionDatos/src/model/AbstractModel.java</file>
             <file>file:/D:/Git/GDD/GDD_KL/PracticaGestionDatos/src/view/PuzzleGUI.java</file>
+            <file>file:/D:/Git/GDD/GDD_KL/PracticaGestionDatos/src/command/MovCommand.java</file>
+            <file>file:/D:/Git/GDD/GDD_KL/PracticaGestionDatos/src/view/PieceView.java</file>
             <file>file:/D:/Git/GDD/GDD_KL/PracticaGestionDatos/src/view/BoardView.java</file>
-            <file>file:/D:/Git/GDD/GDD_KL/PracticaGestionDatos/src/model/Modelo.java</file>
             <file>file:/D:/Git/GDD/GDD_KL/PracticaGestionDatos/src/command/Command.java</file>
+            <file>file:/D:/Git/GDD/GDD_KL/PracticaGestionDatos/src/model/Modelo.java</file>
             <file>file:/D:/Git/GDD/GDD_KL/PracticaGestionDatos/src/command/DisorderCommand.java</file>
             <file>file:/D:/Git/GDD/GDD_KL/PracticaGestionDatos/src/control/AbstractController.java</file>
         </group>

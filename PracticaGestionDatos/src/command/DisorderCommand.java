@@ -39,7 +39,6 @@ public class DisorderCommand implements Command {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    @Override
     public void execute() {
         for(int i = 0; i < 99; i++){
             int[] resul = tablero.movePiece(aleatorio.nextInt(97), aleatorio.nextInt(97));

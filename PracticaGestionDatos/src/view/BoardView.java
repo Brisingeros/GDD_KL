@@ -19,16 +19,15 @@ public class BoardView extends JPanel implements Observer {
     
     public static final int imageWidth= 96;
     public static final int imageHeight= 96;
+    private ArrayList<PieceView> iconArray = null;
     
+    //Nuevas variables
     public int anchoImagen;
     public int altoImagen;
     
     public int columnas;
     public int filas;
-    
-    
-    private ArrayList<PieceView> iconArray = null;
-    
+
     private int piezaBlanca = 0;
 
     public BoardView(int rowNum, int columnNum,int imageSize, String[] imageList){
