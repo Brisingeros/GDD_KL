@@ -1,9 +1,14 @@
 package control;
 
+import command.DisorderCommand;
+import command.LoadCommand;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
 import java.util.Random;
 import java.util.Stack;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import observer.Observer;
 import view.BoardView;
 import view.PuzzleGUI;
@@ -14,14 +19,16 @@ public class Controlador extends AbstractController{
     public Stack<int[]> movs = new Stack();
     public Random aleatorio = new Random(System.currentTimeMillis());
     
+    
     @Override
     public void actionPerformed(ActionEvent e) {
         //System.out.println(e.getActionCommand());
         
         switch (e.getActionCommand()){
             case "load": 
+                LoadCommand loader = new LoadCommand();
                 System.out.println("Cargar");
-                //disorder.cargarImagen();
+                loader.redoCommand();
             break;
             case "clutter":
                 System.out.println("Desordenar");

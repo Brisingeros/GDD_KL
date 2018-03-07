@@ -47,31 +47,62 @@ public class BoardView extends JPanel implements Observer {
         anchoImagen = iconArray.get(0).getIconWidth();
         altoImagen = iconArray.get(0).getIconHeight();
         
+        this.repaint();
     }
 
-    public BoardView(int rowNum, int columnNum, int imageSize, File imageFile){
+    public BoardView(int rowNum, int columnNum, int imageSize, File imageFile) throws IOException{
         
         super();
+        iconArray = new ArrayList<>();
         
+        filas = rowNum;
+        columnas = columnNum;
+        
+        try{
+            BufferedImage img = this.resizeImage(imageFile);
+            BufferedImage[] imagenes = this.splitImage(img);
+
+            for(int i = 0; i < rowNum; i++){
+                for(int j = 0; j < columnNum; j++){
+                    iconArray.add(new PieceView(i*columnNum + j, i, j, imageSize, imagenes[i*columnNum + j]));
+                } 
+            } 
+
+            anchoImagen = iconArray.get(0).getIconWidth();
+            altoImagen = iconArray.get(0).getIconHeight();
+        
+        }catch(IOException e){
+        
+            System.out.println("No se pudo establecer boardview: " + e.getMessage());
+        
+        }
     }
 
     //redimensionamos la imagen para 96*96
     private BufferedImage resizeImage(File fileImage) throws IOException{
         
-        BufferedImage   resizedImage = null;
-        
+        BufferedImage resizedImage = null;
+        BufferedImage bufim = null;
         try{
 
             resizedImage = ImageIO.read(new File(fileImage.getPath()));
-            resizedImage = new BufferedImage(imageWidth,imageHeight,resizedImage.getType());
+            //resizedImage = new BufferedImage(imageWidth,imageHeight,resizedImage.getType());
             
-        }catch(Exception e){
+            bufim = new BufferedImage(imageWidth,imageHeight,resizedImage.getType());
+            Graphics2D g = bufim.createGraphics();
+            g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+            g.drawImage(resizedImage, 0, 0, imageWidth, imageHeight, 0, 0, resizedImage.getWidth(), resizedImage.getHeight(), null);
+            g.dispose();
+        
+            System.out.println("Imagen redimensionada");
+            
+        }catch(IOException e){
         
             System.out.println("No se puede cargar el archivo: " + e.getMessage());
         
         }    
 
-        return resizedImage;
+        return bufim;
         
     }
 
@@ -91,24 +122,27 @@ public class BoardView extends JPanel implements Observer {
             for (int y = 0; y < this.columnas; y++) {
                 //Initialize the image array with image chunks
                 images[count] = new BufferedImage(anchoCuadrado, altoCuadrado, image.getType());
-                
+                // draws the image chunk
+                Graphics2D gr = images[count++].createGraphics();
+                gr.drawImage(image, 0, 0, anchoCuadrado, altoCuadrado, anchoCuadrado * y, altoCuadrado * x, anchoCuadrado * y + anchoCuadrado, altoCuadrado * x + altoCuadrado, null);
+                gr.dispose();
             }
      
         }
-        
+
         System.out.println("Splitting done");
         
         try{
         
             for (int i = 0; i < images.length; i++) {
             
-                ImageIO.write(images[i], "jpg", new File("img" + i + ".jpg"));
+                ImageIO.write(images[i], "jpg", new File("resources/img" + i + ".jpg"));
             
             }
             
             System.out.println("Mini images created");
         
-        }catch(Exception e){
+        }catch(IOException e){
         
             System.out.println("Fallo al dividir: " + e.getMessage());        
         

@@ -5,6 +5,8 @@ import control.AbstractController;
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
+import java.io.IOException;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  * Clase que representa la GUI principal.
@@ -34,7 +36,7 @@ public class PuzzleGUI extends JFrame{
      */
     private PuzzleGUI(){
         super("GMD PuzzleGUI");
-        boardView = new BoardView(rowNum,columnNum,imageSize,imageList);
+        //boardView = new BoardView(rowNum,columnNum,imageSize,imageList);
         boardView.addMouseListener(controller);
         this.getContentPane().setLayout(new BorderLayout());
         this.setJMenuBar(createMenuBar());
@@ -118,8 +120,32 @@ public class PuzzleGUI extends JFrame{
     }
 
     public File showFileSelector(){
-        File selectedFile = null;
-        return(selectedFile);
+        
+        File imagenSeleccionada = null;
+        //Creamos un nuevo cuadro de diálogo para seleccionar imagen
+        JFileChooser selector=new JFileChooser();
+        //Le damos un título
+        selector.setDialogTitle("Seleccione una imagen");
+        //Filtramos los tipos de archivos
+        FileNameExtensionFilter filtroImagen = new FileNameExtensionFilter("JPG & GIF & BMP & PNG", "jpg", "gif", "bmp","png");
+        selector.setFileFilter(filtroImagen);
+        //Abrimos el cuadro de diálog
+        int flag=selector.showOpenDialog(null);
+        //Comprobamos que pulse en aceptar
+        if(flag==JFileChooser.APPROVE_OPTION){
+            
+            //Devuelve el fichero seleccionado
+            imagenSeleccionada=selector.getSelectedFile();
+            System.out.println("Imagen cargada");
+            //Asignamos a la variable bmp la imagen leida
+                  
+        }else{
+        
+            System.out.println("Selección cancelada por usuario");
+        
+        }
+        
+        return imagenSeleccionada;
     }
 
     public BoardView getBoardView(){
@@ -127,8 +153,10 @@ public class PuzzleGUI extends JFrame{
     }
 
     //Método para actualizar la imagen del tablero
-    public void updateBoard(File imageFile){
+    public void updateBoard(File imageFile) throws IOException{
 
+        this.boardView = new BoardView(this.boardView.filas,this.boardView.columnas,imageSize, imageFile);
+        
     }
 
 

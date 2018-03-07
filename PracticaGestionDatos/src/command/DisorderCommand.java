@@ -6,11 +6,13 @@
 package command;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Random;
 import java.util.Stack;
 import view.BoardView;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import view.PuzzleGUI;
 
 /**
  *
@@ -57,39 +59,9 @@ public class DisorderCommand implements Command {
         movs.push(movi);
     }
     
-    public File cargarImagen(){
+    public void cargarImagen() throws IOException{
     
-        File imagenSeleccionada = null;
-        //Creamos un nuevo cuadro de diálogo para seleccionar imagen
-        JFileChooser selector=new JFileChooser();
-        //Le damos un título
-        selector.setDialogTitle("Seleccione una imagen");
-        //Filtramos los tipos de archivos
-        FileNameExtensionFilter filtroImagen = new FileNameExtensionFilter("JPG & GIF & BMP", "jpg", "gif", "bmp");
-        selector.setFileFilter(filtroImagen);
-        //Abrimos el cuadro de diálog
-        int flag=selector.showOpenDialog(null);
-        //Comprobamos que pulse en aceptar
-        if(flag==JFileChooser.APPROVE_OPTION){
-            
-            try {
-                //Devuelve el fichero seleccionado
-                imagenSeleccionada=selector.getSelectedFile();
-                System.out.println("Imagen cargada");
-                //Asignamos a la variable bmp la imagen leida
+        PuzzleGUI.getInstance().updateBoard(PuzzleGUI.getInstance().showFileSelector());
 
-            } catch (Exception e) {
-                
-                System.out.println("No se cargó la imagen: " + e.getMessage());
-            }
-                  
-        }else{
-        
-            System.out.println("Selección cancelada por usuario");
-        
-        }
-
-        return imagenSeleccionada;
-    
     }
 }
