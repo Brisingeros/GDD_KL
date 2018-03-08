@@ -53,10 +53,8 @@ public class PuzzleApp {
         // Obtenemos la vista del tablero
         BoardView v = PuzzleGUI.getInstance().getBoardView();
         // Añadimos un nuevo observador al controlador
-        //DisorderCommand disorder = new DisorderCommand(b);
         c.addObserver(m);
         c.addObserver(v);
-        //c.addDisorder(disorder);
         // Visualizamos la aplicación.
         PuzzleGUI.getInstance().setVisible(true);
     }

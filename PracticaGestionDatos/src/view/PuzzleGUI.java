@@ -36,7 +36,7 @@ public class PuzzleGUI extends JFrame{
      */
     private PuzzleGUI(){
         super("GMD PuzzleGUI");
-        //boardView = new BoardView(rowNum,columnNum,imageSize,imageList);
+        boardView = new BoardView(rowNum,columnNum,imageSize,imageList);
         boardView.addMouseListener(controller);
         this.getContentPane().setLayout(new BorderLayout());
         this.setJMenuBar(createMenuBar());
@@ -44,7 +44,7 @@ public class PuzzleGUI extends JFrame{
         this.getContentPane().add(createSouthPanel(), BorderLayout.SOUTH);
         this.setResizable(false);
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        this.setSize(250, 250);
+        this.setSize(1770, 1000);
         this.setLocation(centerFrame());
     }
 
@@ -73,13 +73,27 @@ public class PuzzleGUI extends JFrame{
         clutterButton.setActionCommand("clutter");
         JButton solveButton = new JButton("Resolver");
         solveButton.setActionCommand("solve");
+        
+        //Nuevos Botones
+        JButton deshacerButton = new JButton("Deshacer");
+        deshacerButton.setActionCommand("deshacer");
+        JButton rehacerButton = new JButton("Rehacer");
+        rehacerButton.setActionCommand("rehacer");
 
         clutterButton.addActionListener(controller);
         solveButton.addActionListener(controller);
+        
+        //Nuevos botones
+        deshacerButton.addActionListener(controller);
+        rehacerButton.addActionListener(controller);
 
 
         southPanel.add(clutterButton);
         southPanel.add(solveButton);
+        
+        //Nuevos botones
+        southPanel.add(deshacerButton);
+        southPanel.add(rehacerButton);
 
         return(southPanel);
     }
@@ -154,8 +168,30 @@ public class PuzzleGUI extends JFrame{
 
     //Método para actualizar la imagen del tablero
     public void updateBoard(File imageFile) throws IOException{
+        
+        controller.removeObserver(boardView);
+        //controller.removeObserver();
 
-        this.boardView = new BoardView(this.boardView.filas,this.boardView.columnas,imageSize, imageFile);
+        this.remove(boardView);
+
+        //Seleccionar tamaños
+        String opFilas = JOptionPane.showInputDialog("Num filas");
+        String opColumnas = JOptionPane.showInputDialog("Num columnas");
+        String opTamaño = JOptionPane.showInputDialog("Tamaño");
+
+        rowNum = Integer.parseInt(opFilas);
+        columnNum = Integer.parseInt(opColumnas);
+        imageSize = Integer.parseInt(opTamaño);
+
+        this.boardView = new BoardView(rowNum,columnNum,imageSize, imageFile);
+
+        boardView.addMouseListener(controller);
+        this.getContentPane().add(boardView, BorderLayout.CENTER);
+
+        this.revalidate();
+        this.repaint();
+
+        controller.addObserver(boardView);
         
     }
 

@@ -1,7 +1,7 @@
 package control;
 
-import command.DisorderCommand;
 import command.LoadCommand;
+import command.MovCommand;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
@@ -16,7 +16,8 @@ import view.PuzzleGUI;
 
 public class Controlador extends AbstractController{
     
-    public Stack<int[]> movs = new Stack();
+    public Stack<MovCommand> movsDes = new Stack<>(); //Atrás
+    public Stack<MovCommand> movsRe = new Stack<>(); //Alante
     public Random aleatorio = new Random(System.currentTimeMillis());
     
     
@@ -25,21 +26,37 @@ public class Controlador extends AbstractController{
         //System.out.println(e.getActionCommand());
         
         switch (e.getActionCommand()){
-            case "load": 
-                LoadCommand loader = new LoadCommand();
+            case "load":
+                LoadCommand loader = new LoadCommand(this);
                 System.out.println("Cargar");
                 loader.redoCommand();
             break;
             case "clutter":
-                System.out.println("Desordenar");
-                //disorder.execute();
                 desordenar();
             break;
             
             case "solve":
-                System.out.println("Solucionar");
-                //disorder.undoCommand();
-                ordenar();
+                try{
+                    ordenar();
+                } catch(Exception y){
+                    System.out.println("Vacío");
+                }
+            break;
+            
+            case "deshacer":
+                try{
+                    deshacer();
+                } catch(Exception y){
+                    System.out.println("Vacío");
+                }
+            break;
+            
+            case "rehacer":
+                try{
+                    rehacer();
+                } catch(Exception y){
+                    System.out.println("Vacío");
+                }
             break;
             
             default:
@@ -60,12 +77,9 @@ public class Controlador extends AbstractController{
         BoardView tablero = PuzzleGUI.getInstance().getBoardView();
         
         if(e.getX() <= tablero.imageWidth && e.getY() <= tablero.imageHeight){
-            
-            int[] resul = tablero.movePiece(e.getX(), e.getY());
-            if(resul != null){
-                movs.push(resul);
-                notifyObservers(resul[0], resul[1]);
-            }
+            MovCommand move = new MovCommand(this, tablero, e.getX(), e.getY());
+            move.redoCommand();
+            movsDes.push(move);
         }
     }
     
@@ -73,19 +87,36 @@ public class Controlador extends AbstractController{
         BoardView tablero = PuzzleGUI.getInstance().getBoardView();
         
         for(int i = 0; i < 99; i++){
-            int[] resul = tablero.movePiece(aleatorio.nextInt(97), aleatorio.nextInt(97));
-            if(resul != null){
-                movs.push(resul);
-                notifyObservers(resul[0], resul[1]);
-            }
+            int[] posi = {aleatorio.nextInt(tablero.imageWidth), aleatorio.nextInt(tablero.imageHeight)};
+            MovCommand move = new MovCommand(this, tablero, posi[0], posi[1]);
+            move.redoCommand();
+            movsDes.push(move);
         }
     }
     
     public void ordenar(){
-        while(!movs.empty()){
-            int[] movi = movs.pop();
-            notifyObservers(movi[1], movi[0]);
+        while(!movsDes.empty()){
+            MovCommand move = movsDes.pop();
+            move.undoCommand();
+            movsRe.push(move);
         }
+    }
+    
+    public void rehacer(){
+        MovCommand move = movsDes.pop();
+        move.undoCommand();
+        movsRe.push(move);
+    }
+    
+    public void deshacer(){
+        MovCommand move = movsRe.pop();
+        move.redoCommand();
+        movsDes.push(move);
+    }
+    
+    public void emptyStacks(){
+        movsRe = new Stack<MovCommand>();
+        movsDes = new Stack<MovCommand>();
     }
     
 }

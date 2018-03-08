@@ -17,8 +17,8 @@ import javax.imageio.ImageIO;
  */
 public class BoardView extends JPanel implements Observer {
     
-    public static final int imageWidth= 96;
-    public static final int imageHeight= 96;
+    public static int imageWidth= 96;
+    public static int imageHeight= 96;
     private ArrayList<PieceView> iconArray = null;
     
     //Nuevas variables
@@ -28,12 +28,14 @@ public class BoardView extends JPanel implements Observer {
     public int columnas;
     public int filas;
 
-    private int piezaBlanca = 0;
+    private int piezaBlanca;
 
     public BoardView(int rowNum, int columnNum,int imageSize, String[] imageList){
         super();
         
         iconArray = new ArrayList<PieceView>();
+        
+        piezaBlanca = 0;
         
         filas = rowNum;
         columnas = columnNum;
@@ -46,8 +48,6 @@ public class BoardView extends JPanel implements Observer {
         
         anchoImagen = iconArray.get(0).getIconWidth();
         altoImagen = iconArray.get(0).getIconHeight();
-        
-        this.repaint();
     }
 
     public BoardView(int rowNum, int columnNum, int imageSize, File imageFile) throws IOException{
@@ -55,22 +55,40 @@ public class BoardView extends JPanel implements Observer {
         super();
         iconArray = new ArrayList<>();
         
+        piezaBlanca = 0;
+        
         filas = rowNum;
         columnas = columnNum;
+        
+        imageWidth = imageSize;
+        imageHeight = imageSize;
+        
         
         try{
             BufferedImage img = this.resizeImage(imageFile);
             BufferedImage[] imagenes = this.splitImage(img);
+            
+            BufferedImage temp = this.resizeBlanca(new File("resources/blank.gif"));
+            
+            imagenes[0] = temp;
 
             for(int i = 0; i < rowNum; i++){
                 for(int j = 0; j < columnNum; j++){
-                    iconArray.add(new PieceView(i*columnNum + j, i, j, imageSize, imagenes[i*columnNum + j]));
+                    iconArray.add(new PieceView(i*columnNum + j, i, j, imagenes[i*columnNum + j].getHeight(), imagenes[i*columnNum + j]));
+                    //System.out.println(i*columnNum + j);
+                    
                 } 
             } 
 
             anchoImagen = iconArray.get(0).getIconWidth();
             altoImagen = iconArray.get(0).getIconHeight();
         
+            System.out.println(anchoImagen);
+            System.out.println(altoImagen);
+            
+            System.out.println(imageWidth);
+            System.out.println(imageHeight);
+            
         }catch(IOException e){
         
             System.out.println("No se pudo establecer boardview: " + e.getMessage());
@@ -87,11 +105,38 @@ public class BoardView extends JPanel implements Observer {
 
             resizedImage = ImageIO.read(new File(fileImage.getPath()));
             //resizedImage = new BufferedImage(imageWidth,imageHeight,resizedImage.getType());
-            
+
             bufim = new BufferedImage(imageWidth,imageHeight,resizedImage.getType());
             Graphics2D g = bufim.createGraphics();
             g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
             g.drawImage(resizedImage, 0, 0, imageWidth, imageHeight, 0, 0, resizedImage.getWidth(), resizedImage.getHeight(), null);
+            g.dispose();
+        
+            System.out.println("Imagen redimensionada");
+            
+        }catch(IOException e){
+        
+            System.out.println("No se puede cargar el archivo: " + e.getMessage());
+        
+        }    
+
+        return bufim;
+        
+    }
+    
+    private BufferedImage resizeBlanca(File fileImage) throws IOException{
+        
+        BufferedImage resizedImage = null;
+        BufferedImage bufim = null;
+        try{
+
+            resizedImage = ImageIO.read(new File(fileImage.getPath()));
+            //resizedImage = new BufferedImage(imageWidth,imageHeight,resizedImage.getType());
+                
+            bufim = new BufferedImage(imageWidth/columnas,imageHeight/filas,resizedImage.getType());
+            Graphics2D g = bufim.createGraphics();
+            g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+            g.drawImage(resizedImage, 0, 0, imageWidth/columnas, imageHeight/filas, 0, 0, resizedImage.getWidth(), resizedImage.getHeight(), null);
             g.dispose();
         
             System.out.println("Imagen redimensionada");
