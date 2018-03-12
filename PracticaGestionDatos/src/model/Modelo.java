@@ -63,8 +63,7 @@ public class Modelo extends AbstractModel{
         piezas[movedPos] = aux;
         
         if(isPuzzleSolve()){
-            System.out.println("U win");
-            JOptionPane.showMessageDialog(PuzzleGUI.getInstance().getContentPane(), "Has ganado!");
+            JOptionPane.showMessageDialog(PuzzleGUI.getInstance().getContentPane(), "¡Has ganado!");
         }
     }
     

@@ -39,17 +39,12 @@ public class MovCommand implements Command{
     public boolean compareCommand(int[] c){
         boolean igual = true;
         int index = 0;
+        int index2 = c.length-1;
         
-        //System.out.println(c[0]);
-        //System.out.println(resul[0]);
-        if(resul != null && c != null){
-            
-            System.out.println(c[0]);
-            System.out.println(resul[0]);
-            while((igual) && (index < resul.length)){
-                igual = c[index] == resul[index];
-                index++;
-            }
+        while((igual) && (index < resul.length)){
+            igual = c[index2] == resul[index];
+            index++;
+            index2--;
         }
         
         return igual;

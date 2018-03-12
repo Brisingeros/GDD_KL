@@ -29,6 +29,8 @@ public class BoardView extends JPanel implements Observer {
     public int filas;
 
     private int piezaBlanca;
+    
+    public BufferedImage[] imagenes;
 
     public BoardView(int rowNum, int columnNum,int imageSize, String[] imageList){
         super();
@@ -66,7 +68,7 @@ public class BoardView extends JPanel implements Observer {
         
         try{
             BufferedImage img = this.resizeImage(imageFile);
-            BufferedImage[] imagenes = this.splitImage(img);
+            imagenes = this.splitImage(img);
             
             BufferedImage temp = this.resizeBlanca(new File("resources/blank.gif"));
             
@@ -251,14 +253,10 @@ public class BoardView extends JPanel implements Observer {
         
         int piezaId = locatePiece(x, y);
         
-        System.out.println("ID a mover: " + piezaId);
-        System.out.println("Pieza blanca: " + piezaBlanca);
-        
         int distanciaX = Math.abs(x - iconArray.get(piezaBlanca).getIndexColumn());
         int distanciaY = Math.abs(y - iconArray.get(piezaBlanca).getIndexRow());
         
         if(distanciaX + distanciaY == 1){
-            System.out.println("///Se mueve///");
             
             int[] resul = {piezaBlanca, piezaId};
             

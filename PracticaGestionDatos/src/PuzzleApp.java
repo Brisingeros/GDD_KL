@@ -55,6 +55,8 @@ public class PuzzleApp {
         // Añadimos un nuevo observador al controlador
         c.addObserver(m);
         c.addObserver(v);
+        c.addModelo(m);
+        c.addView(v);
         // Visualizamos la aplicación.
         PuzzleGUI.getInstance().setVisible(true);
     }
