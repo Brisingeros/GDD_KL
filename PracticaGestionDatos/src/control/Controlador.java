@@ -89,8 +89,19 @@ public class Controlador extends AbstractController{
         for(int i = 0; i < 99; i++){
             int[] posi = {aleatorio.nextInt(tablero.imageWidth), aleatorio.nextInt(tablero.imageHeight)};
             MovCommand move = new MovCommand(this, tablero, posi[0], posi[1]);
-            move.redoCommand();
-            movsDes.push(move);
+            
+            if(!movsDes.empty()){
+                
+                MovCommand prev = movsDes.peek();
+                
+                if(!move.compareCommand(prev.getResul())){
+                    move.redoCommand();
+                    movsDes.push(move);
+                }
+            } else{
+                move.redoCommand();
+                movsDes.push(move);
+            }
         }
     }
     

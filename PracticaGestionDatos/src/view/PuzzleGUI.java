@@ -44,7 +44,7 @@ public class PuzzleGUI extends JFrame{
         this.getContentPane().add(createSouthPanel(), BorderLayout.SOUTH);
         this.setResizable(false);
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        this.setSize(1770, 1000);
+        this.setSize(1500, 800);
         this.setLocation(centerFrame());
     }
 
