@@ -38,7 +38,13 @@ public class Controlador extends AbstractController{
                 System.out.println("Cargar");
                 loader.redoCommand();
                 
+        {
+            try {
                 addView(PuzzleGUI.getInstance().getBoardView());
+            } catch (IOException ex) {
+                Logger.getLogger(Controlador.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
                 
                 Restart();
             break;
@@ -152,16 +158,7 @@ public class Controlador extends AbstractController{
     
     public void Restart(){
         removeObserver(model);
-        
-        BufferedImage[] im = view.imagenes;
-        
-        String[] imagePaths = new String[im.length];
-        
-        for(int i = 0; i < im.length; i++){
-            imagePaths[i] = "resources/img" + i + ".jpg";
-        }
-        
-        model = new Modelo(view.filas, view.columnas, view.altoImagen, imagePaths);
+        model = new Modelo(view.filas, view.columnas, view.altoImagen, view.getPaths());
         
         addObserver(model);
         addModelo(model);

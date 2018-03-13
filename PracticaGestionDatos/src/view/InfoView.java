@@ -7,6 +7,7 @@ import javax.swing.text.StyleConstants;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 /**
  * Ventana de que contiene informacion sobre la aplicación.
@@ -15,7 +16,7 @@ import java.awt.event.ActionListener;
  */
 public class InfoView extends JDialog implements ActionListener {
 
-    public InfoView(){
+    public InfoView() throws IOException{
         super(PuzzleGUI.getInstance(), "Información de la aplicación", true);
         this.getContentPane().setLayout(new BorderLayout());
         this.getContentPane().add(buildCenter(), BorderLayout.CENTER);
@@ -27,7 +28,7 @@ public class InfoView extends JDialog implements ActionListener {
 
     }
 
-    private JTextPane buildCenter(){
+    private JTextPane buildCenter() throws IOException{
         JTextPane textPane = new JTextPane();
         textPane.setEditable(false);
         try {

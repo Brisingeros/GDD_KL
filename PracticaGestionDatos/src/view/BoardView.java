@@ -29,16 +29,16 @@ public class BoardView extends JPanel implements Observer {
     public int filas;
 
     private int piezaBlanca;
-    
+    private String[] paths;
     public BufferedImage[] imagenes;
 
     public BoardView(int rowNum, int columnNum,int imageSize, String[] imageList){
         super();
         
         iconArray = new ArrayList<PieceView>();
-        
+        imagenes = null;
         piezaBlanca = 0;
-        
+        paths = imageList;
         filas = rowNum;
         columnas = columnNum;
         
@@ -98,6 +98,22 @@ public class BoardView extends JPanel implements Observer {
         }
     }
 
+    public String[] getPaths(){
+        
+        if(imagenes != null){
+            BufferedImage[] im = this.imagenes;
+
+            String[] imagePaths = new String[im.length];
+
+            for(int i = 0; i < im.length; i++){
+                imagePaths[i] = "resources/img" + i + ".jpg";
+            }
+
+            return imagePaths;
+        }else{
+            return this.paths;
+        }
+    }
     //redimensionamos la imagen para 96*96
     private BufferedImage resizeImage(File fileImage) throws IOException{
         

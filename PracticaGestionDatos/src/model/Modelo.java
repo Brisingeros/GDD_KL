@@ -1,6 +1,9 @@
 package model;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import view.PieceView;
 import view.PuzzleGUI;
@@ -63,7 +66,11 @@ public class Modelo extends AbstractModel{
         piezas[movedPos] = aux;
         
         if(isPuzzleSolve()){
-            JOptionPane.showMessageDialog(PuzzleGUI.getInstance().getContentPane(), "¡Has ganado!");
+            try {
+                JOptionPane.showMessageDialog(PuzzleGUI.getInstance().getContentPane(), "¡Has ganado!");
+            } catch (IOException ex) {
+                Logger.getLogger(Modelo.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
     

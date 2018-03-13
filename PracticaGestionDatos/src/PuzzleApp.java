@@ -1,7 +1,11 @@
 import command.DisorderCommand;
+import config.Configuracion;
+import config.info;
 import control.AbstractController;
 import control.Controlador;
 import java.io.File;
+import java.io.IOException;
+import javax.xml.bind.JAXBException;
 import model.Modelo;
 import view.BoardView;
 import view.PuzzleGUI;
@@ -32,11 +36,21 @@ import static view.PuzzleGUI.controller;
 
 public class PuzzleApp {
 
-    public static void main(String args[]){
+    public static void main(String args[]) throws JAXBException, IOException{
+        info init = Configuracion.parse();
+        //info init = null;
         int imageSize = 32;
         int rowNum = 3;
         int columnNum= 3;
-
+        String path = null;
+        
+        if(init != null){
+            imageSize = init.getImageSize();
+            rowNum = init.getRows();
+            columnNum= rowNum;
+            path = init.getDefecto();
+        }
+        
         String fileSeparator = System.getProperty("file.separator");
         String imagePath=System.getProperty("user.dir")+fileSeparator+"resources"+fileSeparator;
 
@@ -44,14 +58,23 @@ public class PuzzleApp {
         String[] imageList={imagePath+"blank.gif",imagePath+"one.gif",imagePath+"two.gif",imagePath+"three.gif",imagePath+ "four.gif",
                 imagePath+"five.gif",imagePath+"six.gif",imagePath+"seven.gif",imagePath+"eight.gif"};
         
-        // Creamos el modelo
-        Modelo m = new Modelo(rowNum, columnNum, imageSize, imageList);
-        // Creamos el controlador
+        //Creamos el controlador
         Controlador c  = new Controlador();
-        // Inicializamos la GUI
-        PuzzleGUI.initialize(c, rowNum, columnNum, imageSize, imageList);
+        
+        if(path == null){
+            // Inicializamos la GUI
+            PuzzleGUI.initialize(c, rowNum, columnNum, imageSize, imageList);
+        } else{
+            // Inicializamos la GUI
+            PuzzleGUI.initialize(c, rowNum, columnNum, imageSize, path);
+        }
+        
         // Obtenemos la vista del tablero
         BoardView v = PuzzleGUI.getInstance().getBoardView();
+        
+        // Creamos el modelo
+        Modelo m = new Modelo(rowNum, columnNum, imageSize, v.getPaths());
+        
         // Añadimos un nuevo observador al controlador
         c.addObserver(m);
         c.addObserver(v);
@@ -59,5 +82,6 @@ public class PuzzleApp {
         c.addView(v);
         // Visualizamos la aplicación.
         PuzzleGUI.getInstance().setVisible(true);
+        
     }
 }

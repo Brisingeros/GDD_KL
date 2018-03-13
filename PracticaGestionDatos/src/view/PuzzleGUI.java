@@ -29,14 +29,21 @@ public class PuzzleGUI extends JFrame{
     public static String[] imageList = null;
     //Panel de juego
     private BoardView boardView;
+    
+    //Nueva variable
+    public static String imagePath = null;
 
 
     /**
      * Constructor privado
      */
-    private PuzzleGUI(){
+    private PuzzleGUI() throws IOException{
         super("GMD PuzzleGUI");
-        boardView = new BoardView(rowNum,columnNum,imageSize,imageList);
+        if(imagePath == null){
+            boardView = new BoardView(rowNum,columnNum,imageSize,imageList);
+        } else{
+            boardView = new BoardView(rowNum,columnNum,imageSize,new File(imagePath));
+        }
         boardView.addMouseListener(controller);
         this.getContentPane().setLayout(new BorderLayout());
         this.setJMenuBar(createMenuBar());
@@ -49,7 +56,7 @@ public class PuzzleGUI extends JFrame{
     }
 
     //Singleton
-    public static PuzzleGUI getInstance(){
+    public static PuzzleGUI getInstance() throws IOException{
         if(instance==null){
             instance = new PuzzleGUI();
         }
@@ -62,6 +69,16 @@ public class PuzzleGUI extends JFrame{
         PuzzleGUI.columnNum = columnNum;
         PuzzleGUI.imageSize = imageSize;
         PuzzleGUI.imageList = imageList;
+        PuzzleGUI.imagePath = null;
+    }
+    
+    public static void initialize(AbstractController controller, int rowNum,int columnNum,int imageSize,String imagePath){
+        PuzzleGUI.controller = controller;
+        PuzzleGUI.rowNum = rowNum;
+        PuzzleGUI.columnNum = columnNum;
+        PuzzleGUI.imageSize = imageSize;
+        PuzzleGUI.imageList = null;
+        PuzzleGUI.imagePath = imagePath;
     }
 
     //Método que crea el panel inferior
@@ -103,6 +120,7 @@ public class PuzzleGUI extends JFrame{
         JMenuBar menu = new JMenuBar();
         JMenu archive = new JMenu("Archive");
         JMenu help = new JMenu("Help");
+        JMenu partida = new JMenu("Partida");
 
         JMenuItem load = new JMenuItem("Load");
         load.setActionCommand("load");
@@ -110,6 +128,11 @@ public class PuzzleGUI extends JFrame{
         exit.setActionCommand("exit");
         JMenuItem info = new JMenuItem("Info");
         info.setActionCommand("info");
+        
+        JMenuItem cargar = new JMenuItem("Cargar");
+        cargar.setActionCommand("cargar");
+        JMenuItem guardar = new JMenuItem("Guardar");
+        guardar.setActionCommand("guardar");
 
         archive.add(load);
         archive.add(exit);
@@ -117,10 +140,16 @@ public class PuzzleGUI extends JFrame{
 
         menu.add(archive);
         menu.add(help);
-
+        menu.add(partida);
+        
+        partida.add(cargar);
+        partida.add(guardar);
+        
         load.addActionListener(controller);
         exit.addActionListener(controller);
         info.addActionListener(controller);
+        cargar.addActionListener(controller);
+        guardar.addActionListener(controller);
 
         return(menu);
     }
@@ -175,12 +204,12 @@ public class PuzzleGUI extends JFrame{
         this.remove(boardView);
 
         //Seleccionar tamaños
-        String opFilas = JOptionPane.showInputDialog("Num filas");
-        String opColumnas = JOptionPane.showInputDialog("Num columnas");
+        String opFilas = JOptionPane.showInputDialog("Número de filas y columnas");
+        //String opColumnas = JOptionPane.showInputDialog("Num columnas");
         String opTamaño = JOptionPane.showInputDialog("Tamaño");
 
         rowNum = Integer.parseInt(opFilas);
-        columnNum = Integer.parseInt(opColumnas);
+        columnNum = rowNum;
         imageSize = Integer.parseInt(opTamaño);
 
         this.boardView = new BoardView(rowNum,columnNum,imageSize, imageFile);
