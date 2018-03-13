@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import view.PieceView;
 import view.PuzzleGUI;
 
 /**
@@ -14,25 +13,25 @@ import view.PuzzleGUI;
  */
 public class Modelo extends AbstractModel{
 
-    public int[] piezas;
+    private ArrayList<PieceModel> iconArray = null;
     
     //Nuevas variables
 
     public Modelo(int rowNum, int columnNum, int pieceSize, String[] imageList) {
         super(rowNum, columnNum, pieceSize, imageList);
         
-        piezas = new int[rowNum*columnNum];
+        iconArray = new ArrayList<PieceModel>();
         
         for(int i = 0; i < rowNum; i++){
             for(int j = 0; j < columnNum; j++){
-                piezas[i*columnNum + j] = i*columnNum + j;
+                addNewPiece(i*columnNum + j, i, j, imageList[i*columnNum + j]);
             } 
         } 
     }
 
     @Override
     public void addNewPiece(int id, int indexRow, int indexCol, String imagePath) {
-        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        iconArray.add(new PieceModel(id, indexRow, indexCol, imagePath));
     }
 
     @Override
@@ -45,7 +44,7 @@ public class Modelo extends AbstractModel{
         boolean bien = true;
         
         for(int i = 0; i < rowNum*columnNum && bien; i++){
-            bien = piezas[i] == i;
+            bien = iconArray.get(i).getId() == i;
         }
         
         return bien;
@@ -60,10 +59,21 @@ public class Modelo extends AbstractModel{
     @Override
     public void update(int blankPos, int movedPos) {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        int aux = piezas[blankPos];
         
-        piezas[blankPos] = piezas[movedPos];
-        piezas[movedPos] = aux;
+        PieceModel p = iconArray.get(blankPos);
+        PieceModel p2 = iconArray.get(movedPos);
+        
+        int auxX = p.getJ();
+        int auxY = p.getI();
+        
+        p.setJ(p2.getJ());
+        p.setI(p2.getI());
+        
+        p2.setJ(auxX);
+        p2.setI(auxY);
+        
+        iconArray.set(blankPos, p2);
+        iconArray.set(movedPos, p);
         
         if(isPuzzleSolve()){
             try {

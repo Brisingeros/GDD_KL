@@ -22,15 +22,15 @@ public class BoardView extends JPanel implements Observer {
     private ArrayList<PieceView> iconArray = null;
     
     //Nuevas variables
-    public int anchoImagen;
-    public int altoImagen;
+    private int anchoImagen;
+    private int altoImagen;
     
-    public int columnas;
-    public int filas;
+    private int columnas;
+    private int filas;
 
     private int piezaBlanca;
     private String[] paths;
-    public BufferedImage[] imagenes;
+    private BufferedImage[] imagenes;
 
     public BoardView(int rowNum, int columnNum,int imageSize, String[] imageList){
         super();
@@ -282,4 +282,82 @@ public class BoardView extends JPanel implements Observer {
         }
     }
 
+    public static int getImageWidth() {
+        return imageWidth;
+    }
+
+    public static int getImageHeight() {
+        return imageHeight;
+    }
+
+    public ArrayList<PieceView> getIconArray() {
+        return iconArray;
+    }
+
+    public int getAnchoImagen() {
+        return anchoImagen;
+    }
+
+    public int getAltoImagen() {
+        return altoImagen;
+    }
+
+    public int getColumnas() {
+        return columnas;
+    }
+
+    public int getFilas() {
+        return filas;
+    }
+
+    public int getPiezaBlanca() {
+        return piezaBlanca;
+    }
+
+    public BufferedImage[] getImagenes() {
+        return imagenes;
+    }
+
+    public static void setImageWidth(int imageWidth) {
+        BoardView.imageWidth = imageWidth;
+    }
+
+    public static void setImageHeight(int imageHeight) {
+        BoardView.imageHeight = imageHeight;
+    }
+
+    public void setIconArray(ArrayList<PieceView> iconArray) {
+        this.iconArray = iconArray;
+    }
+
+    public void setAnchoImagen(int anchoImagen) {
+        this.anchoImagen = anchoImagen;
+    }
+
+    public void setAltoImagen(int altoImagen) {
+        this.altoImagen = altoImagen;
+    }
+
+    public void setColumnas(int columnas) {
+        this.columnas = columnas;
+    }
+
+    public void setFilas(int filas) {
+        this.filas = filas;
+    }
+
+    public void setPiezaBlanca(int piezaBlanca) {
+        this.piezaBlanca = piezaBlanca;
+    }
+
+    public void setPaths(String[] paths) {
+        this.paths = paths;
+    }
+
+    public void setImagenes(BufferedImage[] imagenes) {
+        this.imagenes = imagenes;
+    }
+
+    
+    
 }

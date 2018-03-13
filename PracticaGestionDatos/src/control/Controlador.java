@@ -4,7 +4,6 @@ import command.LoadCommand;
 import command.MovCommand;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Random;
 import java.util.Stack;
@@ -18,9 +17,9 @@ import view.PuzzleGUI;
 
 public class Controlador extends AbstractController{
     
-    public Stack<MovCommand> movsDes = new Stack<>(); //Atrás
-    public Stack<MovCommand> movsRe = new Stack<>(); //Alante
-    public Random aleatorio = new Random(System.currentTimeMillis());
+    private Stack<MovCommand> movsDes = new Stack<>(); //Atrás
+    private Stack<MovCommand> movsRe = new Stack<>(); //Alante
+    private Random aleatorio = new Random(System.currentTimeMillis());
     
     public Modelo model;
     public BoardView view;
@@ -100,6 +99,8 @@ public class Controlador extends AbstractController{
     
     public void desordenar(){
         
+        movsRe.clear();
+        
         for(int i = 0; i < desordenes; i++){
             MovCommand  move;
             do{
@@ -158,12 +159,30 @@ public class Controlador extends AbstractController{
     
     public void Restart(){
         removeObserver(model);
-        model = new Modelo(view.filas, view.columnas, view.altoImagen, view.getPaths());
+        model = new Modelo(view.getFilas(), view.getColumnas(), view.getAltoImagen(), view.getPaths());
         
         addObserver(model);
         addModelo(model);
         
-        desordenes = view.filas*view.columnas*2;
+        desordenes = view.getFilas()*view.getColumnas()*2;
     }
+
+    public Stack<MovCommand> getMovsDes() {
+        return movsDes;
+    }
+
+    public Stack<MovCommand> getMovsRe() {
+        return movsRe;
+    }
+
+    public void setMovsDes(Stack<MovCommand> movsDes) {
+        this.movsDes = movsDes;
+    }
+
+    public void setMovsRe(Stack<MovCommand> movsRe) {
+        this.movsRe = movsRe;
+    }
+    
+    
     
 }
