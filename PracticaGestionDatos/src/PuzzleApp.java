@@ -81,6 +81,7 @@ public class PuzzleApp {
         c.addView(v);
         // Visualizamos la aplicación.
         PuzzleGUI.getInstance().setVisible(true);
+        c.desordenar();
         
     }
 }

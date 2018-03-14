@@ -6,7 +6,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import model.PieceModel;
 
 /**
  * Clase que representa la GUI principal.
@@ -223,10 +225,33 @@ public class PuzzleGUI extends JFrame{
         controller.addObserver(boardView);
         
     }
+    
+    public void initCarga(int rows, int columns, int tamañoImagen, ArrayList<PieceModel> piezas){
+        controller.removeObserver(boardView);
+        //controller.removeObserver();
+
+        this.remove(boardView);
+
+        rowNum = rows;
+        columnNum = rowNum;
+        imageSize = tamañoImagen;
+
+        this.boardView = new BoardView(rowNum,columnNum,imageSize, piezas);
+
+        boardView.addMouseListener(controller);
+        this.getContentPane().add(boardView, BorderLayout.CENTER);
+
+        this.revalidate();
+        this.repaint();
+
+        controller.addObserver(boardView);
+    }
 
 
     public Object clone() throws CloneNotSupportedException {
         throw new CloneNotSupportedException();
     }
+    
+    
 
 }

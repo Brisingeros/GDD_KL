@@ -2,6 +2,8 @@ package control;
 
 import command.LoadCommand;
 import command.MovCommand;
+import config.Configuracion;
+import config.PartidaLD;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
@@ -24,12 +26,11 @@ public class Controlador extends AbstractController{
     public Modelo model;
     public BoardView view;
     
-    public int desordenes = 18;
+    public int desordenes = 200;
     
     
     @Override
     public void actionPerformed(ActionEvent e) {
-        //System.out.println(e.getActionCommand());
         
         switch (e.getActionCommand()){
             case "load":
@@ -37,13 +38,11 @@ public class Controlador extends AbstractController{
                 System.out.println("Cargar");
                 loader.redoCommand();
                 
-        {
-            try {
-                addView(PuzzleGUI.getInstance().getBoardView());
-            } catch (IOException ex) {
-                Logger.getLogger(Controlador.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
+                try {
+                    addView(PuzzleGUI.getInstance().getBoardView());
+                } catch (IOException ex) {
+                    Logger.getLogger(Controlador.class.getName()).log(Level.SEVERE, null, ex);
+                }
                 
                 Restart();
             break;
@@ -73,6 +72,26 @@ public class Controlador extends AbstractController{
                 } catch(Exception y){
                     System.out.println("Vacío");
                 }
+            break;
+            
+            case "guardar":
+                PartidaLD partida = new PartidaLD(model, movsDes);
+                try {
+                    Configuracion.toJSON(partida);
+                } catch (IOException ex) {
+                    Logger.getLogger(Controlador.class.getName()).log(Level.SEVERE, null, ex);
+                } 
+            break;
+            
+            case "cargar":
+                PartidaLD party = null;
+                try {
+                    party = Configuracion.cargarPartida();
+                    CargarPartida(party);
+                } catch (IOException ex) {
+                    Logger.getLogger(Controlador.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
             break;
             
             default:
@@ -164,7 +183,7 @@ public class Controlador extends AbstractController{
         addObserver(model);
         addModelo(model);
         
-        desordenes = view.getFilas()*view.getColumnas()*2;
+        desordenes = view.getFilas()*view.getColumnas()*9;
     }
 
     public Stack<MovCommand> getMovsDes() {
@@ -181,6 +200,20 @@ public class Controlador extends AbstractController{
 
     public void setMovsRe(Stack<MovCommand> movsRe) {
         this.movsRe = movsRe;
+    }
+
+    private void CargarPartida(PartidaLD party) throws IOException {
+        removeObserver(model);
+        
+        model = party.getModelo();
+        
+        PuzzleGUI.getInstance().initCarga(model.getRowCount(), model.getColumnCount(), model.getPieceSize(), model.getIconArray());
+        
+        addObserver(model);
+        
+        movsRe.clear();
+        
+        movsDes = party.getDeshacerMovs();
     }
     
     

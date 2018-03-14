@@ -11,6 +11,6 @@
 
 	<rows>4</rows>
 	<imageSize>512</imageSize>
-	<defecto>resources/default.jpg</defecto>
+	<defecto>resources/default/default.jpg</defecto>
 
 </puzzle>

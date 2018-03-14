@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import javax.imageio.ImageIO;
+import model.PieceModel;
 
 /**
  * Clase que representa la vista del tablero
@@ -77,25 +78,48 @@ public class BoardView extends JPanel implements Observer {
             for(int i = 0; i < rowNum; i++){
                 for(int j = 0; j < columnNum; j++){
                     iconArray.add(new PieceView(i*columnNum + j, i, j, imagenes[i*columnNum + j].getHeight(), imagenes[i*columnNum + j]));
-                    //System.out.println(i*columnNum + j);
                     
                 } 
             } 
 
             anchoImagen = iconArray.get(0).getIconWidth();
             altoImagen = iconArray.get(0).getIconHeight();
-        
-            System.out.println(anchoImagen);
-            System.out.println(altoImagen);
-            
-            System.out.println(imageWidth);
-            System.out.println(imageHeight);
-            
+
         }catch(IOException e){
         
             System.out.println("No se pudo establecer boardview: " + e.getMessage());
         
         }
+    }
+    
+    public BoardView(int rowNum, int columnNum, int imageSize, ArrayList<PieceModel> piezas){
+        
+        super();
+        iconArray = new ArrayList<>();
+        
+        filas = rowNum;
+        columnas = columnNum;
+        
+        imageWidth = imageSize;
+        imageHeight = imageSize;
+        
+        PieceModel aux = null;
+        
+        for(int i = 0; i < rowNum; i++){
+            for(int j = 0; j < columnNum; j++){
+                aux = piezas.get(i*columnNum + j);
+                PieceView auxp = new PieceView(aux.getId(), aux.getI(), aux.getJ(),imageWidth/rowNum, aux.getPath());
+                iconArray.add(auxp);
+                
+                if(aux.getId() == 0){
+                    piezaBlanca = i*columnNum + j;
+                    //Añaidr la piezaBlanca redimensionada
+                }
+            } 
+        }
+        
+        anchoImagen = iconArray.get(0).getIconWidth();
+        altoImagen = iconArray.get(0).getIconHeight();
     }
 
     public String[] getPaths(){
@@ -187,7 +211,7 @@ public class BoardView extends JPanel implements Observer {
                 images[count] = new BufferedImage(anchoCuadrado, altoCuadrado, image.getType());
                 // draws the image chunk
                 Graphics2D gr = images[count++].createGraphics();
-                gr.drawImage(image, 0, 0, anchoCuadrado, altoCuadrado, anchoCuadrado * y, altoCuadrado * x, anchoCuadrado * y + anchoCuadrado, altoCuadrado * x + altoCuadrado, null);
+                gr.drawImage(image, 0, 0, anchoCuadrado-2, altoCuadrado-2, anchoCuadrado * y, altoCuadrado * x, anchoCuadrado * y + anchoCuadrado, altoCuadrado * x + altoCuadrado, null);
                 gr.dispose();
             }
      

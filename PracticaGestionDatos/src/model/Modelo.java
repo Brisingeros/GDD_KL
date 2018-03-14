@@ -83,5 +83,9 @@ public class Modelo extends AbstractModel{
             }
         }
     }
+
+    public ArrayList<PieceModel> getIconArray() {
+        return iconArray;
+    }
     
 }

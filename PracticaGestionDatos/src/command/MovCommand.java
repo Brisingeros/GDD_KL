@@ -1,12 +1,16 @@
 package command;
 
 import control.Controlador;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import view.BoardView;
+import view.PuzzleGUI;
 
 public class MovCommand implements Command{
     
-    private BoardView tablero;
-    private Controlador control;
+    private transient BoardView tablero;
+    private transient Controlador control;
     
     private int[] resul;
 
