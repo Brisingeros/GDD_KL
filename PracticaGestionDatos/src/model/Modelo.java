@@ -6,7 +6,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import view.PuzzleGUI;
-
+import model.PieceModel;
 /**
  *
  * @author Brisin
@@ -14,12 +14,13 @@ import view.PuzzleGUI;
 public class Modelo extends AbstractModel{
 
     private ArrayList<PieceModel> iconArray = null;
-    
+    private int blancaAnterior;
     //Nuevas variables
 
     public Modelo(int rowNum, int columnNum, int pieceSize, String[] imageList) {
         super(rowNum, columnNum, pieceSize, imageList);
         
+        blancaAnterior = 0;
         iconArray = new ArrayList<PieceModel>();
         
         for(int i = 0; i < rowNum; i++){
@@ -34,6 +35,36 @@ public class Modelo extends AbstractModel{
         iconArray.add(new PieceModel(id, indexRow, indexCol, imagePath));
     }
 
+    public void setPaths(String[] newPaths){
+    
+        /*for(int i = 0; i < rowNum; i++){
+        
+            for(int j = 0; j < columnNum; j++){
+            
+                for(PieceModel p:iconArray){
+            
+                    if(p.getId() == i*columnNum+j)
+                        p.setPath(newPaths[i*columnNum+j]);
+                }
+                
+            
+            }
+        
+        }*/
+        
+        for(int i = 0; i < rowNum*columnNum; i++){
+        
+            for(PieceModel p:iconArray){
+                
+                if(p.getId() == i)
+                    p.setPath(newPaths[i]);
+            
+            }
+        
+        }
+    
+    }
+    
     @Override
     public void addNewPiece(int id, int indexRow, int indexCol) {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -52,14 +83,41 @@ public class Modelo extends AbstractModel{
 
     @Override
     public int[] getRandomMovement(int lastPos, int pos) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        //Aquí haremos el desordenar, comprobando no hacer bucles simples
+        
+        int[] vecinos = this.vecinos(pos);
+        int random = 0;
+        
+        do{
+        
+            random = (int) Math.floor(Math.random()*4);
+            
+        }while(vecinos[random] == -1 || vecinos[random] == lastPos);
+        
+        int[] resultado = {pos,vecinos[random]};
+        
+        return resultado;
+        
     }
 
+    public int getBlancaAnterior() {
+        return blancaAnterior;
+    }
+
+    private int[] vecinos(int pos){
+    
+        int[] vecinos = new int[4];
+        vecinos[0] = iconArray.get(pos).getJ() < columnNum-1?iconArray.get(pos).getI()*columnNum+iconArray.get(pos).getJ() + 1:-1;
+        vecinos[1] = iconArray.get(pos).getJ() > 0?iconArray.get(pos).getI()*columnNum+iconArray.get(pos).getJ() - 1:-1;
+        vecinos[2] = iconArray.get(pos).getI() < rowNum-1?iconArray.get(pos).getI()*columnNum+iconArray.get(pos).getJ() + columnNum:-1;
+        vecinos[3] = iconArray.get(pos).getI() > 0?iconArray.get(pos).getI()*columnNum+iconArray.get(pos).getJ() - columnNum:-1;
+    
+        return vecinos;
+    }
     @Override
     public void update(int blankPos, int movedPos) {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         
+        blancaAnterior = blankPos;
         PieceModel p = iconArray.get(blankPos);
         PieceModel p2 = iconArray.get(movedPos);
         

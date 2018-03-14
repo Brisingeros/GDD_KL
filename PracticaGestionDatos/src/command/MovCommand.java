@@ -1,11 +1,7 @@
 package command;
 
 import control.Controlador;
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import view.BoardView;
-import view.PuzzleGUI;
 
 public class MovCommand implements Command{
     
@@ -38,20 +34,6 @@ public class MovCommand implements Command{
     public void redoCommand() {
         if(resul != null)
         control.notifyObservers(resul[0], resul[1]);
-    }
-    
-    public boolean compareCommand(int[] c){
-        boolean igual = true;
-        int index = 0;
-        int index2 = c.length-1;
-        
-        while((igual) && (index < resul.length)){
-            igual = c[index2] == resul[index];
-            index++;
-            index2--;
-        }
-        
-        return igual;
     }
 
     public int[] getResul(){

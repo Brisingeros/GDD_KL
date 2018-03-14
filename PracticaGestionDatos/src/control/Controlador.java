@@ -75,6 +75,15 @@ public class Controlador extends AbstractController{
             break;
             
             case "guardar":
+        
+                try {
+                    view.imagenesGuardadas();
+                    model.setPaths(view.getPaths());
+                    
+                } catch (IOException ex) {
+                    Logger.getLogger(Controlador.class.getName()).log(Level.SEVERE, null, ex);
+                }
+        
                 PartidaLD partida = new PartidaLD(model, movsDes);
                 try {
                     Configuracion.toJSON(partida);
@@ -108,8 +117,9 @@ public class Controlador extends AbstractController{
         
     }
     
+    @Override
     public void mouseClicked(MouseEvent e) {
-        if(e.getX() <= view.imageWidth && e.getY() <= view.imageHeight){
+        if(e.getX() <= BoardView.imageWidth && e.getY() <= BoardView.imageHeight){
             MovCommand move = new MovCommand(this, view, e.getX(), e.getY());
             move.redoCommand();
             movsDes.push(move);
@@ -117,30 +127,17 @@ public class Controlador extends AbstractController{
     }
     
     public void desordenar(){
-        
+    
         movsRe.clear();
-        
         for(int i = 0; i < desordenes; i++){
-            MovCommand  move;
-            do{
-                int[] posi = {aleatorio.nextInt(view.imageWidth),aleatorio.nextInt(view.imageHeight)};
-                move = new MovCommand(this, view, posi[0], posi[1]);
-                
-            }while(move.getResul() == null);
+        
+            int[] mov = model.getRandomMovement(model.getBlancaAnterior(), view.getPiezaBlanca());
+            MovCommand move = new MovCommand(this,view,mov);
+            move.redoCommand();
+            movsDes.push(move);
             
-            if(!movsDes.empty()){
-                MovCommand prev = movsDes.peek();
-
-                if(!move.compareCommand(prev.getResul())){
-                    move.redoCommand();
-                    movsDes.push(move);
-                }
-                
-            } else{
-                move.redoCommand();
-                movsDes.push(move);
-            }
         }
+    
     }
     
     public void ordenar(){
@@ -178,7 +175,7 @@ public class Controlador extends AbstractController{
     
     public void Restart(){
         removeObserver(model);
-        model = new Modelo(view.getFilas(), view.getColumnas(), view.getAltoImagen(), view.getPaths());
+        model = new Modelo(view.getFilas(), view.getColumnas(), view.getAltoImagen()*view.getColumnas(), view.getPaths());
         
         addObserver(model);
         addModelo(model);
@@ -204,13 +201,13 @@ public class Controlador extends AbstractController{
 
     private void CargarPartida(PartidaLD party) throws IOException {
         removeObserver(model);
-        
+        removeObserver(view);
         model = party.getModelo();
         
         PuzzleGUI.getInstance().initCarga(model.getRowCount(), model.getColumnCount(), model.getPieceSize(), model.getIconArray());
         
         addObserver(model);
-        
+        view = PuzzleGUI.getInstance().getBoardView();
         movsRe.clear();
         
         movsDes = party.getDeshacerMovs();
