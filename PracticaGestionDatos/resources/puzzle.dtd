@@ -1,4 +1,0 @@
-<!ELEMENT puzzle (rows,imageSize,defecto)>
-<!ELEMENT rows (#PCDATA)>
-<!ELEMENT imageSize (#PCDATA)>
-<!ELEMENT defecto (#PCDATA)>

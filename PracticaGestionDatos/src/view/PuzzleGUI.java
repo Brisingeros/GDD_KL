@@ -222,6 +222,7 @@ public class PuzzleGUI extends JFrame{
         
     }
     
+    //UpdateBoard para cuando cargamos partida y no cuando cargamos una nueva imagen
     public void initCarga(int rows, int columns, int tamañoImagen, ArrayList<PieceModel> piezas) throws IOException{
         controller.removeObserver(boardView);
         this.remove(boardView);

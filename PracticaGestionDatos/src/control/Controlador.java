@@ -181,6 +181,7 @@ public class Controlador extends AbstractController{
             MovCommand move = new MovCommand(this, view, e.getX(), e.getY());
             if(move.getResul() != null){
                 
+                movsRe.clear();
                 move.redoCommand();
                 movsDes.push(move);
                 
