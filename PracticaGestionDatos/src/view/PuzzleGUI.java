@@ -75,12 +75,14 @@ public class PuzzleGUI extends JFrame{
     }
     
     public static void initialize(AbstractController controller, int rowNum,int columnNum,int imageSize,String imagePath){
+        
         PuzzleGUI.controller = controller;
         PuzzleGUI.rowNum = rowNum;
         PuzzleGUI.columnNum = columnNum;
         PuzzleGUI.imageSize = imageSize;
         PuzzleGUI.imageList = null;
         PuzzleGUI.imagePath = imagePath;
+        
     }
 
     //Método que crea el panel inferior
@@ -201,8 +203,6 @@ public class PuzzleGUI extends JFrame{
     public void updateBoard(File imageFile) throws IOException{
         
         controller.removeObserver(boardView);
-        //controller.removeObserver();
-
         this.remove(boardView);
 
         //Seleccionar tamaños
@@ -226,10 +226,8 @@ public class PuzzleGUI extends JFrame{
         
     }
     
-    public void initCarga(int rows, int columns, int tamañoImagen, ArrayList<PieceModel> piezas){
+    public void initCarga(int rows, int columns, int tamañoImagen, ArrayList<PieceModel> piezas) throws IOException{
         controller.removeObserver(boardView);
-        //controller.removeObserver();
-
         this.remove(boardView);
 
         rowNum = rows;

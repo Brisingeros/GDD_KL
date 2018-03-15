@@ -10,16 +10,22 @@ public class PartidaLD {
     private Stack<MovCommand> deshacerMovs;
     
     public PartidaLD(Modelo m,Stack<MovCommand> deshacer){
-        model = m;
-        deshacerMovs = deshacer;
+        
+        this.model = m;
+        this.deshacerMovs = deshacer;
+        
     }
 
     public Modelo getModelo() {
-        return model;
+        
+        return this.model;
+        
     }
 
     public Stack<MovCommand> getDeshacerMovs() {
-        return deshacerMovs;
+        
+        return this.deshacerMovs;
+        
     }
 
 }

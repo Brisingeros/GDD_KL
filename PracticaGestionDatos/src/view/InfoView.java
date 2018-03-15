@@ -22,7 +22,7 @@ public class InfoView extends JDialog implements ActionListener {
         this.getContentPane().add(buildCenter(), BorderLayout.CENTER);
         this.getContentPane().add(buildSouth(), BorderLayout.SOUTH);
         this.setLocationRelativeTo(PuzzleGUI.getInstance());
-        this.setSize(380, 320);
+        this.setSize(600, 480);
         this.setResizable(false);
         this.setVisible(true);
 
@@ -35,9 +35,9 @@ public class InfoView extends JDialog implements ActionListener {
 
             Document document = textPane.getStyledDocument();
 
-            Font titleFont = new Font("Times New Roman", Font.BOLD, 18);
-            Font professorFont = new Font("Times New Roman", Font.ITALIC, 12);
-            Font copyrightFont = new Font("Times New Roman", Font.ITALIC, 10);
+            Font titleFont = new Font("Times New Roman", Font.BOLD, 22);
+            Font professorFont = new Font("Times New Roman", Font.ITALIC, 18);
+            Font copyrightFont = new Font("Times New Roman", Font.ITALIC, 14);
 
             //Formato del titulo
             SimpleAttributeSet simpleSet = new SimpleAttributeSet();
