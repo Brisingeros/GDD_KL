@@ -169,22 +169,15 @@ public class PuzzleGUI extends JFrame{
     public File showFileSelector(){
         
         File imagenSeleccionada = null;
-        //Creamos un nuevo cuadro de diálogo para seleccionar imagen
         JFileChooser selector=new JFileChooser();
-        //Le damos un título
         selector.setDialogTitle("Seleccione una imagen");
-        //Filtramos los tipos de archivos
         FileNameExtensionFilter filtroImagen = new FileNameExtensionFilter("JPG & GIF & BMP & PNG", "jpg", "gif", "bmp","png");
         selector.setFileFilter(filtroImagen);
-        //Abrimos el cuadro de diálog
         int flag=selector.showOpenDialog(null);
-        //Comprobamos que pulse en aceptar
+        
         if(flag==JFileChooser.APPROVE_OPTION){
-            
-            //Devuelve el fichero seleccionado
+
             imagenSeleccionada=selector.getSelectedFile();
-            System.out.println("Imagen cargada");
-            //Asignamos a la variable bmp la imagen leida
                   
         }else{
         
@@ -193,10 +186,13 @@ public class PuzzleGUI extends JFrame{
         }
         
         return imagenSeleccionada;
+        
     }
 
     public BoardView getBoardView(){
+        
         return(this.boardView);
+        
     }
 
     //Método para actualizar la imagen del tablero
@@ -206,11 +202,11 @@ public class PuzzleGUI extends JFrame{
         this.remove(boardView);
 
         //Seleccionar tamaños
-        String opFilas = JOptionPane.showInputDialog("Número de filas y columnas");
-        //String opColumnas = JOptionPane.showInputDialog("Num columnas");
-        String opTamaño = JOptionPane.showInputDialog("Tamaño");
+        String opPiezas = JOptionPane.showInputDialog("Número de piezas");
+        String opTamaño = JOptionPane.showInputDialog("Tamaño deseado de la imagen completa");
 
-        rowNum = Integer.parseInt(opFilas);
+        int piezas = Integer.parseInt(opPiezas);
+        rowNum = (int) Math.sqrt(piezas);
         columnNum = rowNum;
         imageSize = Integer.parseInt(opTamaño);
 
@@ -245,11 +241,8 @@ public class PuzzleGUI extends JFrame{
         controller.addObserver(boardView);
     }
 
-
     public Object clone() throws CloneNotSupportedException {
         throw new CloneNotSupportedException();
     }
     
-    
-
 }

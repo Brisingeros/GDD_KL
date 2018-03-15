@@ -5,9 +5,15 @@
         <group>
             <file>file:/E:/Laura/Universidad/Gestion%20de%20datos/Practica1/GDD_KL/PracticaGestionDatos/src/view/PuzzleGUI.java</file>
             <file>file:/E:/Laura/Universidad/Gestion%20de%20datos/Practica1/GDD_KL/PracticaGestionDatos/src/model/Modelo.java</file>
+            <file>file:/E:/Laura/Universidad/Gestion%20de%20datos/Practica1/GDD_KL/PracticaGestionDatos/src/config/Configuracion.java</file>
             <file>file:/E:/Laura/Universidad/Gestion%20de%20datos/Practica1/GDD_KL/PracticaGestionDatos/src/command/MovCommand.java</file>
             <file>file:/E:/Laura/Universidad/Gestion%20de%20datos/Practica1/GDD_KL/PracticaGestionDatos/src/control/Controlador.java</file>
+            <file>file:/E:/Laura/Universidad/Gestion%20de%20datos/Practica1/GDD_KL/PracticaGestionDatos/src/view/InfoView.java</file>
+            <file>file:/E:/Laura/Universidad/Gestion%20de%20datos/Practica1/GDD_KL/PracticaGestionDatos/src/view/PieceView.java</file>
             <file>file:/E:/Laura/Universidad/Gestion%20de%20datos/Practica1/GDD_KL/PracticaGestionDatos/src/config/PartidaLD.java</file>
+            <file>file:/E:/Laura/Universidad/Gestion%20de%20datos/Practica1/GDD_KL/PracticaGestionDatos/src/config/info.java</file>
+            <file>file:/E:/Laura/Universidad/Gestion%20de%20datos/Practica1/GDD_KL/PracticaGestionDatos/src/command/LoadCommand.java</file>
+            <file>file:/E:/Laura/Universidad/Gestion%20de%20datos/Practica1/GDD_KL/PracticaGestionDatos/src/view/BoardView.java</file>
         </group>
     </open-files>
 </project-private>

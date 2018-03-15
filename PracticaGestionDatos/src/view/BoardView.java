@@ -1,5 +1,6 @@
 package view;
 
+import com.sun.glass.ui.Screen;
 import observer.Observer;
 
 import javax.swing.*;
@@ -21,8 +22,7 @@ public class BoardView extends JPanel implements Observer {
     public static int imageWidth= 96;
     public static int imageHeight= 96;
     private ArrayList<PieceView> iconArray = null;
-    
-    //Nuevas variables
+
     private int anchoImagen;
     private int altoImagen;
     
@@ -44,19 +44,26 @@ public class BoardView extends JPanel implements Observer {
         imageHeight = imageSize;
         filas = rowNum;
         columnas = columnNum;
+        
         for(int i = 0; i < rowNum; i++){
+            
             for(int j = 0; j < columnNum; j++){
+                
                 iconArray.add(new PieceView(i*columnNum + j, i, j, imageSize, imageList[i*columnNum + j]));
+                
             } 
+            
         } 
         
         anchoImagen = iconArray.get(0).getIconWidth();
         altoImagen = iconArray.get(0).getIconHeight();
+        
     }
 
     public BoardView(int rowNum, int columnNum, int imageSize, File imageFile) throws IOException{
         
         super();
+        
         iconArray = new ArrayList<>();
         
         piezaBlanca = 0;
@@ -69,14 +76,18 @@ public class BoardView extends JPanel implements Observer {
         paths = new String[rowNum*columnNum];
         
         try{
+            
             BufferedImage img = this.resizeImage(imageFile);
             imagenes = this.splitImage(img);
             
             for(int i = 0; i < rowNum; i++){
+                
                 for(int j = 0; j < columnNum; j++){
+                    
                     iconArray.add(new PieceView(i*columnNum + j, i, j, imagenes[i*columnNum + j].getHeight(), imagenes[i*columnNum + j]));
                     
                 } 
+                
             } 
 
             anchoImagen = iconArray.get(0).getIconWidth();
@@ -87,6 +98,7 @@ public class BoardView extends JPanel implements Observer {
             System.out.println("No se pudo establecer boardview: " + e.getMessage());
         
         }
+        
     }
     
     private void setImages(ArrayList<PieceModel> pm) throws IOException{
@@ -98,14 +110,17 @@ public class BoardView extends JPanel implements Observer {
                 for(PieceModel p:pm){
             
                     if(p.getId() == i*columnas+j)
+                        
                         imagenes[i*columnas+j] = ImageIO.read(new File(p.getPath()));
+                    
                 }
-                
-            
+
             }
+            
         }
     
     }
+    
     public BoardView(int rowNum, int columnNum, int imageSize, ArrayList<PieceModel> piezas) throws IOException{
         
         super();
@@ -118,22 +133,29 @@ public class BoardView extends JPanel implements Observer {
         imageHeight = imageSize;
         PieceModel aux = null;
         paths = new String[rowNum*columnNum];
+        
         for(int i = 0; i < rowNum; i++){
+            
             for(int j = 0; j < columnNum; j++){
+                
                 aux = piezas.get(i*columnNum + j);
                 PieceView auxp = new PieceView(aux.getId(), aux.getI(), aux.getJ(),imageSize/rowNum, aux.getPath());
                 iconArray.add(auxp);
                 
                 if(aux.getId() == 0){
+                    
                     piezaBlanca = i*columnNum + j;
-                    //Añadir la piezaBlanca redimensionada
+                    
                 }
+                
             } 
+            
         }
         
         setImages(piezas);
         anchoImagen = iconArray.get(0).getIconWidth();
         altoImagen = iconArray.get(0).getIconHeight();
+        
     }
 
     public String[] getPaths(){
@@ -141,23 +163,20 @@ public class BoardView extends JPanel implements Observer {
             return this.paths;
 
     }
-    //redimensionamos la imagen para 96*96
+
     private BufferedImage resizeImage(File fileImage) throws IOException{
         
         BufferedImage resizedImage = null;
         BufferedImage bufim = null;
+        
         try{
 
-            resizedImage = ImageIO.read(new File(fileImage.getPath()));
-            //resizedImage = new BufferedImage(imageWidth,imageHeight,resizedImage.getType());
-
+            resizedImage = ImageIO.read(fileImage);
             bufim = new BufferedImage(imageWidth,imageHeight,resizedImage.getType());
             Graphics2D g = bufim.createGraphics();
             g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
             g.drawImage(resizedImage, 0, 0, imageWidth, imageHeight, 0, 0, resizedImage.getWidth(), resizedImage.getHeight(), null);
             g.dispose();
-        
-            System.out.println("Imagen redimensionada");
             
         }catch(IOException e){
         
@@ -173,19 +192,16 @@ public class BoardView extends JPanel implements Observer {
         
         BufferedImage resizedImage = null;
         BufferedImage bufim = null;
+        
         try{
 
-            resizedImage = ImageIO.read(new File(fileImage.getPath()));
-            //resizedImage = new BufferedImage(imageWidth,imageHeight,resizedImage.getType());
-                
+            resizedImage = ImageIO.read(new File(fileImage.getPath()));  
             bufim = new BufferedImage(imageWidth/columnas,imageHeight/filas,resizedImage.getType());
             Graphics2D g = bufim.createGraphics();
             g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
             g.drawImage(resizedImage, 0, 0, imageWidth/columnas, imageHeight/filas, 0, 0, resizedImage.getWidth(), resizedImage.getHeight(), null);
             g.dispose();
-        
-            System.out.println("Imagen redimensionada");
-            
+
         }catch(IOException e){
         
             System.out.println("No se puede cargar el archivo: " + e.getMessage());
@@ -198,30 +214,26 @@ public class BoardView extends JPanel implements Observer {
 
     //dividimos la imagen en el número
     private BufferedImage[] splitImage(BufferedImage image) throws IOException{
-        //Divisor de imágenes
-        
-        //COMO ACTUALIZAMOS LA IMAGEN UNA VEZ CARGADA. ACCEDER A BOARDVIEW Y A SUS METODOS PRIVADOS
-        //NECESITAMOS DEVOLVER UN ARRAY DE PATHS Y DEVOLVEMOS ARRAY DE BUFFERED IMAGES
+
         int cuadrados = this.filas * this.columnas;
 
-        int anchoCuadrado = image.getWidth() / this.columnas; // determines the chunk width and height
+        int anchoCuadrado = image.getWidth() / this.columnas;
         int altoCuadrado = image.getHeight() / this.filas;
-        int count = 0;
-        BufferedImage images[] = new BufferedImage[cuadrados]; //Image array to hold image chunks
+        BufferedImage images[] = new BufferedImage[cuadrados]; 
+        
         for (int x = 0; x < this.filas; x++) {
+            
             for (int y = 0; y < this.columnas; y++) {
-                //Initialize the image array with image chunks
+
                 images[x*columnas+y] = new BufferedImage(anchoCuadrado, altoCuadrado, image.getType());
-                // draws the image chunk
                 Graphics2D gr = images[x*columnas+y].createGraphics();
                 gr.drawImage(image, 0, 0, anchoCuadrado-2, altoCuadrado-2, anchoCuadrado * y, altoCuadrado * x, anchoCuadrado * y + anchoCuadrado, altoCuadrado * x + altoCuadrado, null);
                 gr.dispose();
+                
             }
      
         }
 
-        System.out.println("Splitting done");
-        
         try{
         
             BufferedImage temp = this.resizeBlanca(new File("resources/blank.gif"));
@@ -238,8 +250,6 @@ public class BoardView extends JPanel implements Observer {
                 }
                 
             }
-            
-            System.out.println("Mini images created");
         
         }catch(IOException e){
         
@@ -266,6 +276,7 @@ public class BoardView extends JPanel implements Observer {
     
     }
     public void update(int blankPos, int movedPos){
+        
         PieceView p = iconArray.get(blankPos);
         PieceView p2 = iconArray.get(movedPos);
         
@@ -284,23 +295,32 @@ public class BoardView extends JPanel implements Observer {
         piezaBlanca = movedPos;
         
         this.repaint();
+        
     }
 
     public void update(Graphics g){
+        
         paint(g);
+        
     }
 
     public void paint(Graphics g){
+        
         super.paint(g);
         
         for(PieceView iconImage:iconArray){
+            
             g.drawImage(iconImage.getImage(), iconImage.getIndexColumn() * iconImage.getIconWidth(), iconImage.getIndexRow() * iconImage.getIconHeight(), iconImage.getImageSize(), iconImage.getImageSize(), this);
+        
         }
+        
     }
 
     //Dado una posicion X e Y localizar una pieza
     private int locatePiece(int posX,int posY){
+        
         return(posY * columnas + posX);
+        
     }
 
     /**
@@ -314,6 +334,7 @@ public class BoardView extends JPanel implements Observer {
      */
 
     public int[] movePiece(int posX,int posY){
+        
         int x = posX / anchoImagen;
         int y = posY / altoImagen;
         
@@ -327,87 +348,127 @@ public class BoardView extends JPanel implements Observer {
             int[] resul = {piezaBlanca, piezaId};
             
             return(resul);
+            
         } else{
+            
             return null;
+            
         }
+        
     }
 
     public static int getImageWidth() {
+        
         return imageWidth;
+        
     }
 
     public static int getImageHeight() {
+        
         return imageHeight;
+        
     }
 
     public ArrayList<PieceView> getIconArray() {
+        
         return iconArray;
+        
     }
 
     public int getAnchoImagen() {
+        
         return anchoImagen;
+        
     }
 
     public int getAltoImagen() {
+        
         return altoImagen;
+        
     }
 
     public int getColumnas() {
+        
         return columnas;
+        
     }
 
     public int getFilas() {
+        
         return filas;
+        
     }
 
     public int getPiezaBlanca() {
+        
         return piezaBlanca;
+        
     }
 
     public BufferedImage[] getImagenes() {
+        
         return imagenes;
+        
     }
 
     public static void setImageWidth(int imageWidth) {
+        
         BoardView.imageWidth = imageWidth;
+        
     }
 
     public static void setImageHeight(int imageHeight) {
+        
         BoardView.imageHeight = imageHeight;
+        
     }
 
     public void setIconArray(ArrayList<PieceView> iconArray) {
+        
         this.iconArray = iconArray;
+        
     }
 
     public void setAnchoImagen(int anchoImagen) {
+        
         this.anchoImagen = anchoImagen;
+        
     }
 
     public void setAltoImagen(int altoImagen) {
+        
         this.altoImagen = altoImagen;
+        
     }
 
     public void setColumnas(int columnas) {
+        
         this.columnas = columnas;
+        
     }
 
     public void setFilas(int filas) {
+        
         this.filas = filas;
+        
     }
 
     public void setPiezaBlanca(int piezaBlanca) {
+        
         this.piezaBlanca = piezaBlanca;
+        
     }
 
     public void setPaths(String[] paths) {
+        
         this.paths = paths;
+        
     }
 
     public void setImagenes(BufferedImage[] imagenes) {
+        
         this.imagenes = imagenes;
-    }
-
-    
+        
+    } 
     
 }

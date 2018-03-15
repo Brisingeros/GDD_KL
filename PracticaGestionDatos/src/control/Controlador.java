@@ -265,6 +265,7 @@ public class Controlador extends AbstractController{
         addModelo(model);
         
         desordenes = view.getFilas()*view.getColumnas()*9;
+        this.desordenar();
         
     }
 
