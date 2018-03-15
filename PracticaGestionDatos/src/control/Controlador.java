@@ -30,7 +30,7 @@ public class Controlador extends AbstractController{
     private BoardView view;
 
     @Override
-    public void actionPerformed(ActionEvent e) {
+    public void actionPerformed(ActionEvent e) { //Método que maneja los eventos
         
         switch (e.getActionCommand()){
             
@@ -69,7 +69,7 @@ public class Controlador extends AbstractController{
                     
                 }
                 
-                Restart();
+                Restart(); //Llamada a método de manejo de creación del nuevo modelo
                 
             break;
             
@@ -121,7 +121,7 @@ public class Controlador extends AbstractController{
                 
             break;
             
-            case "guardar":
+            case "guardar": //Creamos un objeto partida con los datos actuales
         
                 try {
                     
@@ -139,7 +139,7 @@ public class Controlador extends AbstractController{
                 
             break;
             
-            case "cargar":
+            case "cargar": //Leemos un objeto partida y llamamos al método que maneja la creación de nuevo MVC en base a los datos recibidos
                 
                 PartidaLD party = null;
                 
@@ -318,12 +318,12 @@ public class Controlador extends AbstractController{
         
     }
 
-    private void CargarPartida(PartidaLD party) throws IOException {
+    private void CargarPartida(PartidaLD party) throws IOException { //Obtenemos el modelo y la pila del fichero de carga
         
         removeObserver(model);
         model = party.getModelo();
         
-        PuzzleGUI.getInstance().initCarga(model.getRowCount(), model.getColumnCount(), model.getPieceSize(), model.getIconArray());
+        PuzzleGUI.getInstance().initCarga(model.getRowCount(), model.getColumnCount(), model.getPieceSize(), model.getIconArray()); //Método que maneja la creación de un nuevo boardView
         
         addObserver(model);
         view = PuzzleGUI.getInstance().getBoardView();

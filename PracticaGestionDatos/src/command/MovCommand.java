@@ -9,7 +9,7 @@ public class MovCommand implements Command{
     
     private int[] resul;
 
-    public MovCommand(Controlador c, BoardView tab, int x, int y){
+    public MovCommand(Controlador c, BoardView tab, int x, int y){ //Constructor para movimiento de ratón
         
         this.tablero = tab;
         this.control = c;
@@ -17,7 +17,7 @@ public class MovCommand implements Command{
         
     }
     
-    public MovCommand(Controlador c, BoardView tab, int[] x){
+    public MovCommand(Controlador c, BoardView tab, int[] x){ //Constructor para movimiento aleatorio
         
         this.tablero = tab;
         this.control = c;  

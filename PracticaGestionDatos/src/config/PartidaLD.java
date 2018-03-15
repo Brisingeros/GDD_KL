@@ -4,7 +4,7 @@ import command.MovCommand;
 import java.util.Stack;
 import model.Modelo;
 
-public class PartidaLD {
+public class PartidaLD { //Clase que almacena lo necesario para cargar una partida
     
     private Modelo model;
     private Stack<MovCommand> deshacerMovs;

@@ -36,14 +36,13 @@ import static view.PuzzleGUI.controller;
 public class PuzzleApp {
 
     public static void main(String args[]) throws JAXBException, IOException{
-        info init = Configuracion.parse();
-        //info init = null;
+        info init = Configuracion.parse(); //Leemos el fichero de configuración inicial
         int imageSize = 32;
         int rowNum = 3;
         int columnNum= 3;
         String path = null;
         
-        if(init != null){
+        if(init != null){ //Si se ha leído correctamente
             imageSize = init.getImageSize();
             rowNum = init.getRows();
             columnNum= rowNum;
@@ -60,7 +59,7 @@ public class PuzzleApp {
         //Creamos el controlador
         Controlador c  = new Controlador();
         
-        if(path == null){
+        if(path == null){ //Si el path está disponible
             // Inicializamos la GUI
             PuzzleGUI.initialize(c, rowNum, columnNum, imageSize, imageList);
         } else{

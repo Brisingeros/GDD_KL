@@ -19,7 +19,7 @@ public class Configuracion {
     
     private static Gson gson = new GsonBuilder().setPrettyPrinting().create();
     
-    public static info parse() throws JAXBException{
+    public static info parse() throws JAXBException{ //Para leer el fichero de config
         
         JAXBContext jc = JAXBContext.newInstance(info.class);
         
@@ -31,6 +31,7 @@ public class Configuracion {
         
     }
     
+    //Para guardar partida en Json
     public static void toJSON(PartidaLD partida) throws IOException{
     
         String cadena = gson.toJson(partida);
@@ -54,6 +55,7 @@ public class Configuracion {
         
     }
     
+    //Para leer un fichero Json y parsearlo a Partida
     public static PartidaLD cargarPartida() throws IOException{
         
         FileReader f = null;

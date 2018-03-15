@@ -60,7 +60,7 @@ public class Modelo extends AbstractModel{
     }
 
     @Override
-    public boolean isPuzzleSolve() {
+    public boolean isPuzzleSolve() { //Comprobamos si los índices coinciden con los ids, indicando que estaría resuelo
         
         boolean bien = true;
         
@@ -74,7 +74,7 @@ public class Modelo extends AbstractModel{
     }
 
     @Override
-    public int[] getRandomMovement(int lastPos, int pos) {
+    public int[] getRandomMovement(int lastPos, int pos) { //Generamos un movimiento que no coincida la posición blanca con la posición blanca anterior, evitando ciclos simples
         
         ArrayList<Integer> vecinos = this.vecinos(pos);
         int random = 0;
@@ -114,7 +114,7 @@ public class Modelo extends AbstractModel{
     }
     
     @Override
-    public void update(int blankPos, int movedPos) {
+    public void update(int blankPos, int movedPos) { //Al igual que en boardview, modificamos la posición de las piezas. Además, comprobamos el método de victoria
 
         blancaAnterior = blankPos;
         PieceModel p = iconArray.get(blankPos);

@@ -60,7 +60,7 @@ public class BoardView extends JPanel implements Observer {
         
     }
 
-    public BoardView(int rowNum, int columnNum, int imageSize, File imageFile) throws IOException{
+    public BoardView(int rowNum, int columnNum, int imageSize, File imageFile) throws IOException{ //Constructor de boardview cuando le enviamos una imagen completa a dividir
         
         super();
         
@@ -121,7 +121,7 @@ public class BoardView extends JPanel implements Observer {
     
     }
     
-    public BoardView(int rowNum, int columnNum, int imageSize, ArrayList<PieceModel> piezas) throws IOException{
+    public BoardView(int rowNum, int columnNum, int imageSize, ArrayList<PieceModel> piezas) throws IOException{ //Constructor cuando cargamos partida desde Json, con los PieceModel que almacenan id, pos, imagen...
         
         super();
         iconArray = new ArrayList<>();
@@ -164,7 +164,7 @@ public class BoardView extends JPanel implements Observer {
 
     }
 
-    private BufferedImage resizeImage(File fileImage) throws IOException{
+    private BufferedImage resizeImage(File fileImage) throws IOException{ //Damos a la imagen el tamaño deseado, obteniendo un bufferedImage a ser spliteado
         
         BufferedImage resizedImage = null;
         BufferedImage bufim = null;
@@ -212,7 +212,7 @@ public class BoardView extends JPanel implements Observer {
         
     }
 
-    //dividimos la imagen en el número
+    //dividimos la imagen en el número de piezas necesarias
     private BufferedImage[] splitImage(BufferedImage image) throws IOException{
 
         int cuadrados = this.filas * this.columnas;
@@ -275,7 +275,7 @@ public class BoardView extends JPanel implements Observer {
         }      
     
     }
-    public void update(int blankPos, int movedPos){
+    public void update(int blankPos, int movedPos){ //Cambiamos de posición los PieceView
         
         PieceView p = iconArray.get(blankPos);
         PieceView p2 = iconArray.get(movedPos);

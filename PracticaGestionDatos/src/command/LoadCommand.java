@@ -28,6 +28,7 @@ public class LoadCommand implements Command {
     @Override
     public void redoCommand() {
     
+        //Obtenemos la imagen del FileSelector y creamos el nuevo boardView
         try {
             File imagen = PuzzleGUI.getInstance().showFileSelector();
             

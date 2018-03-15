@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package config;
 
 import javax.xml.bind.annotation.XmlElement;
@@ -11,7 +6,7 @@ import javax.xml.bind.annotation.XmlType;
 
 @XmlRootElement(name = "puzzle")
 @XmlType (propOrder = {"rows", "imageSize", "defecto"})
-public class info {
+public class info { //Clase para parsear el fichero de config inicial
     
     private int rows;
     private int imageSize;
