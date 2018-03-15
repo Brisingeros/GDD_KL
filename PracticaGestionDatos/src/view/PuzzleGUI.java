@@ -166,7 +166,7 @@ public class PuzzleGUI extends JFrame{
         return(new Point(xCoord,yCoord));
     }
 
-    public File showFileSelector(){
+    public File showFileSelector(){ //Creamos el panel de selección y leemos la imagen deseada en caso de ser posible
         
         File imagenSeleccionada = null;
         JFileChooser selector=new JFileChooser();
