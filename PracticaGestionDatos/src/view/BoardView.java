@@ -172,6 +172,7 @@ public class BoardView extends JPanel implements Observer {
         try{
 
             resizedImage = ImageIO.read(fileImage);
+            imageHeight = imageHeight * imageWidth/resizedImage.getWidth();
             bufim = new BufferedImage(imageWidth,imageHeight,resizedImage.getType());
             Graphics2D g = bufim.createGraphics();
             g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
@@ -310,8 +311,8 @@ public class BoardView extends JPanel implements Observer {
         
         for(PieceView iconImage:iconArray){
             
-            g.drawImage(iconImage.getImage(), iconImage.getIndexColumn() * iconImage.getIconWidth(), iconImage.getIndexRow() * iconImage.getIconHeight(), iconImage.getImageSize(), iconImage.getImageSize(), this);
-        
+            //g.drawImage(iconImage.getImage(), iconImage.getIndexColumn() * iconImage.getIconWidth(), iconImage.getIndexRow() * iconImage.getIconHeight(), iconImage.getImageSize(), iconImage.getImageSize(), this);
+            g.drawImage(iconImage.getImage(), iconImage.getIndexColumn() * imageWidth/columnas, iconImage.getIndexRow() * imageHeight/filas, imageWidth/columnas, imageHeight/filas, this);
         }
         
     }

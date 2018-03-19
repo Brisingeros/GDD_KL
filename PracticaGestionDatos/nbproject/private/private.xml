@@ -3,19 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/Laura/Universidad/Curso%203º/Gestion%20de%20datos/GDD_KL/PracticaGestionDatos/src/model/PieceModel.java</file>
-            <file>file:/D:/Laura/Universidad/Curso%203º/Gestion%20de%20datos/GDD_KL/PracticaGestionDatos/src/command/LoadCommand.java</file>
-            <file>file:/D:/Laura/Universidad/Curso%203º/Gestion%20de%20datos/GDD_KL/PracticaGestionDatos/src/config/info.java</file>
-            <file>file:/D:/Laura/Universidad/Curso%203º/Gestion%20de%20datos/GDD_KL/PracticaGestionDatos/src/control/Controlador.java</file>
-            <file>file:/D:/Laura/Universidad/Curso%203º/Gestion%20de%20datos/GDD_KL/PracticaGestionDatos/src/view/BoardView.java</file>
-            <file>file:/D:/Laura/Universidad/Curso%203º/Gestion%20de%20datos/GDD_KL/PracticaGestionDatos/src/command/MovCommand.java</file>
-            <file>file:/D:/Laura/Universidad/Curso%203º/Gestion%20de%20datos/GDD_KL/PracticaGestionDatos/src/PuzzleApp.java</file>
-            <file>file:/D:/Laura/Universidad/Curso%203º/Gestion%20de%20datos/GDD_KL/PracticaGestionDatos/src/view/PuzzleGUI.java</file>
-            <file>file:/D:/Laura/Universidad/Curso%203º/Gestion%20de%20datos/GDD_KL/PracticaGestionDatos/src/model/Modelo.java</file>
-            <file>file:/D:/Laura/Universidad/Curso%203º/Gestion%20de%20datos/GDD_KL/PracticaGestionDatos/src/config/PartidaLD.java</file>
-            <file>file:/D:/Laura/Universidad/Curso%203º/Gestion%20de%20datos/GDD_KL/PracticaGestionDatos/src/config/Configuracion.java</file>
-            <file>file:/D:/Laura/Universidad/Curso%203º/Gestion%20de%20datos/GDD_KL/PracticaGestionDatos/src/model/AbstractModel.java</file>
-            <file>file:/D:/Laura/Universidad/Curso%203º/Gestion%20de%20datos/GDD_KL/PracticaGestionDatos/src/view/PieceView.java</file>
+            <file>file:/D:/Git/GDD/GDD_KL/PracticaGestionDatos/src/config/info.java</file>
+            <file>file:/D:/Git/GDD/GDD_KL/PracticaGestionDatos/src/PuzzleApp.java</file>
+            <file>file:/D:/Git/GDD/GDD_KL/PracticaGestionDatos/src/view/PuzzleGUI.java</file>
+            <file>file:/D:/Git/GDD/GDD_KL/PracticaGestionDatos/src/config/Configuracion.java</file>
+            <file>file:/D:/Git/GDD/GDD_KL/PracticaGestionDatos/src/view/BoardView.java</file>
         </group>
     </open-files>
 </project-private>

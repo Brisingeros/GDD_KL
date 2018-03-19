@@ -202,12 +202,15 @@ public class PuzzleGUI extends JFrame{
         this.remove(boardView);
 
         //Seleccionar tamaños
-        String opPiezas = JOptionPane.showInputDialog("Número de piezas");
+        String opPiezas = JOptionPane.showInputDialog("Número de filas");
+        String opPiezas2 = JOptionPane.showInputDialog("Número de columnas");
         String opTamaño = JOptionPane.showInputDialog("Tamaño deseado de la imagen completa");
 
-        int piezas = Integer.parseInt(opPiezas);
-        rowNum = (int) Math.sqrt(piezas);
-        columnNum = rowNum;
+        //int piezas = Integer.parseInt(opPiezas);
+        //rowNum = (int) Math.sqrt(piezas);
+        //columnNum = rowNum;
+        rowNum = Integer.parseInt(opPiezas);
+        columnNum = Integer.parseInt(opPiezas2);
         imageSize = Integer.parseInt(opTamaño);
 
         this.boardView = new BoardView(rowNum,columnNum,imageSize, imageFile);
