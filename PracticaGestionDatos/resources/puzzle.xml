@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE puzzle[
-	<!ELEMENT puzzle (rows,imageSize,defecto)>
+	<!ELEMENT puzzle (rows,columns,imageSize,defecto)>
 	<!ELEMENT rows (#PCDATA)>
 	<!ELEMENT columns (#PCDATA)>
 	<!ELEMENT imageSize (#PCDATA)>
@@ -13,6 +13,6 @@
 	<rows>5</rows>
 	<columns>7</columns>
 	<imageSize>512</imageSize>
-	<defecto>resources/default/default.png</defecto>
+	<defecto>resources/default/default.jpg</defecto>
 
 </puzzle>

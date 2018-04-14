@@ -36,6 +36,7 @@ public class Controlador extends AbstractController{
             
             case "exit": 
                 
+                view.borrarImagenes();
                 System.exit(0);
             
             break;
@@ -57,20 +58,17 @@ public class Controlador extends AbstractController{
             case "load":
                 
                 LoadCommand loader = new LoadCommand(this);
-                loader.redoCommand();
-                
+
                 try {
                     
-                    addView(PuzzleGUI.getInstance().getBoardView());
+                    loader.execute();
                     
                 } catch (IOException ex) {
                     
                     Logger.getLogger(Controlador.class.getName()).log(Level.SEVERE, null, ex);
                     
                 }
-                
-                Restart(); //Llamada a método de manejo de creación del nuevo modelo
-                
+
             break;
             
             case "clutter":
@@ -178,9 +176,12 @@ public class Controlador extends AbstractController{
     public void mouseClicked(MouseEvent e) {
         
         if(e.getX() <= BoardView.imageWidth && e.getY() <= BoardView.imageHeight){
-            MovCommand move = new MovCommand(this, view, e.getX(), e.getY());
-            if(move.getResul() != null){
+
+            int[] mov = view.movePiece(e.getX(), e.getY());
+            
+            if(mov != null){
                 
+                MovCommand move = new MovCommand(this, view, mov);
                 movsRe.clear();
                 move.redoCommand();
                 movsDes.push(move);
@@ -324,6 +325,7 @@ public class Controlador extends AbstractController{
         removeObserver(model);
         model = party.getModelo();
         
+        System.out.println("Tamaño pieza: " + model.getPieceSize());
         PuzzleGUI.getInstance().initCarga(model.getRowCount(), model.getColumnCount(), model.getPieceSize(), model.getIconArray()); //Método que maneja la creación de un nuevo boardView
         
         addObserver(model);

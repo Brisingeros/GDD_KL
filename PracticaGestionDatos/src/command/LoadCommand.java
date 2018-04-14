@@ -16,10 +16,31 @@ import view.PuzzleGUI;
  *
  * @author Laura
  */
-public class LoadCommand implements Command {
+public class LoadCommand implements Command{
 
     Controlador control;
     
+    public void execute() throws IOException {
+    
+        //Obtenemos la imagen del FileSelector y creamos el nuevo boardView
+
+            File imagen = PuzzleGUI.getInstance().showFileSelector();
+            
+            if(imagen != null){
+                
+                control.emptyStacks();
+                PuzzleGUI.getInstance().updateBoard(imagen);
+                control.addView(PuzzleGUI.getInstance().getBoardView());
+                control.Restart(); //Llamada a método de manejo de creación del nuevo modelo
+                
+            }
+        
+    }
+    
+    public LoadCommand(Controlador c){
+        control = c;
+    }
+
     @Override
     public void undoCommand() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -27,22 +48,7 @@ public class LoadCommand implements Command {
 
     @Override
     public void redoCommand() {
-    
-        //Obtenemos la imagen del FileSelector y creamos el nuevo boardView
-        try {
-            File imagen = PuzzleGUI.getInstance().showFileSelector();
-            
-            if(imagen != null){
-                control.emptyStacks();
-                PuzzleGUI.getInstance().updateBoard(imagen);
-            }
-        } catch (IOException ex) {
-            Logger.getLogger(LoadCommand.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-    
-    public LoadCommand(Controlador c){
-        control = c;
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }

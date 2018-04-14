@@ -35,7 +35,9 @@ public class PuzzleGUI extends JFrame{
     //Nueva variable
     public static String imagePath = null;
 
-
+    //Tamaño de pantalla
+    private static int ancho;
+    private static int alto;
     /**
      * Constructor privado
      */
@@ -43,8 +45,10 @@ public class PuzzleGUI extends JFrame{
         super("GMD PuzzleGUI");
         if(imagePath == null){
             boardView = new BoardView(rowNum,columnNum,imageSize,imageList);
+            this.setBounds((ancho / 2) - (this.getWidth() / 2), (alto / 2) - (this.getHeight() / 2), 500,250);
         } else{
             boardView = new BoardView(rowNum,columnNum,imageSize,new File(imagePath));
+            this.setBounds((ancho / 2) - (this.getWidth() / 2), (alto / 2) - (this.getHeight() / 2), 530,375);
         }
         boardView.addMouseListener(controller);
         this.getContentPane().setLayout(new BorderLayout());
@@ -53,8 +57,12 @@ public class PuzzleGUI extends JFrame{
         this.getContentPane().add(createSouthPanel(), BorderLayout.SOUTH);
         this.setResizable(false);
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        this.setSize(1500, 800);
+        //COGEMOS ANCHO Y ALTO DE LA PANTALLA
+        ancho = java.awt.Toolkit.getDefaultToolkit().getScreenSize().width;
+        alto = java.awt.Toolkit.getDefaultToolkit().getScreenSize().height;
+        
         this.setLocation(centerFrame());
+        
     }
 
     //Singleton
@@ -64,7 +72,7 @@ public class PuzzleGUI extends JFrame{
         }
         return(instance);
     }
-
+    
     public static void initialize(AbstractController controller, int rowNum,int columnNum,int imageSize,String[] imageList){
         PuzzleGUI.controller = controller;
         PuzzleGUI.rowNum = rowNum;
@@ -72,6 +80,7 @@ public class PuzzleGUI extends JFrame{
         PuzzleGUI.imageSize = imageSize;
         PuzzleGUI.imageList = imageList;
         PuzzleGUI.imagePath = null;
+        
     }
     
     public static void initialize(AbstractController controller, int rowNum,int columnNum,int imageSize,String imagePath){
@@ -219,6 +228,7 @@ public class PuzzleGUI extends JFrame{
         this.getContentPane().add(boardView, BorderLayout.CENTER);
 
         this.revalidate();
+        this.setBounds((ancho / 2) - (this.getWidth() / 2), (alto / 2) - (this.getHeight() / 2),(int) (BoardView.getImageWidth() * 1.03), (int) (BoardView.getImageHeight() + this.boardView.getAnchoImagen()) + 4);
         this.repaint();
 
         controller.addObserver(boardView);
@@ -235,11 +245,12 @@ public class PuzzleGUI extends JFrame{
         imageSize = tamañoImagen;
 
         this.boardView = new BoardView(rowNum,columnNum,imageSize, piezas);
-
+        System.out.println("Imagesize: " + imageSize);
         boardView.addMouseListener(controller);
         this.getContentPane().add(boardView, BorderLayout.CENTER);
 
         this.revalidate();
+        this.setBounds((ancho / 2) - (this.getWidth() / 2), (alto / 2) - (this.getHeight() / 2),(int) (BoardView.getImageWidth() * 1.03), (int) (BoardView.getImageHeight() + this.boardView.getAnchoImagen()) + 4);
         this.repaint();
 
         controller.addObserver(boardView);

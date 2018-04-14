@@ -9,14 +9,6 @@ public class MovCommand implements Command{
     
     private int[] resul;
 
-    public MovCommand(Controlador c, BoardView tab, int x, int y){ //Constructor para movimiento de ratón
-        
-        this.tablero = tab;
-        this.control = c;
-        this.resul = tablero.movePiece(x, y);
-        
-    }
-    
     public MovCommand(Controlador c, BoardView tab, int[] x){ //Constructor para movimiento aleatorio
         
         this.tablero = tab;
@@ -28,18 +20,14 @@ public class MovCommand implements Command{
     @Override
     public void undoCommand() {
         
-        if(resul != null)
-            
-            this.control.notifyObservers(this.resul[1], this.resul[0]);
+        this.control.notifyObservers(this.resul[1], this.resul[0]);
         
     }
 
     @Override
     public void redoCommand() {
-        
-        if(this.resul != null)
-            
-            this.control.notifyObservers(this.resul[0], this.resul[1]);
+
+        this.control.notifyObservers(this.resul[0], this.resul[1]);
         
     }
 

@@ -245,8 +245,8 @@ public class BoardView extends JPanel implements Observer {
             
                 for(int j = 0; j < columnas; j++){
                 
-                    ImageIO.write(images[i*columnas+j], "jpg", new File("resources/img" + i*columnas+j + ".jpg"));
-                    paths[i*columnas+j] = "resources/img" + i*columnas+j + ".jpg";
+                    ImageIO.write(images[i*columnas+j], "jpg", new File("resources/img" + (i*columnas+j) + ".jpg"));
+                    paths[i*columnas+j] = "resources/img" + (i*columnas+j) + ".jpg";
                 
                 }
                 
@@ -268,12 +268,27 @@ public class BoardView extends JPanel implements Observer {
             
             for(int j = 0; j < columnas; j++){
                 
-                ImageIO.write(imagenes[i*columnas+j], "jpg", new File("resources/default/img" + i*columnas+j + ".jpg"));
-                paths[i*columnas+j] = "resources/default/img" + i*columnas+j + ".jpg";
+                ImageIO.write(imagenes[i*columnas+j], "jpg", new File("resources/default/img" + (i*columnas+j) + ".jpg"));
+                paths[i*columnas+j] = "resources/default/img" + (i*columnas+j) + ".jpg";
                 
             }
             
         }      
+    
+    }
+    
+    public void borrarImagenes(){
+    
+        for (int i = 0; i < filas; i++) {
+            
+            for(int j = 0; j < columnas; j++){
+                
+                File im = new File(paths[i*columnas+j]);
+                im.delete();
+                
+            }
+            
+        }    
     
     }
     public void update(int blankPos, int movedPos){ //Cambiamos de posición los PieceView

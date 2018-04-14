@@ -5,7 +5,9 @@ import control.Controlador;
 import java.io.File;
 import java.io.IOException;
 import javax.xml.bind.JAXBException;
+import javax.xml.parsers.ParserConfigurationException;
 import model.Modelo;
+import org.xml.sax.SAXException;
 import view.BoardView;
 import view.PuzzleGUI;
 import static view.PuzzleGUI.controller;
@@ -35,7 +37,7 @@ import static view.PuzzleGUI.controller;
 
 public class PuzzleApp {
 
-    public static void main(String args[]) throws JAXBException, IOException{
+    public static void main(String args[]) throws JAXBException, IOException, ParserConfigurationException, SAXException{
         info init = Configuracion.parse(); //Leemos el fichero de configuración inicial
         int imageSize = 32;
         int rowNum = 3;
@@ -48,7 +50,7 @@ public class PuzzleApp {
             columnNum= init.getColumns();
             path = init.getDefecto();
         }
-        
+
         String fileSeparator = System.getProperty("file.separator");
         String imagePath=System.getProperty("user.dir")+fileSeparator+"resources"+fileSeparator;
 
@@ -58,10 +60,10 @@ public class PuzzleApp {
         
         //Creamos el controlador
         Controlador c  = new Controlador();
-        
+
         if(path == null){ //Si el path está disponible
             // Inicializamos la GUI
-            PuzzleGUI.initialize(c, rowNum, columnNum, imageSize, imageList);
+            PuzzleGUI.initialize(c, 3, 3, 96, imageList);
         } else{
             // Inicializamos la GUI
             PuzzleGUI.initialize(c, rowNum, columnNum, imageSize, path);
