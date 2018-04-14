@@ -47,7 +47,7 @@ public class PuzzleApp {
         if(init != null){ //Si se ha leído correctamente
             imageSize = init.getImageSize();
             rowNum = init.getRows();
-            columnNum= init.getColumns();
+            columnNum = rowNum;
             path = init.getDefecto();
         }
 

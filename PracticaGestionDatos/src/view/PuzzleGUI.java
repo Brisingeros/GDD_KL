@@ -48,7 +48,7 @@ public class PuzzleGUI extends JFrame{
             this.setBounds((ancho / 2) - (this.getWidth() / 2), (alto / 2) - (this.getHeight() / 2), 500,250);
         } else{
             boardView = new BoardView(rowNum,columnNum,imageSize,new File(imagePath));
-            this.setBounds((ancho / 2) - (this.getWidth() / 2), (alto / 2) - (this.getHeight() / 2), 530,375);
+            this.setBounds((ancho / 2) - (this.getWidth() / 2), (alto / 2) - (this.getHeight() / 2), 530,600);
         }
         boardView.addMouseListener(controller);
         this.getContentPane().setLayout(new BorderLayout());
@@ -210,17 +210,21 @@ public class PuzzleGUI extends JFrame{
         controller.removeObserver(boardView);
         this.remove(boardView);
 
+        int piezas = 0; 
+        
         //Seleccionar tamaños
-        String opPiezas = JOptionPane.showInputDialog("Número de filas");
-        String opPiezas2 = JOptionPane.showInputDialog("Número de columnas");
-        String opTamaño = JOptionPane.showInputDialog("Tamaño deseado de la imagen completa");
-
-        //int piezas = Integer.parseInt(opPiezas);
-        //rowNum = (int) Math.sqrt(piezas);
-        //columnNum = rowNum;
-        rowNum = Integer.parseInt(opPiezas);
-        columnNum = Integer.parseInt(opPiezas2);
-        imageSize = Integer.parseInt(opTamaño);
+        do{
+            String opPiezas = JOptionPane.showInputDialog("Número de piezas (Minimo 9)");
+            piezas = Integer.parseInt(opPiezas);
+        }while(piezas < 9);
+        
+        do{
+            String opTamaño = JOptionPane.showInputDialog("Tamaño deseado de la imagen completa (Mínimo 206)");
+            imageSize = Integer.parseInt(opTamaño);
+        }while(imageSize <= 206);
+        
+        rowNum = (int) Math.sqrt(piezas);
+        columnNum = rowNum;        
 
         this.boardView = new BoardView(rowNum,columnNum,imageSize, imageFile);
 
@@ -228,7 +232,7 @@ public class PuzzleGUI extends JFrame{
         this.getContentPane().add(boardView, BorderLayout.CENTER);
 
         this.revalidate();
-        this.setBounds((ancho / 2) - (this.getWidth() / 2), (alto / 2) - (this.getHeight() / 2),(int) (BoardView.getImageWidth() * 1.03), (int) (BoardView.getImageHeight() + this.boardView.getAnchoImagen()) + 4);
+        this.setBounds((ancho / 2) - (this.getWidth() / 2), (alto / 2) - (this.getHeight() / 2),(int) (BoardView.getImageWidth() * 1.03), (int) (BoardView.getImageHeight() * 1.03) + 85);
         this.repaint();
 
         controller.addObserver(boardView);
@@ -236,7 +240,7 @@ public class PuzzleGUI extends JFrame{
     }
     
     //UpdateBoard para cuando cargamos partida y no cuando cargamos una nueva imagen
-    public void initCarga(int rows, int columns, int tamañoImagen, ArrayList<PieceModel> piezas) throws IOException{
+    public void initCarga(int rows, int tamañoImagen, ArrayList<PieceModel> piezas) throws IOException{
         controller.removeObserver(boardView);
         this.remove(boardView);
 
@@ -250,7 +254,7 @@ public class PuzzleGUI extends JFrame{
         this.getContentPane().add(boardView, BorderLayout.CENTER);
 
         this.revalidate();
-        this.setBounds((ancho / 2) - (this.getWidth() / 2), (alto / 2) - (this.getHeight() / 2),(int) (BoardView.getImageWidth() * 1.03), (int) (BoardView.getImageHeight() + this.boardView.getAnchoImagen()) + 4);
+        this.setBounds((ancho / 2) - (this.getWidth() / 2), (alto / 2) - (this.getHeight() / 2),(int) (BoardView.getImageWidth() * 1.03), (int) (BoardView.getImageHeight() * 1.03) + 85);
         this.repaint();
 
         controller.addObserver(boardView);

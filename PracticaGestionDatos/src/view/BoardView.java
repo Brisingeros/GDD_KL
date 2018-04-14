@@ -172,7 +172,7 @@ public class BoardView extends JPanel implements Observer {
         try{
 
             resizedImage = ImageIO.read(fileImage);
-            imageHeight = imageHeight * imageWidth/resizedImage.getWidth();
+            //imageHeight = imageHeight * imageWidth/resizedImage.getWidth();
             bufim = new BufferedImage(imageWidth,imageHeight,resizedImage.getType());
             Graphics2D g = bufim.createGraphics();
             g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);

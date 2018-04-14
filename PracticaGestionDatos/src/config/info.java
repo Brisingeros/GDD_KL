@@ -5,22 +5,16 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 @XmlRootElement(name = "puzzle")
-@XmlType (propOrder = {"rows", "columns", "imageSize", "defecto"})
+@XmlType (propOrder = {"rows", "imageSize", "defecto"})
 public class info { //Clase para parsear el fichero de config inicial
     
     private int rows;
-    private int columns;
     private int imageSize;
     private String defecto;
     
     @XmlElement (name = "rows")
     public int getRows(){
         return this.rows;
-    }
-    
-    @XmlElement (name = "columns")
-    public int getColumns(){
-        return this.columns;
     }
     
     @XmlElement (name = "imageSize")
@@ -35,10 +29,6 @@ public class info { //Clase para parsear el fichero de config inicial
     
     public void setRows(int a){
         this.rows = a;
-    }
-    
-    public void setColumns(int a){
-        this.columns = a;
     }
     
     public void setImageSize(int a){

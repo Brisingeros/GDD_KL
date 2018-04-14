@@ -326,7 +326,7 @@ public class Controlador extends AbstractController{
         model = party.getModelo();
         
         System.out.println("Tamaño pieza: " + model.getPieceSize());
-        PuzzleGUI.getInstance().initCarga(model.getRowCount(), model.getColumnCount(), model.getPieceSize(), model.getIconArray()); //Método que maneja la creación de un nuevo boardView
+        PuzzleGUI.getInstance().initCarga(model.getRowCount(), model.getPieceSize(), model.getIconArray()); //Método que maneja la creación de un nuevo boardView
         
         addObserver(model);
         view = PuzzleGUI.getInstance().getBoardView();
