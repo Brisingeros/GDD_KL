@@ -15,6 +15,7 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import model.Modelo;
 import observer.Observer;
+import org.basex.core.BaseXException;
 import org.basex.core.Context;
 import view.BoardView;
 import view.InfoView;
@@ -83,18 +84,24 @@ public class Controlador extends AbstractController{
             break;
             
             case "solve":
+        {
+            try {
                 /*
                 try{
-                    
-                    ordenar();
-                    
+                
+                ordenar();
+                
                 } catch(Exception y){
-                    
-                    System.out.println("Vacío");
-                    
+                
+                System.out.println("Vacío");
+                
                 }*/
                 
                 ordenar();
+            } catch (BaseXException ex) {
+                Logger.getLogger(Controlador.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
                 
             break;
             
@@ -251,7 +258,7 @@ public class Controlador extends AbstractController{
     
     }
     
-    public void ordenar(){
+    public void ordenar() throws BaseXException{
         /*
         while(!movsDes.empty()){
             
@@ -260,12 +267,12 @@ public class Controlador extends AbstractController{
             movsRe.push(move);
             
         }*/
-
+        manager.queryCatalog("/pilas", contexto);
         String posi = manager.tomarMovCommand(contexto, "movsdes");
         String[] aux;
         int[] values;
         
-        while(posi != null){
+        while(posi != ""){
             aux = posi.split(",");
             values = new int[2];
             for(int i = 0; i < values.length; i++){
@@ -293,16 +300,20 @@ public class Controlador extends AbstractController{
         String[] aux;
         int[] values;
         
-        aux = posi.split(",");
-        values = new int[2];
-        for(int i = 0; i < values.length; i++){
-            values[i] = Integer.parseInt(aux[i]);
+        if(posi != ""){
+        
+            aux = posi.split(",");
+            values = new int[2];
+            for(int i = 0; i < values.length; i++){
+                values[i] = Integer.parseInt(aux[i]);
+            }
+
+            MovCommand move = new MovCommand(this, view, values);
+            move.undoCommand();
+
+            manager.addMovCommand(move, contexto, "rehacer");
+            
         }
-
-        MovCommand move = new MovCommand(this, view, values);
-        move.undoCommand();
-
-        manager.addMovCommand(move, contexto, "rehacer");
         
     }
     
@@ -317,17 +328,21 @@ public class Controlador extends AbstractController{
         String[] aux;
         int[] values;
         
-        aux = posi.split(",");
-        values = new int[2];
-        for(int i = 0; i < values.length; i++){
-            values[i] = Integer.parseInt(aux[i]);
+        if(posi != ""){
+        
+            aux = posi.split(",");
+            values = new int[2];
+            for(int i = 0; i < values.length; i++){
+                values[i] = Integer.parseInt(aux[i]);
+            }
+
+            MovCommand move = new MovCommand(this, view, values);
+            move.redoCommand();
+
+            manager.addMovCommand(move, contexto, "movsdes");
+            
         }
 
-        MovCommand move = new MovCommand(this, view, values);
-        move.redoCommand();
-
-        manager.addMovCommand(move, contexto, "movsdes");
-        
     }
     
     public void emptyStacks(){

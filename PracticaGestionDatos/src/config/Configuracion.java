@@ -137,11 +137,7 @@ public class Configuracion {
             
             Logger.getLogger(Configuracion.class.getName()).log(Level.SEVERE, null, ex);
             
-        } catch (IOException ex) {
-            
-            Logger.getLogger(Configuracion.class.getName()).log(Level.SEVERE, null, ex);
-            
-        }
+        } 
            
         f.close();
         

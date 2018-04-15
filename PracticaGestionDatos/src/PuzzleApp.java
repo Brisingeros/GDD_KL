@@ -61,7 +61,7 @@ public class PuzzleApp {
         //Creamos el controlador
         Controlador c  = new Controlador();
         c.inicioContexto();
-
+        
         if(path == null){ //Si el path está disponible
             // Inicializamos la GUI
             PuzzleGUI.initialize(c, 3, 3, 96, imageList);
