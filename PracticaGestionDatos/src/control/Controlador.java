@@ -31,7 +31,7 @@ public class Controlador extends AbstractController{
     private Modelo model;
     private BoardView view;
     
-    private BaseXManager man; // = new BaseXManager();
+    private BaseXManager manager; // = new BaseXManager();
     private Context contexto; // = new Context();
 
     @Override
@@ -201,9 +201,9 @@ public class Controlador extends AbstractController{
                 move.redoCommand();
 
                 //Limpiar rehacer
-                man.limpiarMovCommand(contexto, "movsre");
+                manager.limpiarMovCommand(contexto, "rehacer");
                 //Añadir el movcommand al tipo movsdes
-                man.addMovCommand(move, contexto, "movsdes");
+                manager.addMovCommand(move, contexto, "movsdes");
                 
             }
             
@@ -212,10 +212,10 @@ public class Controlador extends AbstractController{
     }
     
     public void inicioContexto(){
-        man = new BaseXManager();
+        manager = new BaseXManager();
         contexto = new Context();
         
-        man.createCollection("Pilas", contexto);
+        manager.createCollection("Pilas", contexto);
     }
     
     public void desordenar(){
@@ -236,7 +236,7 @@ public class Controlador extends AbstractController{
             
         }*/
         
-        man.limpiarMovCommand(contexto, "movsre");
+        manager.limpiarMovCommand(contexto, "rehacer");
         for(int i = 0; i < desordenes; i++){
             int[] mov = model.getRandomMovement(model.getBlancaAnterior(), view.getPiezaBlanca());
             MovCommand move = new MovCommand(this,view,mov);
@@ -244,7 +244,7 @@ public class Controlador extends AbstractController{
             if(move.getResul() != null){
                 
                 move.redoCommand();
-                man.addMovCommand(move, contexto, "movsdes");
+                manager.addMovCommand(move, contexto, "movsdes");
                 
             }
         }
@@ -260,10 +260,8 @@ public class Controlador extends AbstractController{
             movsRe.push(move);
             
         }*/
-        String posi = man.tomarMovCommand(contexto, "movsdes");
-        
-        System.out.println(posi);
-        
+
+        String posi = manager.tomarMovCommand(contexto, "movsdes");
         String[] aux;
         int[] values;
         
@@ -272,15 +270,14 @@ public class Controlador extends AbstractController{
             values = new int[2];
             for(int i = 0; i < values.length; i++){
                 values[i] = Integer.parseInt(aux[i]);
-                //System.out.println(values[i]);
             }
-            
+
             MovCommand move = new MovCommand(this, view, values);
             move.undoCommand();
             
-            man.addMovCommand(move, contexto, "movsre");
+            manager.addMovCommand(move, contexto, "rehacer");
             
-            posi = man.tomarMovCommand(contexto, "movsdes");
+            posi = manager.tomarMovCommand(contexto, "movsdes");
         }
         
     }
@@ -292,12 +289,12 @@ public class Controlador extends AbstractController{
         movsRe.push(move);
         */
         
-        String posi = man.tomarMovCommand(contexto, "movsdes");
+        String posi = manager.tomarMovCommand(contexto, "movsdes");
         String[] aux;
         int[] values;
         
         aux = posi.split(",");
-        values = new int[aux.length];
+        values = new int[2];
         for(int i = 0; i < values.length; i++){
             values[i] = Integer.parseInt(aux[i]);
         }
@@ -305,7 +302,7 @@ public class Controlador extends AbstractController{
         MovCommand move = new MovCommand(this, view, values);
         move.undoCommand();
 
-        man.addMovCommand(move, contexto, "movsre");
+        manager.addMovCommand(move, contexto, "rehacer");
         
     }
     
@@ -316,12 +313,12 @@ public class Controlador extends AbstractController{
         movsDes.push(move);
         */
         
-        String posi = man.tomarMovCommand(contexto, "movsre");
+        String posi = manager.tomarMovCommand(contexto, "rehacer");
         String[] aux;
         int[] values;
         
         aux = posi.split(",");
-        values = new int[aux.length];
+        values = new int[2];
         for(int i = 0; i < values.length; i++){
             values[i] = Integer.parseInt(aux[i]);
         }
@@ -329,7 +326,7 @@ public class Controlador extends AbstractController{
         MovCommand move = new MovCommand(this, view, values);
         move.redoCommand();
 
-        man.addMovCommand(move, contexto, "movsdes");
+        manager.addMovCommand(move, contexto, "movsdes");
         
     }
     
@@ -339,8 +336,8 @@ public class Controlador extends AbstractController{
         movsDes = new Stack<MovCommand>();
         */
         
-        man.limpiarMovCommand(contexto, "movsre");
-        man.limpiarMovCommand(contexto, "movsdes");
+        manager.limpiarMovCommand(contexto, "rehacer");
+        manager.limpiarMovCommand(contexto, "movsdes");
         
     }
     
