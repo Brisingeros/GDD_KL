@@ -2,6 +2,7 @@ package control;
 
 import command.LoadCommand;
 import command.MovCommand;
+import config.BaseXManager;
 import config.Configuracion;
 import config.PartidaLD;
 import java.awt.event.ActionEvent;
@@ -14,6 +15,7 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import model.Modelo;
 import observer.Observer;
+import org.basex.core.Context;
 import view.BoardView;
 import view.InfoView;
 import view.PuzzleGUI;
@@ -28,6 +30,9 @@ public class Controlador extends AbstractController{
     
     private Modelo model;
     private BoardView view;
+    
+    private BaseXManager man; // = new BaseXManager();
+    private Context contexto; // = new Context();
 
     @Override
     public void actionPerformed(ActionEvent e) { //Método que maneja los eventos
@@ -78,7 +83,7 @@ public class Controlador extends AbstractController{
             break;
             
             case "solve":
-                
+                /*
                 try{
                     
                     ordenar();
@@ -87,12 +92,14 @@ public class Controlador extends AbstractController{
                     
                     System.out.println("Vacío");
                     
-                }
+                }*/
+                
+                ordenar();
                 
             break;
             
             case "deshacer":
-                
+                /*
                 try{
                     
                     deshacer();
@@ -101,12 +108,14 @@ public class Controlador extends AbstractController{
                     
                     System.out.println("Vacío");
                     
-                }
+                }*/
+                
+                deshacer();
                 
             break;
             
             case "rehacer":
-                
+                /*
                 try{
                     
                     rehacer();
@@ -115,7 +124,9 @@ public class Controlador extends AbstractController{
                     
                     System.out.println("Vacío");
                     
-                }
+                }*/
+                
+                rehacer();
                 
             break;
             
@@ -138,7 +149,7 @@ public class Controlador extends AbstractController{
             break;
             
             case "cargar": //Leemos un objeto partida y llamamos al método que maneja la creación de nuevo MVC en base a los datos recibidos
-                
+                /*
                 PartidaLD party = null;
                 
                 try {
@@ -152,7 +163,7 @@ public class Controlador extends AbstractController{
                     Logger.getLogger(Controlador.class.getName()).log(Level.SEVERE, null, ex);
                     
                 }  
-
+                *///Desactivado por miedo a explosión de forma temporal
             break;
             
             default:
@@ -180,11 +191,19 @@ public class Controlador extends AbstractController{
             int[] mov = view.movePiece(e.getX(), e.getY());
             
             if(mov != null){
-                
+                /*
                 MovCommand move = new MovCommand(this, view, mov);
                 movsRe.clear();
                 move.redoCommand();
-                movsDes.push(move);
+                movsDes.push(move);*/
+                
+                MovCommand move = new MovCommand(this, view, mov);
+                move.redoCommand();
+
+                //Limpiar rehacer
+                man.limpiarMovCommand(contexto, "movsre");
+                //Añadir el movcommand al tipo movsdes
+                man.addMovCommand(move, contexto, "movsdes");
                 
             }
             
@@ -192,8 +211,16 @@ public class Controlador extends AbstractController{
         
     }
     
+    public void inicioContexto(){
+        man = new BaseXManager();
+        contexto = new Context();
+        
+        man.createCollection("Pilas", contexto);
+    }
+    
     public void desordenar(){
     
+        /*
         movsRe.clear();
         for(int i = 0; i < desordenes; i++){
         
@@ -207,42 +234,113 @@ public class Controlador extends AbstractController{
                 
             }
             
+        }*/
+        
+        man.limpiarMovCommand(contexto, "movsre");
+        for(int i = 0; i < desordenes; i++){
+            int[] mov = model.getRandomMovement(model.getBlancaAnterior(), view.getPiezaBlanca());
+            MovCommand move = new MovCommand(this,view,mov);
+            
+            if(move.getResul() != null){
+                
+                move.redoCommand();
+                man.addMovCommand(move, contexto, "movsdes");
+                
+            }
         }
     
     }
     
     public void ordenar(){
-        
+        /*
         while(!movsDes.empty()){
             
             MovCommand move = movsDes.pop();
             move.undoCommand();
             movsRe.push(move);
             
+        }*/
+        String posi = man.tomarMovCommand(contexto, "movsdes");
+        
+        System.out.println(posi);
+        
+        String[] aux;
+        int[] values;
+        
+        while(posi != null){
+            aux = posi.split(",");
+            values = new int[2];
+            for(int i = 0; i < values.length; i++){
+                values[i] = Integer.parseInt(aux[i]);
+                //System.out.println(values[i]);
+            }
+            
+            MovCommand move = new MovCommand(this, view, values);
+            move.undoCommand();
+            
+            man.addMovCommand(move, contexto, "movsre");
+            
+            posi = man.tomarMovCommand(contexto, "movsdes");
         }
         
     }
     
     public void deshacer(){
-        
+        /*
         MovCommand move = movsDes.pop();
         move.undoCommand();
         movsRe.push(move);
+        */
+        
+        String posi = man.tomarMovCommand(contexto, "movsdes");
+        String[] aux;
+        int[] values;
+        
+        aux = posi.split(",");
+        values = new int[aux.length];
+        for(int i = 0; i < values.length; i++){
+            values[i] = Integer.parseInt(aux[i]);
+        }
+
+        MovCommand move = new MovCommand(this, view, values);
+        move.undoCommand();
+
+        man.addMovCommand(move, contexto, "movsre");
         
     }
     
     public void rehacer(){
-        
+        /*
         MovCommand move = movsRe.pop();
         move.redoCommand();
         movsDes.push(move);
+        */
+        
+        String posi = man.tomarMovCommand(contexto, "movsre");
+        String[] aux;
+        int[] values;
+        
+        aux = posi.split(",");
+        values = new int[aux.length];
+        for(int i = 0; i < values.length; i++){
+            values[i] = Integer.parseInt(aux[i]);
+        }
+
+        MovCommand move = new MovCommand(this, view, values);
+        move.redoCommand();
+
+        man.addMovCommand(move, contexto, "movsdes");
         
     }
     
     public void emptyStacks(){
-        
+        /*
         movsRe = new Stack<MovCommand>();
         movsDes = new Stack<MovCommand>();
+        */
+        
+        man.limpiarMovCommand(contexto, "movsre");
+        man.limpiarMovCommand(contexto, "movsdes");
         
     }
     

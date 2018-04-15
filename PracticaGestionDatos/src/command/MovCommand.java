@@ -1,5 +1,6 @@
 package command;
 import control.Controlador;
+import java.util.Arrays;
 import view.BoardView;
 
 public class MovCommand implements Command{
@@ -35,6 +36,11 @@ public class MovCommand implements Command{
         
         return this.resul;
         
+    }
+    
+    @Override
+    public String toString(){
+        return ("element array{'" + resul[0] + "," + resul[1] + "'}");
     }
      
 }
