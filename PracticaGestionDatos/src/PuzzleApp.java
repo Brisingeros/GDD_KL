@@ -71,13 +71,14 @@ public class PuzzleApp {
         BoardView v = PuzzleGUI.getInstance().getBoardView();
         
         // Creamos el modelo
-        Modelo m = new Modelo(rowNum, columnNum, imageSize, v.getPaths());
+        Modelo m = new Modelo(rowNum, columnNum, imageSize, v.getPathsPiezas());
         
         // Añadimos un nuevo observador al controlador
         c.addObserver(m);
         c.addObserver(v);
         c.addModelo(m);
         c.addView(v);
+        
         // Visualizamos la aplicación.
         PuzzleGUI.getInstance().setVisible(true);
         c.desordenar();

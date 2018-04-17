@@ -20,7 +20,6 @@ import view.BoardView;
 import view.InfoView;
 import view.PuzzleGUI;
 
-
 public class Controlador extends AbstractController{
     
     private Stack<MovCommand> movsDes = new Stack<>(); //Atrás
@@ -77,18 +76,14 @@ public class Controlador extends AbstractController{
             break;
             
             case "clutter":
-                
-        {
+
                 desordenar();
-        }
-                
+   
             break;
             
             case "solve":
-        {
                 
                 ordenar();
-        }
                 
             break;
             
@@ -105,40 +100,46 @@ public class Controlador extends AbstractController{
             break;
             
             case "guardaP0":
-                //Creamos un objeto partida con los datos actuales
+                try {
+                    JOptionPane.showMessageDialog(PuzzleGUI.getInstance().getContentPane(), manager.guardarPartida(contexto, 0, view.getFilas(), view.getTamaño(), view.getPathImagenCompleta()));
+                } catch (IOException ex) {
+                    Logger.getLogger(Controlador.class.getName()).log(Level.SEVERE, null, ex);
+                }
                 
-                manager.guardarPartida(contexto, 0, view.getFilas(), view.getTamaño(), view.getPath());
-                
-      
             break;
             
             case "guardaP1":
                 
-                manager.guardarPartida(contexto, 1, view.getFilas(), view.getTamaño(), view.getPath());
-                
+                try {
+                    JOptionPane.showMessageDialog(PuzzleGUI.getInstance().getContentPane(), manager.guardarPartida(contexto, 1, view.getFilas(), view.getTamaño(), view.getPathImagenCompleta()));
+                } catch (IOException ex) {
+                    Logger.getLogger(Controlador.class.getName()).log(Level.SEVERE, null, ex);
+                }
                 
             break;
             case "guardaP2": 
-                
-                manager.guardarPartida(contexto, 2, view.getFilas(), view.getTamaño(), view.getPath());
-                
-                
+                         
+                try {
+                    JOptionPane.showMessageDialog(PuzzleGUI.getInstance().getContentPane(), manager.guardarPartida(contexto, 2, view.getFilas(), view.getTamaño(), view.getPathImagenCompleta()));
+                } catch (IOException ex) {
+                    Logger.getLogger(Controlador.class.getName()).log(Level.SEVERE, null, ex);
+                }
+  
             break;
             case "cargaP0": //Leemos un objeto partida y llamamos al método que maneja la creación de nuevo MVC en base a los datos recibidos
-                
-                this.cargarPartidaXml(0);
-                
+
+                    this.cargarPartidaXml(0);
+
             break;
             case "cargaP1": //Leemos un objeto partida y llamamos al método que maneja la creación de nuevo MVC en base a los datos recibidos
-                
-                this.cargarPartidaXml(1);
+
+                    this.cargarPartidaXml(1);
                 
             break;
             case "cargaP2": //Leemos un objeto partida y llamamos al método que maneja la creación de nuevo MVC en base a los datos recibidos
-                
-                this.cargarPartidaXml(2);
-                //JOptionPane.showMessageDialog(PuzzleGUI.getInstance().getContentPane(), "Partida cargada");
-                
+
+                    this.cargarPartidaXml(2);
+
             break;
             
             default:
@@ -198,7 +199,7 @@ public class Controlador extends AbstractController{
         
         manager.limpiarMovCommand(contexto, "rehacer");
         
-        for(int i = 0; i < 5; i++){
+        for(int i = 0; i < desordenes; i++){
             int[] mov = model.getRandomMovement(model.getBlancaAnterior(), view.getPiezaBlanca());
             MovCommand move = new MovCommand(this,view,mov);
             
@@ -300,10 +301,63 @@ public class Controlador extends AbstractController{
         
     }
     
+        
+    private void cargarPartidaXml(int id){
+        try {
+            String query = manager.cargarPartida(contexto, id);
+            
+            if(query != null){
+            
+                PartidaXML game = Configuracion.parseXML(query);
+            
+                removeObserver(model);
+
+                PuzzleGUI.getInstance().initCarga(game.getFilas(), game.getTamaño(), game.getPath());
+
+                view = PuzzleGUI.getInstance().getBoardView();
+
+                model = new Modelo(game.getFilas(), game.getFilas(), game.getTamaño(), view.getPathsPiezas());
+
+                this.addObserver(model);
+
+                this.desordenInicio();
+                
+                JOptionPane.showMessageDialog(PuzzleGUI.getInstance().getContentPane(), "Partida cargada correctamente");
+            
+            }else
+                
+                JOptionPane.showMessageDialog(PuzzleGUI.getInstance().getContentPane(), "Error al cargar partida");
+                
+            
+        } catch (IOException ex) {
+            Logger.getLogger(Controlador.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    private void desordenInicio(){
+        String aux1 = manager.recorridoInicio(contexto);
+        
+        String[] aux2 = aux1.split("\r\n");
+        String[] aux3;
+        int[] values;
+        
+        for(int i = 0; i < aux2.length; i++){
+            aux3 = aux2[i].split(",");
+            
+            values = new int[aux3.length];
+            for(int j = 0; j < values.length; j++){
+                values[j] = Integer.parseInt(aux3[j]);
+            }
+            
+            MovCommand move = new MovCommand(this, view, values);
+            move.redoCommand();
+        }
+    }
+    
     public void Restart(){
         
         removeObserver(model);
-        model = new Modelo(view.getFilas(), view.getColumnas(), view.getAltoImagen()*view.getColumnas(), view.getPaths());
+        model = new Modelo(view.getFilas(), view.getColumnas(), view.getAltoImagen()*view.getColumnas(), view.getPathsPiezas());
         
         addObserver(model);
         addModelo(model);
@@ -362,45 +416,4 @@ public class Controlador extends AbstractController{
         
     }
     
-    private void cargarPartidaXml(int id){
-        try {
-            PartidaXML game = Configuracion.parseXML(manager.cargarPartida(contexto, id));
-            
-            removeObserver(model);
-            
-            PuzzleGUI.getInstance().initCarga(game.getFilas(), game.getTamaño(), game.getPath());
-            
-            view = PuzzleGUI.getInstance().getBoardView();
-            
-            model = new Modelo(game.getFilas(), game.getFilas(), game.getTamaño(), view.getPaths());
-            
-            this.addObserver(model);
-            
-            this.desordenInicio();
-        } catch (IOException ex) {
-            Logger.getLogger(Controlador.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-    
-    private void desordenInicio(){
-        String aux1 = manager.recorridoInicio(contexto);
-        System.out.println(aux1);
-        
-        String[] aux2 = aux1.split("\r\n");
-        String[] aux3;
-        int[] values;
-        
-        for(int i = 0; i < aux2.length; i++){
-            aux3 = aux2[i].split(",");
-            
-            values = new int[aux3.length];
-            for(int j = 0; j < values.length; j++){
-                values[j] = Integer.parseInt(aux3[j]);
-            }
-            
-            MovCommand move = new MovCommand(this, view, values);
-            move.redoCommand();
-        }
-    }
- 
 }

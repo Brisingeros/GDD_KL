@@ -12,6 +12,7 @@ import org.basex.core.cmd.XQuery;
 public class BaseXManager {
 
     public void createCollection(String name, Context context){
+        
         try {
             
             new CreateDB(name).execute(context);
@@ -25,10 +26,15 @@ public class BaseXManager {
             /*System.out.println("Show data base information: ");
             System.out.println(new InfoDB().execute(context));*/
         } catch (BaseXException ex) {
+            
             Logger.getLogger(BaseXManager.class.getName()).log(Level.SEVERE, null, ex);
+            
         } catch (IOException ex) {
+            
             Logger.getLogger(BaseXManager.class.getName()).log(Level.SEVERE, null, ex);
+            
         } 
+        
     }
     
     public void queryCatalog(String query, Context context){
@@ -48,7 +54,7 @@ public class BaseXManager {
     public void addMovCommand(MovCommand com, Context context, String type){
         try {
 
-            System.out.println("insert node " + com + " into /pilas/" + type);
+            //System.out.println("insert node " + com + " into /pilas/" + type);
             XQuery xQuery = new XQuery("insert node " + com + " into /pilas/" + type); //Almacenamos en el mismo XML ambos tipos de movcommand, separados en dos elementos
             System.out.println(xQuery.execute(context));
             updatePilas(context);
@@ -100,8 +106,10 @@ public class BaseXManager {
             updatePilas(context);
             return res;
         } catch (BaseXException ex) {
-            //Logger.getLogger(BaseXManager.class.getName()).log(Level.SEVERE, null, ex);
+            
+            Logger.getLogger(BaseXManager.class.getName()).log(Level.SEVERE, null, ex);
             return "";
+            
         }
     }
     
@@ -111,14 +119,15 @@ public class BaseXManager {
             query.execute(context);
             updatePilas(context);
         } catch (BaseXException ex) {
-            //Logger.getLogger(BaseXManager.class.getName()).log(Level.SEVERE, null, ex);
+            
+            Logger.getLogger(BaseXManager.class.getName()).log(Level.SEVERE, null, ex);
+            
         }
     }
     
-    public void guardarPartida(Context context, int id, int filas, int tamaño, String path){
+    public String guardarPartida(Context context, int id, int filas, int tamaño, String path){
     
         try {
-            //XQuery query = new XQuery("insert node doc('Pilas.xml')/pilas/. into doc('Partidas.xml')/partida[@id='" + id + "']");
             
             XQuery query = new XQuery("doc('resources/Pilas.xml')/pilas/*");
             XQuery query1 = new XQuery("replace node /partidas/partida[@id='"+ id +"'] with element partida{attribute id{'" + id + "'}," +
@@ -128,11 +137,15 @@ public class BaseXManager {
                                             "element pilas{doc('resources/Pilas.xml')/pilas/*}}" );
             
             query1.execute(context);
-            
-            queryCatalog("/partidas",context);
             updatePartidaGuardada(context);
+            
+            return "Partida guardada correctamente";
+            
         } catch (BaseXException ex) {
+            
             Logger.getLogger(BaseXManager.class.getName()).log(Level.SEVERE, null, ex);
+            return "No se pudo guardar la partida";
+            
         } 
     
     }
@@ -147,17 +160,23 @@ public class BaseXManager {
             query1.execute(context);
             return query.execute(context);
         } catch (BaseXException ex) {
+            
             Logger.getLogger(BaseXManager.class.getName()).log(Level.SEVERE, null, ex);
             return null;
+            
         }
     }
     
     public String recorridoInicio(Context context){
         try {
+            
             return new XQuery("for $mov in /pilas/movsdes/array/text() \n return $mov").execute(context);
+            
         } catch (BaseXException ex) {
+            
             Logger.getLogger(BaseXManager.class.getName()).log(Level.SEVERE, null, ex);
             return null;
+            
         }
     }
     

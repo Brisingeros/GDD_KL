@@ -53,7 +53,7 @@ public class Configuracion {
             StringReader reader = new StringReader(obj);
             
             PartidaXML party = (PartidaXML) unmar.unmarshal(reader);
-            
+
             return party;
             
         } catch (JAXBException ex) {

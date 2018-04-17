@@ -4,6 +4,8 @@ import control.AbstractController;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -49,12 +51,22 @@ public class PuzzleGUI extends JFrame{
             this.setBounds((ancho / 2) - (this.getWidth() / 2), (alto / 2) - (this.getHeight() / 2), 530,600);
         }
         boardView.addMouseListener(controller);
+        
+        this.addWindowListener(new WindowAdapter() {
+            
+            @Override
+            public void windowClosing(WindowEvent e) {
+                boardView.borrarImagenes();
+            }
+            
+        });
         this.getContentPane().setLayout(new BorderLayout());
         this.setJMenuBar(createMenuBar());
         this.getContentPane().add(boardView, BorderLayout.CENTER);
         this.getContentPane().add(createSouthPanel(), BorderLayout.SOUTH);
         this.setResizable(false);
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        
         //COGEMOS ANCHO Y ALTO DE LA PANTALLA
         ancho = java.awt.Toolkit.getDefaultToolkit().getScreenSize().width;
         alto = java.awt.Toolkit.getDefaultToolkit().getScreenSize().height;
@@ -274,7 +286,7 @@ public class PuzzleGUI extends JFrame{
         imageSize = tamañoImagen;
 
         this.boardView = new BoardView(rowNum,columnNum,imageSize, new File(path));
-        System.out.println("Imagesize: " + imageSize);
+
         boardView.addMouseListener(controller);
         this.getContentPane().add(boardView, BorderLayout.CENTER);
 

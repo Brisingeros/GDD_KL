@@ -15,6 +15,7 @@ import javax.imageio.ImageIO;
  * @author Miguel Ángel
  * @version 1.0
  */
+
 public class BoardView extends JPanel implements Observer {
     
     public static int imageWidth= 96;
@@ -99,12 +100,6 @@ public class BoardView extends JPanel implements Observer {
         
         }
         
-    }
-
-    public String[] getPaths(){
-
-            return this.paths;
-
     }
 
     private BufferedImage resizeImage(File fileImage) throws IOException{ //Damos a la imagen el tamaño deseado, obteniendo un bufferedImage a ser spliteado
@@ -363,7 +358,14 @@ public class BoardView extends JPanel implements Observer {
         
     }
 
-    public String getPath(){
+    
+    public String[] getPathsPiezas(){
+
+            return this.paths;
+
+    }
+    
+    public String getPathImagenCompleta(){
     
         return this.path;
         
