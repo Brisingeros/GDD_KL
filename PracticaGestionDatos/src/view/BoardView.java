@@ -1,6 +1,5 @@
 package view;
 
-import com.sun.glass.ui.Screen;
 import observer.Observer;
 
 import javax.swing.*;
@@ -10,7 +9,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import javax.imageio.ImageIO;
-import model.PieceModel;
 
 /**
  * Clase que representa la vista del tablero
@@ -100,63 +98,6 @@ public class BoardView extends JPanel implements Observer {
             System.out.println("No se pudo establecer boardview: " + e.getMessage());
         
         }
-        
-    }
-    
-    private void setImages(ArrayList<PieceModel> pm) throws IOException{
-    
-        for(int i = 0; i < filas; i++){
-        
-            for(int j = 0; j < columnas; j++){
-            
-                for(PieceModel p:pm){
-            
-                    if(p.getId() == i*columnas+j)
-                        
-                        imagenes[i*columnas+j] = ImageIO.read(new File(p.getPath()));
-                    
-                }
-
-            }
-            
-        }
-    
-    }
-    
-    public BoardView(int rowNum, int columnNum, int imageSize, ArrayList<PieceModel> piezas) throws IOException{ //Constructor cuando cargamos partida desde Json, con los PieceModel que almacenan id, pos, imagen...
-        
-        super();
-        iconArray = new ArrayList<>();
-        
-        filas = rowNum;
-        columnas = columnNum;
-        imagenes = new BufferedImage[rowNum*columnNum]; 
-        imageWidth = imageSize;
-        imageHeight = imageSize;
-        PieceModel aux = null;
-        paths = new String[rowNum*columnNum];
-        
-        for(int i = 0; i < rowNum; i++){
-            
-            for(int j = 0; j < columnNum; j++){
-                
-                aux = piezas.get(i*columnNum + j);
-                PieceView auxp = new PieceView(aux.getId(), aux.getI(), aux.getJ(),imageSize/rowNum, aux.getPath());
-                iconArray.add(auxp);
-                
-                if(aux.getId() == 0){
-                    
-                    piezaBlanca = i*columnNum + j;
-                    
-                }
-                
-            } 
-            
-        }
-        
-        setImages(piezas);
-        anchoImagen = iconArray.get(0).getIconWidth();
-        altoImagen = iconArray.get(0).getIconHeight();
         
     }
 
@@ -262,24 +203,6 @@ public class BoardView extends JPanel implements Observer {
         
         return(images);
         
-    }
-
-    public void imagenesGuardadas(int id) throws IOException{
-    
-        ImageIO.write(ImageIO.read(new File(path)), ".jpg", new File("resources/default/id" + id + ".jpg"));
-        
-        
-        for (int i = 0; i < filas; i++) {
-            
-            for(int j = 0; j < columnas; j++){
-                
-                ImageIO.write(imagenes[i*columnas+j], "jpg", new File("resources/default/img" + (i*columnas+j) + ".jpg"));
-                paths[i*columnas+j] = "resources/default/img" + (i*columnas+j) + ".jpg";
-                
-            }
-            
-        }      
-    
     }
     
     public void borrarImagenes(){

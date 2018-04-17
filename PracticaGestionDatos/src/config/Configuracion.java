@@ -9,6 +9,7 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.io.StringReader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.bind.JAXBContext;
@@ -41,6 +42,25 @@ public class Configuracion {
 
         return jugador;
 
+    }
+    
+    public static PartidaXML parseXML(String obj){
+        try {
+            JAXBContext jc = JAXBContext.newInstance(PartidaXML.class);
+            
+            Unmarshaller unmar = jc.createUnmarshaller();
+            
+            StringReader reader = new StringReader(obj);
+            
+            PartidaXML party = (PartidaXML) unmar.unmarshal(reader);
+            
+            return party;
+            
+        } catch (JAXBException ex) {
+            Logger.getLogger(Configuracion.class.getName()).log(Level.SEVERE, null, ex);
+            
+            return null;
+        }
     }
 
     public static boolean validate(String xml)throws ParserConfigurationException, IOException, org.xml.sax.SAXException{
@@ -93,55 +113,6 @@ public class Configuracion {
           
         }
         
-    }
-    
-    //Para guardar partida en Json
-    public static void toJSON(PartidaLD partida) throws IOException{
-    
-        String cadena = gson.toJson(partida);
-        añadirFichero(cadena);
-      
-    }
-    
-    private static void añadirFichero(String c) throws FileNotFoundException, IOException{
-        
-        try{
-
-            PrintStream lectura = new PrintStream(new FileOutputStream("resources/partida.json"),false);
-            lectura.print(c);
-            lectura.close();
-
-        }catch(FileNotFoundException e){
-        
-            System.out.println("Fichero no encontrado");
-        
-        }
-        
-    }
-    
-    //Para leer un fichero Json y parsearlo a Partida
-    public static PartidaLD cargarPartida() throws IOException{
-        
-        FileReader f = null;
-        String cadena = "";
-        BufferedReader b = null;
-        PartidaLD party = null;
-        
-        try {
-            
-            f = new FileReader("resources/partida.json");
-            b = new BufferedReader(f);
-            party = gson.fromJson(b, PartidaLD.class);  
-            
-        } catch (FileNotFoundException ex) {
-            
-            Logger.getLogger(Configuracion.class.getName()).log(Level.SEVERE, null, ex);
-            
-        } 
-           
-        f.close();
-        
-        return party;
     }
 
 }

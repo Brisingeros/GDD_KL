@@ -1,8 +1,6 @@
 import config.Configuracion;
 import config.info;
-import control.AbstractController;
 import control.Controlador;
-import java.io.File;
 import java.io.IOException;
 import javax.xml.bind.JAXBException;
 import javax.xml.parsers.ParserConfigurationException;
@@ -10,7 +8,6 @@ import model.Modelo;
 import org.xml.sax.SAXException;
 import view.BoardView;
 import view.PuzzleGUI;
-import static view.PuzzleGUI.controller;
 
 /*
  * Copyright 2016 Miguel Ángel Rodríguez-García (miguel.rodriguez@urjc.es).

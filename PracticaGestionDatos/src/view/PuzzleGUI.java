@@ -6,9 +6,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import model.PieceModel;
 
 /**
  * Clase que representa la GUI principal.
@@ -267,7 +265,7 @@ public class PuzzleGUI extends JFrame{
     }
     
     //UpdateBoard para cuando cargamos partida y no cuando cargamos una nueva imagen
-    public void initCarga(int rows, int tamañoImagen, ArrayList<PieceModel> piezas) throws IOException{
+    public void initCarga(int rows, int tamañoImagen, String path) throws IOException{
         controller.removeObserver(boardView);
         this.remove(boardView);
 
@@ -275,7 +273,7 @@ public class PuzzleGUI extends JFrame{
         columnNum = rowNum;
         imageSize = tamañoImagen;
 
-        this.boardView = new BoardView(rowNum,columnNum,imageSize, piezas);
+        this.boardView = new BoardView(rowNum,columnNum,imageSize, new File(path));
         System.out.println("Imagesize: " + imageSize);
         boardView.addMouseListener(controller);
         this.getContentPane().add(boardView, BorderLayout.CENTER);

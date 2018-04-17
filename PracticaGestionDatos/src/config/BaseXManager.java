@@ -1,17 +1,13 @@
 package config;
 
 import command.MovCommand;
-import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.xml.parsers.ParserConfigurationException;
 import org.basex.core.*;
 import org.basex.core.cmd.Add;
 import org.basex.core.cmd.CreateDB;
-import org.basex.core.cmd.InfoDB;
 import org.basex.core.cmd.XQuery;
-import org.xml.sax.SAXException;
 
 public class BaseXManager {
 
@@ -35,7 +31,7 @@ public class BaseXManager {
         } 
     }
     
-    public void queryCatalog(String query, Context context) throws BaseXException{
+    public void queryCatalog(String query, Context context){
     
         try{
             
@@ -111,7 +107,7 @@ public class BaseXManager {
     
     public void limpiarMovCommand(Context context, String type){
         try {
-            XQuery query = new XQuery("delete node /pilas/" + type + "/array*"); //Comprobar si está bien
+            XQuery query = new XQuery("delete nodes /pilas/" + type + "/array"); //Comprobar si está bien
             query.execute(context);
             updatePilas(context);
         } catch (BaseXException ex) {
@@ -125,11 +121,11 @@ public class BaseXManager {
             //XQuery query = new XQuery("insert node doc('Pilas.xml')/pilas/. into doc('Partidas.xml')/partida[@id='" + id + "']");
             
             XQuery query = new XQuery("doc('resources/Pilas.xml')/pilas/*");
-            XQuery query1 = new XQuery("insert node element partida{attribute id{'" + id + "'}," +
+            XQuery query1 = new XQuery("replace node /partidas/partida[@id='"+ id +"'] with element partida{attribute id{'" + id + "'}," +
                     "element path{'" + path + "'}," +
                             "element filas{'" + filas + "'}," +
                                     "element tamaño{'" + tamaño + "'}," +
-                                            "element pilas{doc('resources/Pilas.xml')/pilas/*}} into /partidas");
+                                            "element pilas{doc('resources/Pilas.xml')/pilas/*}}" );
             
             query1.execute(context);
             
@@ -137,13 +133,32 @@ public class BaseXManager {
             updatePartidaGuardada(context);
         } catch (BaseXException ex) {
             Logger.getLogger(BaseXManager.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        
-        
-        
-        
+        } 
     
+    }
+    
+    public String cargarPartida(Context context, int id){
+        try {
+            XQuery query = new XQuery("let $game := partidas/partida[@id='" + id +"'] \n return <partida>{$game/* except $game/pilas}</partida>");
+            
+            XQuery query2 = new XQuery("doc('resources/Partidas.xml')/partidas/partida[@id='"+ id +"']/pilas");
+            XQuery query1 = new XQuery("replace node /pilas with " + query2.execute(context));
+            
+            query1.execute(context);
+            return query.execute(context);
+        } catch (BaseXException ex) {
+            Logger.getLogger(BaseXManager.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
+    }
+    
+    public String recorridoInicio(Context context){
+        try {
+            return new XQuery("for $mov in /pilas/movsdes/array/text() \n return $mov").execute(context);
+        } catch (BaseXException ex) {
+            Logger.getLogger(BaseXManager.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
     }
     
 }
