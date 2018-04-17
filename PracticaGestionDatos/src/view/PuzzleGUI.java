@@ -142,10 +142,24 @@ public class PuzzleGUI extends JFrame{
         JMenuItem info = new JMenuItem("Info");
         info.setActionCommand("info");
         
-        JMenuItem cargar = new JMenuItem("Cargar");
-        cargar.setActionCommand("cargar");
-        JMenuItem guardar = new JMenuItem("Guardar");
-        guardar.setActionCommand("guardar");
+        JMenu cargar = new JMenu("Cargar");
+        JMenuItem p0 = new JMenuItem("Partida 0");
+        JMenuItem p1 = new JMenuItem("Partida 1");
+        JMenuItem p2 = new JMenuItem("Partida 2");
+        
+        p0.setActionCommand("cargaP0");
+        p1.setActionCommand("cargaP1");
+        p2.setActionCommand("cargaP2");
+        //cargar.setActionCommand("cargar");
+        JMenu guardar = new JMenu("Guardar");
+        JMenuItem p00 = new JMenuItem("Partida 0");
+        JMenuItem p11 = new JMenuItem("Partida 1");
+        JMenuItem p22 = new JMenuItem("Partida 2");
+        
+        p00.setActionCommand("guardaP0");
+        p11.setActionCommand("guardaP1");
+        p22.setActionCommand("guardaP2");
+        //guardar.setActionCommand("guardar");
 
         archive.add(load);
         archive.add(exit);
@@ -155,14 +169,27 @@ public class PuzzleGUI extends JFrame{
         menu.add(help);
         menu.add(partida);
         
+        cargar.add(p0);
+        cargar.add(p1);
+        cargar.add(p2);
         partida.add(cargar);
+        
+        guardar.add(p00);
+        guardar.add(p11);
+        guardar.add(p22);
         partida.add(guardar);
         
         load.addActionListener(controller);
         exit.addActionListener(controller);
         info.addActionListener(controller);
-        cargar.addActionListener(controller);
-        guardar.addActionListener(controller);
+        //cargar.addActionListener(controller);
+        p0.addActionListener(controller);
+        p1.addActionListener(controller);
+        p2.addActionListener(controller);
+        p00.addActionListener(controller);
+        p11.addActionListener(controller);
+        p22.addActionListener(controller);
+        //guardar.addActionListener(controller);
 
         return(menu);
     }

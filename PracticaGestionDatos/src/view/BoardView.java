@@ -28,9 +28,10 @@ public class BoardView extends JPanel implements Observer {
     
     private int columnas;
     private int filas;
-
+    private int tamaño;
     private int piezaBlanca;
     private String[] paths;
+    private String path;
     private BufferedImage[] imagenes;
 
     public BoardView(int rowNum, int columnNum,int imageSize, String[] imageList){
@@ -44,7 +45,7 @@ public class BoardView extends JPanel implements Observer {
         imageHeight = imageSize;
         filas = rowNum;
         columnas = columnNum;
-        
+        tamaño = imageSize;
         for(int i = 0; i < rowNum; i++){
             
             for(int j = 0; j < columnNum; j++){
@@ -68,13 +69,14 @@ public class BoardView extends JPanel implements Observer {
         
         piezaBlanca = 0;
         
+        path = imageFile.getPath();
         filas = rowNum;
         columnas = columnNum;
         
         imageWidth = imageSize;
         imageHeight = imageSize;
         paths = new String[rowNum*columnNum];
-        
+        tamaño = imageSize;
         try{
             
             BufferedImage img = this.resizeImage(imageFile);
@@ -262,8 +264,11 @@ public class BoardView extends JPanel implements Observer {
         
     }
 
-    public void imagenesGuardadas() throws IOException{
+    public void imagenesGuardadas(int id) throws IOException{
     
+        ImageIO.write(ImageIO.read(new File(path)), ".jpg", new File("resources/default/id" + id + ".jpg"));
+        
+        
         for (int i = 0; i < filas; i++) {
             
             for(int j = 0; j < columnas; j++){
@@ -278,7 +283,7 @@ public class BoardView extends JPanel implements Observer {
     }
     
     public void borrarImagenes(){
-    
+
         for (int i = 0; i < filas; i++) {
             
             for(int j = 0; j < columnas; j++){
@@ -373,6 +378,14 @@ public class BoardView extends JPanel implements Observer {
         
     }
 
+    public int getTamaño() {
+        return tamaño;
+    }
+
+    public void setTamaño(int tamaño) {
+        this.tamaño = tamaño;
+    }
+
     public static int getImageWidth() {
         
         return imageWidth;
@@ -427,6 +440,11 @@ public class BoardView extends JPanel implements Observer {
         
     }
 
+    public String getPath(){
+    
+        return this.path;
+        
+    }
     public static void setImageWidth(int imageWidth) {
         
         BoardView.imageWidth = imageWidth;

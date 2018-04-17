@@ -1,8 +1,8 @@
 # General Options
 DEBUG = false
-DBPATH = D:/BDD2/XPath/basex/data
+DBPATH = 
 LOGPATH = .logs
-REPOPATH = D:/BDD2/XPath/basex/repo
+REPOPATH = 
 LANG = English
 LANGKEYS = false
 FAIRLOCK = false
@@ -26,7 +26,7 @@ LOG = true
 LOGMSGMAXLEN = 1000
 
 # HTTP Services
-WEBPATH = D:/BDD2/XPath/basex/webapp
+WEBPATH = 
 RESTPATH = 
 RESTXQPATH = 
 PARSERESTXQ = 3

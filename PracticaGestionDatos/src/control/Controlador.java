@@ -79,7 +79,13 @@ public class Controlador extends AbstractController{
             
             case "clutter":
                 
+        {
+            try {
                 desordenar();
+            } catch (BaseXException ex) {
+                Logger.getLogger(Controlador.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
                 
             break;
             
@@ -137,11 +143,13 @@ public class Controlador extends AbstractController{
                 
             break;
             
-            case "guardar": //Creamos un objeto partida con los datos actuales
+            case "guardaP0": //Creamos un objeto partida con los datos actuales
         
-                try {
+                manager.guardarPartida(contexto, 0, view.getFilas(), view.getTamaño(), view.getPath());
+                
+                /*try {
                     
-                    view.imagenesGuardadas();
+                    //view.imagenesGuardadas();
                     model.setPaths(view.getPaths());
                     PartidaLD partida = new PartidaLD(model, movsDes);            
                     Configuracion.toJSON(partida);
@@ -151,11 +159,79 @@ public class Controlador extends AbstractController{
                     
                     Logger.getLogger(Controlador.class.getName()).log(Level.SEVERE, null, ex);
                     
-                } 
+                } */
                 
             break;
             
-            case "cargar": //Leemos un objeto partida y llamamos al método que maneja la creación de nuevo MVC en base a los datos recibidos
+            case "guardaP1": //Creamos un objeto partida con los datos actuales
+        
+                /*try {
+                    
+                    //view.imagenesGuardadas();
+                    model.setPaths(view.getPaths());
+                    PartidaLD partida = new PartidaLD(model, movsDes);            
+                    Configuracion.toJSON(partida);
+                    JOptionPane.showMessageDialog(PuzzleGUI.getInstance().getContentPane(), "Partida guardada");
+                    
+                } catch (IOException ex) {
+                    
+                    Logger.getLogger(Controlador.class.getName()).log(Level.SEVERE, null, ex);
+                    
+                } */
+                
+            break;
+            case "guardaP2": //Creamos un objeto partida con los datos actuales
+        
+                /*try {
+                    
+                    //view.imagenesGuardadas();
+                    model.setPaths(view.getPaths());
+                    PartidaLD partida = new PartidaLD(model, movsDes);            
+                    Configuracion.toJSON(partida);
+                    JOptionPane.showMessageDialog(PuzzleGUI.getInstance().getContentPane(), "Partida guardada");
+                    
+                } catch (IOException ex) {
+                    
+                    Logger.getLogger(Controlador.class.getName()).log(Level.SEVERE, null, ex);
+                    
+                } */
+                
+            break;
+            case "cargaP0": //Leemos un objeto partida y llamamos al método que maneja la creación de nuevo MVC en base a los datos recibidos
+                /*
+                PartidaLD party = null;
+                
+                try {
+                    
+                    party = Configuracion.cargarPartida();
+                    CargarPartida(party);
+                    JOptionPane.showMessageDialog(PuzzleGUI.getInstance().getContentPane(), "Partida cargada");
+                   
+                } catch (IOException ex) {
+                    
+                    Logger.getLogger(Controlador.class.getName()).log(Level.SEVERE, null, ex);
+                    
+                }  
+                *///Desactivado por miedo a explosión de forma temporal
+            break;
+            case "cargaP1": //Leemos un objeto partida y llamamos al método que maneja la creación de nuevo MVC en base a los datos recibidos
+                /*
+                PartidaLD party = null;
+                
+                try {
+                    
+                    party = Configuracion.cargarPartida();
+                    CargarPartida(party);
+                    JOptionPane.showMessageDialog(PuzzleGUI.getInstance().getContentPane(), "Partida cargada");
+                   
+                } catch (IOException ex) {
+                    
+                    Logger.getLogger(Controlador.class.getName()).log(Level.SEVERE, null, ex);
+                    
+                }  
+                *///Desactivado por miedo a explosión de forma temporal
+            break;
+            case "cargaP2": //Leemos un objeto partida y llamamos al método que maneja la creación de nuevo MVC en base a los datos recibidos
                 /*
                 PartidaLD party = null;
                 
@@ -178,6 +254,7 @@ public class Controlador extends AbstractController{
             break;
         }
     }
+
 
     @Override
     public void notifyObservers(int blankPos, int movedPos) {
@@ -219,13 +296,15 @@ public class Controlador extends AbstractController{
     }
     
     public void inicioContexto(){
+        
         manager = new BaseXManager();
         contexto = new Context();
+
+        manager.createCollection("Pilas",contexto);
         
-        manager.createCollection("Pilas", contexto);
     }
     
-    public void desordenar(){
+    public void desordenar() throws BaseXException{
     
         /*
         movsRe.clear();
@@ -242,8 +321,9 @@ public class Controlador extends AbstractController{
             }
             
         }*/
-        
         manager.limpiarMovCommand(contexto, "rehacer");
+        manager.queryCatalog("/pilas", contexto);
+        
         for(int i = 0; i < desordenes; i++){
             int[] mov = model.getRandomMovement(model.getBlancaAnterior(), view.getPiezaBlanca());
             MovCommand move = new MovCommand(this,view,mov);
@@ -267,7 +347,7 @@ public class Controlador extends AbstractController{
             movsRe.push(move);
             
         }*/
-        manager.queryCatalog("/pilas", contexto);
+        
         String posi = manager.tomarMovCommand(contexto, "movsdes");
         String[] aux;
         int[] values;
@@ -368,7 +448,7 @@ public class Controlador extends AbstractController{
         
     }
     
-    public void Restart(){
+    public void Restart() throws BaseXException{
         
         removeObserver(model);
         model = new Modelo(view.getFilas(), view.getColumnas(), view.getAltoImagen()*view.getColumnas(), view.getPaths());
