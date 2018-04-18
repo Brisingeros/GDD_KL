@@ -285,6 +285,7 @@ public class PuzzleGUI extends JFrame{
         columnNum = rowNum;
         imageSize = tamañoImagen;
 
+        boardView.borrarImagenes();
         this.boardView = new BoardView(rowNum,columnNum,imageSize, new File(path));
 
         boardView.addMouseListener(controller);
