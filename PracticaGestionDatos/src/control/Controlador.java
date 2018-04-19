@@ -4,6 +4,7 @@ import command.LoadCommand;
 import command.MovCommand;
 import config.BaseXManager;
 import config.Configuracion;
+import config.MongoManager;
 import config.PartidaCarga;
 import config.PartidaXML;
 import java.awt.event.ActionEvent;
@@ -33,12 +34,12 @@ public class Controlador extends AbstractController{
     private BoardView view;
     
     private BaseXManager manager; // = new BaseXManager();
+    private MongoManager monager;
     private Context contexto; // = new Context();
     
     private String base;
     
-    public Controlador(String b){
-        
+    public void init(String b){
         base = b;
         
         if(base.equals("XML")){
@@ -49,9 +50,9 @@ public class Controlador extends AbstractController{
 
             emptyStacks();
         } else{
-            
+            monager = new MongoManager();
+            monager.createCollection(view.getFilas(), view.getTamaño(), view.getPathImagenCompleta());
         }
-        
     }
 
     public void gestorAcciones(String accion){
@@ -116,6 +117,21 @@ public class Controlador extends AbstractController{
 
                     }
                     
+                } else if(base.equals("Mongo")){
+                    
+                    //monager.limpiarStack("rehacer");
+                    
+                    for(int i = 0; i < desordenes; i++){
+                
+                        MovCommand move = desordenar();
+                        if(move.getResul() != null){
+                
+                            move.redoCommand();
+                            monager.addMovCommand(move, "movsdes");
+                        
+                        }
+
+                    }
                 }
                 
             break;
@@ -131,9 +147,19 @@ public class Controlador extends AbstractController{
                         deshacer(posi);
                         posi = manager.tomarMovCommand(contexto, "movsdes");
                     
-                   }
+                    }
                 
-                }else if(base.equals("Mongo"))
+                }else if(base.equals("Mongo")){
+                    
+                    int[] posi = monager.tomarMovCommand("movsdes");
+                    
+                    while(posi != null){
+                    
+                        deshacer(posi);
+                        posi = monager.tomarMovCommand("movsdes");
+                    
+                    }
+                }
                 
                 
             break;
@@ -150,7 +176,9 @@ public class Controlador extends AbstractController{
                     
                    }
                 
-                }else if(base.equals("Mongo"))
+                }else if(base.equals("Mongo")){
+                    
+                }
                 
                 
             break;
@@ -167,17 +195,21 @@ public class Controlador extends AbstractController{
                     
                    }
                 
-                }else if(base.equals("Mongo"))
+                }else if(base.equals("Mongo")){
+                    
+                }
                 
             break;
             
             case "guardaP0":
                 
-                if(base.equals("XML"))
+                if(base.equals("XML")){
                     
                     panel = manager.guardarPartida(contexto, 0, view.getFilas(), view.getTamaño(), view.getPathImagenCompleta());
                 
-                else if(base.equals("Mongo"))
+                }else if(base.equals("Mongo")){
+                    
+                }
                 
                 try {
                     JOptionPane.showMessageDialog(PuzzleGUI.getInstance().getContentPane(), panel);
@@ -189,11 +221,13 @@ public class Controlador extends AbstractController{
             
             case "guardaP1":
                 
-                if(base.equals("XML"))
+                if(base.equals("XML")){
                     
                     panel = manager.guardarPartida(contexto, 1, view.getFilas(), view.getTamaño(), view.getPathImagenCompleta());
                 
-                else if(base.equals("Mongo"))
+                }else if(base.equals("Mongo")){
+                    
+                }
                 try {
                     JOptionPane.showMessageDialog(PuzzleGUI.getInstance().getContentPane(), panel);
                 } catch (IOException ex) {
@@ -203,11 +237,13 @@ public class Controlador extends AbstractController{
             break;
             case "guardaP2": 
 
-                if(base.equals("XML"))
+                if(base.equals("XML")){
                     
                     panel = manager.guardarPartida(contexto, 2, view.getFilas(), view.getTamaño(), view.getPathImagenCompleta());
                 
-                else if(base.equals("Mongo"))
+                }else if(base.equals("Mongo")){
+                
+                }
                          
                 try {
                     JOptionPane.showMessageDialog(PuzzleGUI.getInstance().getContentPane(), panel);
@@ -236,7 +272,9 @@ public class Controlador extends AbstractController{
 
                         }
 
-                    }else if(base.equals("Mongo")){}
+                    }else if(base.equals("Mongo")){
+                    
+                    }
                     
                 }catch(IOException ex) {
                     
@@ -264,7 +302,9 @@ public class Controlador extends AbstractController{
 
                         }
 
-                    }else if(base.equals("Mongo")){}
+                    }else if(base.equals("Mongo")){
+                    
+                    }
                     
                 }catch(IOException ex) {
                     
@@ -293,7 +333,9 @@ public class Controlador extends AbstractController{
 
                         }
 
-                    }else if(base.equals("Mongo")){}
+                    }else if(base.equals("Mongo")){
+                    
+                    }
                     
                 }catch(IOException ex) {
                     
@@ -338,12 +380,21 @@ public class Controlador extends AbstractController{
                 
                 MovCommand move = new MovCommand(this, view, mov);
                 //Limpiar rehacer
-                manager.limpiarMovCommand(contexto, "rehacer");
+                if(base.equals("XML")){
+                    manager.limpiarMovCommand(contexto, "rehacer");
+
+                    
+
+                    //Añadir el movcommand al tipo movsdes
+                    manager.addMovCommand(move, contexto, "movsdes");
+                    
+                } else if(base.equals("Mongo")){
+                    monager.limpiarStack("rehacer");
+                    
+                    monager.addMovCommand(move, "movsdes");
+                }
                 
                 move.redoCommand();
-                
-                //Añadir el movcommand al tipo movsdes
-                manager.addMovCommand(move, contexto, "movsdes");
                 
             }
             

@@ -58,7 +58,8 @@ public class PuzzleApp {
                 imagePath+"five.gif",imagePath+"six.gif",imagePath+"seven.gif",imagePath+"eight.gif"};
         
         //Creamos el controlador
-        Controlador c  = new Controlador(base);
+        base = "Mongo";
+        Controlador c  = new Controlador();
         
         if(path == null){ //Si el path está disponible
             // Inicializamos la GUI
@@ -79,6 +80,8 @@ public class PuzzleApp {
         c.addObserver(v);
         c.addModelo(m);
         c.addView(v);
+        
+        c.init(base);
         
         // Visualizamos la aplicación.
         PuzzleGUI.getInstance().setVisible(true);
