@@ -40,24 +40,26 @@ public class PuzzleApp {
         int rowNum = 3;
         int columnNum= 3;
         String path = null;
+        String base = "XML";
         
         if(init != null){ //Si se ha leído correctamente
             imageSize = init.getImageSize();
             rowNum = init.getRows();
             columnNum = rowNum;
             path = init.getDefecto();
+            base = init.getBase();
         }
 
+        System.out.println("defecto: " + path);
         String fileSeparator = System.getProperty("file.separator");
-        String imagePath=System.getProperty("user.dir")+fileSeparator+"resources"+fileSeparator;
+        String imagePath=System.getProperty("user.dir")+fileSeparator+"resources"+fileSeparator + "default" + fileSeparator;
 
         
         String[] imageList={imagePath+"blank.gif",imagePath+"one.gif",imagePath+"two.gif",imagePath+"three.gif",imagePath+ "four.gif",
                 imagePath+"five.gif",imagePath+"six.gif",imagePath+"seven.gif",imagePath+"eight.gif"};
         
         //Creamos el controlador
-        Controlador c  = new Controlador();
-        c.inicioContexto();
+        Controlador c  = new Controlador(base);
         
         if(path == null){ //Si el path está disponible
             // Inicializamos la GUI
@@ -81,7 +83,7 @@ public class PuzzleApp {
         
         // Visualizamos la aplicación.
         PuzzleGUI.getInstance().setVisible(true);
-        c.desordenar();
+        c.gestorAcciones("clutter");
         
     }
 }

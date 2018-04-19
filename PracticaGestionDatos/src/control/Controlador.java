@@ -32,11 +32,29 @@ public class Controlador extends AbstractController{
     
     private BaseXManager manager; // = new BaseXManager();
     private Context contexto; // = new Context();
-
-    @Override
-    public void actionPerformed(ActionEvent e) { //Método que maneja los eventos
+    
+    private String base;
+    
+    public Controlador(String b){
         
-        switch (e.getActionCommand()){
+        base = b;
+        
+        if(base.equals("XML")){
+            manager = new BaseXManager();
+            contexto = new Context();
+
+            manager.createCollection("Pilas",contexto);
+
+            emptyStacks();
+        } else{
+            
+        }
+        
+    }
+
+    public void gestorAcciones(String accion){
+    
+    switch (accion){
             
             case "exit": 
                 
@@ -77,25 +95,74 @@ public class Controlador extends AbstractController{
             
             case "clutter":
 
-                desordenar();
-   
+                if(base.equals("XML")){
+                
+                    manager.limpiarMovCommand(contexto, "rehacer");
+                
+                    for(int i = 0; i < desordenes; i++){
+                
+                        MovCommand move = desordenar();
+                        if(move.getResul() != null){
+                
+                            move.redoCommand();
+                            manager.addMovCommand(move, contexto, "movsdes");
+                        
+                        }
+
+                    }
+                    
+                }
+                
             break;
             
             case "solve":
                 
-                ordenar();
+                if(base.equals("XML")){
+                
+                    int[] posi = manager.tomarMovCommand(contexto, "movsdes");
+                    
+                    while(posi != null){
+                    
+                        ordenar(posi);
+                        posi = manager.tomarMovCommand(contexto, "movsdes");
+                    
+                   }
+                
+                }
+                
                 
             break;
             
             case "deshacer":
                 
-                deshacer();
+                if(base.equals("XML")){
+                
+                    int[] posi = manager.tomarMovCommand(contexto, "movsdes");
+                    
+                    if(posi != null){
+
+                        manager.addMovCommand(deshacer(posi), contexto, "rehacer");
+                    
+                   }
+                
+                }
+                
                 
             break;
             
             case "rehacer":
                 
-                rehacer();
+                if(base.equals("XML")){
+                
+                    int[] posi = manager.tomarMovCommand(contexto, "rehacer");
+                    
+                    if(posi != null){
+
+                        manager.addMovCommand(rehacer(posi), contexto, "movsdes");
+                    
+                   }
+                
+                }
                 
             break;
             
@@ -147,6 +214,12 @@ public class Controlador extends AbstractController{
             break;
         }
     }
+    @Override
+    public void actionPerformed(ActionEvent e) { //Método que maneja los eventos
+        
+        this.gestorAcciones(e.getActionCommand());
+        
+    }
 
 
     @Override
@@ -184,101 +257,39 @@ public class Controlador extends AbstractController{
         
     }
     
-    public void inicioContexto(){
-        
-        manager = new BaseXManager();
-        contexto = new Context();
+    public MovCommand desordenar(){
 
-        manager.createCollection("Pilas",contexto);
-        
-        emptyStacks();
+        int[] mov = model.getRandomMovement(model.getBlancaAnterior(), view.getPiezaBlanca());
+        MovCommand move = new MovCommand(this,view,mov);
+
+        return move;
         
     }
     
-    public void desordenar(){
+    public void ordenar(int[] movimiento){
         
-        manager.limpiarMovCommand(contexto, "rehacer");
-        
-        for(int i = 0; i < desordenes; i++){
-            int[] mov = model.getRandomMovement(model.getBlancaAnterior(), view.getPiezaBlanca());
-            MovCommand move = new MovCommand(this,view,mov);
-            
-            if(move.getResul() != null){
-                
-                move.redoCommand();
-                manager.addMovCommand(move, contexto, "movsdes");
-                
-            }
-        }
-    
-    }
-    
-    public void ordenar(){
-        
-        String posi = manager.tomarMovCommand(contexto, "movsdes");
-        String[] aux;
-        int[] values;
-        
-        while(posi != ""){
-            aux = posi.split(",");
-            values = new int[2];
-            for(int i = 0; i < values.length; i++){
-                values[i] = Integer.parseInt(aux[i]);
-            }
-
-            MovCommand move = new MovCommand(this, view, values);
-            move.undoCommand();
-            
-            //manager.addMovCommand(move, contexto, "rehacer"); //No creo que deban poder rehacerse
-            
-            posi = manager.tomarMovCommand(contexto, "movsdes");
-        }
+        MovCommand move = new MovCommand(this, view, movimiento);
+        move.undoCommand();
         
     }
     
-    public void deshacer(){
+    public MovCommand deshacer(int[] posi){
 
-        String posi = manager.tomarMovCommand(contexto, "movsdes");
-        String[] aux;
-        int[] values;
+        MovCommand move = new MovCommand(this, view, posi);
+        move.undoCommand();
         
-        if(posi != ""){
-        
-            aux = posi.split(",");
-            values = new int[2];
-            for(int i = 0; i < values.length; i++){
-                values[i] = Integer.parseInt(aux[i]);
-            }
-
-            MovCommand move = new MovCommand(this, view, values);
-            move.undoCommand();
-
-            manager.addMovCommand(move, contexto, "rehacer");
-            
-        }
+        return move;
         
     }
     
-    public void rehacer(){
+    public MovCommand rehacer(int[] posi){ //PASAMOS INT[] DE PARAMETRO
         
-        String posi = manager.tomarMovCommand(contexto, "rehacer");
-        String[] aux;
-        int[] values;
-        
-        if(posi != ""){
-        
-            aux = posi.split(",");
-            values = new int[2];
-            for(int i = 0; i < values.length; i++){
-                values[i] = Integer.parseInt(aux[i]);
-            }
 
-            MovCommand move = new MovCommand(this, view, values);
+            MovCommand move = new MovCommand(this, view, posi);
             move.redoCommand();
 
-            manager.addMovCommand(move, contexto, "movsdes");
             
-        }
+        return move;
 
     }
     
@@ -302,7 +313,7 @@ public class Controlador extends AbstractController{
     }
     
         
-    private void cargarPartidaXml(int id){
+    private void cargarPartidaXml(int id){ //PASAMOS STRING DE PARAMETRO PARA EL JOPTIONPANE Y OBJETO DE PARTIDA
         try {
             String query = manager.cargarPartida(contexto, id);
             
@@ -334,7 +345,9 @@ public class Controlador extends AbstractController{
         }
     }
     
-    private void desordenInicio(){
+    private void desordenInicio(){ //PASAMOS LISTA DE INT[] DE PARAMETRO
+        
+        //de aqui
         String aux1 = manager.recorridoInicio(contexto);
         
         String[] aux2 = aux1.split("\r\n");
@@ -349,6 +362,7 @@ public class Controlador extends AbstractController{
                 values[j] = Integer.parseInt(aux3[j]);
             }
             
+        //a aqui al metodo de BaseXmanager de recorridoInicio
             MovCommand move = new MovCommand(this, view, values);
             move.redoCommand();
         }
@@ -415,5 +429,7 @@ public class Controlador extends AbstractController{
         this.movsRe = movsRe;
         
     }
+    
+    
     
 }

@@ -36,7 +36,7 @@ public class BaseXManager {
         } 
         
     }
-    
+    //
     public void queryCatalog(String query, Context context){
     
         try{
@@ -98,17 +98,39 @@ public class BaseXManager {
     
     }
     
-    public String tomarMovCommand(Context context, String type){
+    private int[] StringToInt(String s){
+    
+        int[] value = null;
+        if(s != ""){
+        
+            String[] aux = s.split(",");
+            value = new int[2];
+        
+        
+            for(int i = 0; i < 2; i++)
+
+                value[i] = Integer.parseInt(aux[i]);
+
+
+        }
+        
+        return value;
+
+    }
+    
+    public int[] tomarMovCommand(Context context, String type){
+        
         try {
             String res = new XQuery("/pilas/" + type + "/array[last()]/text()").execute(context);
             XQuery query = new XQuery("delete node /pilas/" + type + "/array[last()]");
             query.execute(context);
             updatePilas(context);
-            return res;
+
+            return StringToInt(res);
         } catch (BaseXException ex) {
             
             Logger.getLogger(BaseXManager.class.getName()).log(Level.SEVERE, null, ex);
-            return "";
+            return null;
             
         }
     }
