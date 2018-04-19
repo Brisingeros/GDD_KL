@@ -175,7 +175,7 @@ public class BoardView extends JPanel implements Observer {
 
         try{
         
-            BufferedImage temp = this.resizeBlanca(new File("resources/blank.gif"));
+            BufferedImage temp = this.resizeBlanca(new File("resources/default/blank.gif"));
             
             images[0] = temp;
             

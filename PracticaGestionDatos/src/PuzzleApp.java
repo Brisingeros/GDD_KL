@@ -50,7 +50,6 @@ public class PuzzleApp {
             base = init.getBase();
         }
 
-        System.out.println("defecto: " + path);
         String fileSeparator = System.getProperty("file.separator");
         String imagePath=System.getProperty("user.dir")+fileSeparator+"resources"+fileSeparator + "default" + fileSeparator;
 

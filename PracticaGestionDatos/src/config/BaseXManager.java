@@ -2,6 +2,7 @@ package config;
 
 import command.MovCommand;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.basex.core.*;
@@ -56,7 +57,7 @@ public class BaseXManager {
 
             //System.out.println("insert node " + com + " into /pilas/" + type);
             XQuery xQuery = new XQuery("insert node " + com + " into /pilas/" + type); //Almacenamos en el mismo XML ambos tipos de movcommand, separados en dos elementos
-            System.out.println(xQuery.execute(context));
+            xQuery.execute(context);
             updatePilas(context);
         } catch (BaseXException ex) {
             
@@ -88,7 +89,7 @@ public class BaseXManager {
             
             XQuery query = new XQuery("file:write('resources/Partidas.xml', for $item in /partidas \n return $item)");
 
-            System.out.println(query.execute(context));
+            query.execute(context);
         
         }catch(Exception e){
         
@@ -105,8 +106,7 @@ public class BaseXManager {
         
             String[] aux = s.split(",");
             value = new int[2];
-        
-        
+
             for(int i = 0; i < 2; i++)
 
                 value[i] = Integer.parseInt(aux[i]);
@@ -127,6 +127,7 @@ public class BaseXManager {
             updatePilas(context);
 
             return StringToInt(res);
+            
         } catch (BaseXException ex) {
             
             Logger.getLogger(BaseXManager.class.getName()).log(Level.SEVERE, null, ex);
@@ -180,7 +181,9 @@ public class BaseXManager {
             XQuery query1 = new XQuery("replace node /pilas with " + query2.execute(context));
             
             query1.execute(context);
+            
             return query.execute(context);
+            
         } catch (BaseXException ex) {
             
             Logger.getLogger(BaseXManager.class.getName()).log(Level.SEVERE, null, ex);
@@ -189,10 +192,24 @@ public class BaseXManager {
         }
     }
     
-    public String recorridoInicio(Context context){
+    public ArrayList<int[]> recorridoInicio(Context context){
         try {
             
-            return new XQuery("for $mov in /pilas/movsdes/array/text() \n return $mov").execute(context);
+            String mov = new XQuery("for $mov in /pilas/movsdes/array/text() \n return $mov").execute(context);
+            
+            ArrayList<int[]> val = new ArrayList<int[]>();
+            String[] aux2 = mov.split("\r\n");
+            String[] aux3 = null;
+            
+            for(int i = 0; i < aux2.length; i++){
+                aux3 = aux2[i].split(",");
+                int[] values = {Integer.parseInt(aux3[0]),Integer.parseInt(aux3[1])};
+                
+                val.add(values);
+            
+            }
+            
+            return val;
             
         } catch (BaseXException ex) {
             

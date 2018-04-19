@@ -4,10 +4,12 @@ import command.LoadCommand;
 import command.MovCommand;
 import config.BaseXManager;
 import config.Configuracion;
+import config.PartidaCarga;
 import config.PartidaXML;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Random;
 import java.util.Stack;
 import java.util.logging.Level;
@@ -54,7 +56,10 @@ public class Controlador extends AbstractController{
 
     public void gestorAcciones(String accion){
     
-    switch (accion){
+        String panel = null;
+        PartidaCarga p;
+        
+        switch (accion){
             
             case "exit": 
                 
@@ -123,12 +128,12 @@ public class Controlador extends AbstractController{
                     
                     while(posi != null){
                     
-                        ordenar(posi);
+                        deshacer(posi);
                         posi = manager.tomarMovCommand(contexto, "movsdes");
                     
                    }
                 
-                }
+                }else if(base.equals("Mongo"))
                 
                 
             break;
@@ -145,7 +150,7 @@ public class Controlador extends AbstractController{
                     
                    }
                 
-                }
+                }else if(base.equals("Mongo"))
                 
                 
             break;
@@ -162,13 +167,20 @@ public class Controlador extends AbstractController{
                     
                    }
                 
-                }
+                }else if(base.equals("Mongo"))
                 
             break;
             
             case "guardaP0":
+                
+                if(base.equals("XML"))
+                    
+                    panel = manager.guardarPartida(contexto, 0, view.getFilas(), view.getTamaño(), view.getPathImagenCompleta());
+                
+                else if(base.equals("Mongo"))
+                
                 try {
-                    JOptionPane.showMessageDialog(PuzzleGUI.getInstance().getContentPane(), manager.guardarPartida(contexto, 0, view.getFilas(), view.getTamaño(), view.getPathImagenCompleta()));
+                    JOptionPane.showMessageDialog(PuzzleGUI.getInstance().getContentPane(), panel);
                 } catch (IOException ex) {
                     Logger.getLogger(Controlador.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -177,35 +189,117 @@ public class Controlador extends AbstractController{
             
             case "guardaP1":
                 
+                if(base.equals("XML"))
+                    
+                    panel = manager.guardarPartida(contexto, 1, view.getFilas(), view.getTamaño(), view.getPathImagenCompleta());
+                
+                else if(base.equals("Mongo"))
                 try {
-                    JOptionPane.showMessageDialog(PuzzleGUI.getInstance().getContentPane(), manager.guardarPartida(contexto, 1, view.getFilas(), view.getTamaño(), view.getPathImagenCompleta()));
+                    JOptionPane.showMessageDialog(PuzzleGUI.getInstance().getContentPane(), panel);
                 } catch (IOException ex) {
                     Logger.getLogger(Controlador.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 
             break;
             case "guardaP2": 
+
+                if(base.equals("XML"))
+                    
+                    panel = manager.guardarPartida(contexto, 2, view.getFilas(), view.getTamaño(), view.getPathImagenCompleta());
+                
+                else if(base.equals("Mongo"))
                          
                 try {
-                    JOptionPane.showMessageDialog(PuzzleGUI.getInstance().getContentPane(), manager.guardarPartida(contexto, 2, view.getFilas(), view.getTamaño(), view.getPathImagenCompleta()));
+                    JOptionPane.showMessageDialog(PuzzleGUI.getInstance().getContentPane(), panel);
                 } catch (IOException ex) {
                     Logger.getLogger(Controlador.class.getName()).log(Level.SEVERE, null, ex);
                 }
   
             break;
             case "cargaP0": //Leemos un objeto partida y llamamos al método que maneja la creación de nuevo MVC en base a los datos recibidos
+                
+                try{
+                    if(base.equals("XML")){
 
-                    this.cargarPartidaXml(0);
+                        String query = manager.cargarPartida(contexto, 0);
+                        if(query != null){
 
+                            PartidaXML game = Configuracion.parseXML(query);
+                            p = new PartidaCarga(game.getTamaño(),game.getFilas(),game.getPath());
+                            this.cargarPartida(p);
+                            this.desordenInicio(manager.recorridoInicio(contexto));
+                            JOptionPane.showMessageDialog(PuzzleGUI.getInstance().getContentPane(), "Partida cargada correctamente");
+                            
+                        }else{
+
+                            JOptionPane.showMessageDialog(PuzzleGUI.getInstance().getContentPane(), "Error al cargar partida");
+
+                        }
+
+                    }else if(base.equals("Mongo")){}
+                    
+                }catch(IOException ex) {
+                    
+                    Logger.getLogger(Controlador.class.getName()).log(Level.SEVERE, null, ex);
+                    
+                }
             break;
             case "cargaP1": //Leemos un objeto partida y llamamos al método que maneja la creación de nuevo MVC en base a los datos recibidos
 
-                    this.cargarPartidaXml(1);
+                try{
+                    if(base.equals("XML")){
+
+                        String query = manager.cargarPartida(contexto, 1);
+                        if(query != null){
+
+                            PartidaXML game = Configuracion.parseXML(query);
+                            p = new PartidaCarga(game.getTamaño(),game.getFilas(),game.getPath());
+                            this.cargarPartida(p);
+                            this.desordenInicio(manager.recorridoInicio(contexto));
+                            JOptionPane.showMessageDialog(PuzzleGUI.getInstance().getContentPane(), "Partida cargada correctamente");
+                            
+                        }else{
+
+                            JOptionPane.showMessageDialog(PuzzleGUI.getInstance().getContentPane(), "Error al cargar partida");
+
+                        }
+
+                    }else if(base.equals("Mongo")){}
+                    
+                }catch(IOException ex) {
+                    
+                    Logger.getLogger(Controlador.class.getName()).log(Level.SEVERE, null, ex);
+                    
+                }
                 
             break;
             case "cargaP2": //Leemos un objeto partida y llamamos al método que maneja la creación de nuevo MVC en base a los datos recibidos
 
-                    this.cargarPartidaXml(2);
+                try{
+                    if(base.equals("XML")){
+
+                        String query = manager.cargarPartida(contexto, 2);
+                        if(query != null){
+
+                            PartidaXML game = Configuracion.parseXML(query);
+                            p = new PartidaCarga(game.getTamaño(),game.getFilas(),game.getPath());
+                            this.cargarPartida(p);
+                            this.desordenInicio(manager.recorridoInicio(contexto));
+                            JOptionPane.showMessageDialog(PuzzleGUI.getInstance().getContentPane(), "Partida cargada correctamente");
+                            
+                        }else{
+
+                            JOptionPane.showMessageDialog(PuzzleGUI.getInstance().getContentPane(), "Error al cargar partida");
+
+                        }
+
+                    }else if(base.equals("Mongo")){}
+                    
+                }catch(IOException ex) {
+                    
+                    Logger.getLogger(Controlador.class.getName()).log(Level.SEVERE, null, ex);
+                    
+                }
 
             break;
             
@@ -266,13 +360,6 @@ public class Controlador extends AbstractController{
         
     }
     
-    public void ordenar(int[] movimiento){
-        
-        MovCommand move = new MovCommand(this, view, movimiento);
-        move.undoCommand();
-        
-    }
-    
     public MovCommand deshacer(int[] posi){
 
         MovCommand move = new MovCommand(this, view, posi);
@@ -313,14 +400,9 @@ public class Controlador extends AbstractController{
     }
     
         
-    private void cargarPartidaXml(int id){ //PASAMOS STRING DE PARAMETRO PARA EL JOPTIONPANE Y OBJETO DE PARTIDA
+    private void cargarPartida(PartidaCarga game){ //PASAMOS STRING DE PARAMETRO PARA EL JOPTIONPANE Y OBJETO DE PARTIDA
         try {
-            String query = manager.cargarPartida(contexto, id);
-            
-            if(query != null){
-            
-                PartidaXML game = Configuracion.parseXML(query);
-            
+
                 removeObserver(model);
 
                 PuzzleGUI.getInstance().initCarga(game.getFilas(), game.getTamaño(), game.getPath());
@@ -329,43 +411,24 @@ public class Controlador extends AbstractController{
 
                 model = new Modelo(game.getFilas(), game.getFilas(), game.getTamaño(), view.getPathsPiezas());
 
-                this.addObserver(model);
-
-                this.desordenInicio();
+                this.addObserver(model);                         
                 
-                JOptionPane.showMessageDialog(PuzzleGUI.getInstance().getContentPane(), "Partida cargada correctamente");
-            
-            }else
-                
-                JOptionPane.showMessageDialog(PuzzleGUI.getInstance().getContentPane(), "Error al cargar partida");
-                
-            
         } catch (IOException ex) {
+            
             Logger.getLogger(Controlador.class.getName()).log(Level.SEVERE, null, ex);
+            
         }
     }
     
-    private void desordenInicio(){ //PASAMOS LISTA DE INT[] DE PARAMETRO
+    private void desordenInicio(ArrayList<int[]> movimientos){ //PASAMOS LISTA DE INT[] DE PARAMETRO
         
-        //de aqui
-        String aux1 = manager.recorridoInicio(contexto);
+        for(int[] mov:movimientos){
         
-        String[] aux2 = aux1.split("\r\n");
-        String[] aux3;
-        int[] values;
-        
-        for(int i = 0; i < aux2.length; i++){
-            aux3 = aux2[i].split(",");
-            
-            values = new int[aux3.length];
-            for(int j = 0; j < values.length; j++){
-                values[j] = Integer.parseInt(aux3[j]);
-            }
-            
-        //a aqui al metodo de BaseXmanager de recorridoInicio
-            MovCommand move = new MovCommand(this, view, values);
+            MovCommand move = new MovCommand(this, view, mov);
             move.redoCommand();
+            
         }
+        
     }
     
     public void Restart(){
