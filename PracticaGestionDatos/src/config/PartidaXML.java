@@ -49,6 +49,4 @@ public class PartidaXML {
         this.tamaño = tamaño;
     }
     
-    
-    
 }

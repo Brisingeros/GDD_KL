@@ -11,6 +11,7 @@ import com.mongodb.client.model.Updates;
 import command.MovCommand;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import org.bson.conversions.Bson;
 import org.bson.Document;
 
@@ -22,37 +23,29 @@ public class MongoManager {
     public void createCollection(int filas, int tamaño, String path){
         MongoClient mongoClient = new MongoClient("localhost", 27017);
         base = mongoClient.getDatabase("miBD");
-        
-        //base.createCollection("games");
+
         col = base.getCollection("games");
-        
-        //int[][] a1 = new int[1][2];
-        ArrayList<int[]> a1 = new ArrayList<int[]>();
-        //a1[1] = new int[2];
-        
+        ArrayList<int[]> a1 = new ArrayList<>();
         Document partida = null;
-        /*
-        for(int i = -1; i < 3; i++){
-            partida = new Document();
-            partida.append("_id", i)
-                    .append("tamaño", 0)
-                    .append("filas", 1)
-                    .append("path", "abcd")
-                    .append("movsdes", a2)
-                    .append("rehacer", a2);
-            
-            col.insertOne(partida);
-        }*/
         
-        partida = new Document();
-        partida.append("_id", -1)
-                    .append("tamaño", tamaño)
-                    .append("filas", filas)
-                    .append("path", path)
-                    .append("movsdes", a1)
-                    .append("rehacer", a1);
+        if(col.find() == null){
         
-        col.findOneAndReplace(new Document("_id", -1), partida);
+            base.createCollection("games");
+            for(int i = -1; i < 3; i++){
+                partida = new Document();
+                partida.append("_id", i)
+                        .append("tamaño", 0)
+                        .append("filas", 1)
+                        .append("path", "abcd")
+                        .append("movsdes", a1)
+                        .append("rehacer", a1);
+
+                col.insertOne(partida);
+            }
+        }
+        
+        this.updatePartida(filas, tamaño, path);
+        
     }
     
     //Going good
@@ -62,62 +55,117 @@ public class MongoManager {
     
     public int[] tomarMovCommand(String type){
         
+        String opuesto;
+        
+        if(type.equals("movsdes"))
+            
+            opuesto = "rehacer";
+        
+        else
+            
+            opuesto = "movsdes";
+        
         Bson filter = new Document("_id", -1);
-        Bson proj = Projections.fields(Projections.slice(type, -1), Projections.exclude("_id", "filas", "tamaño", "path", "rehacer"));
+        Bson proj = Projections.fields(Projections.slice(type, -1), Projections.exclude("_id", "filas", "tamaño", "path", opuesto));
         
-        FindIterable<Document> doc = col.find(filter).projection(proj);
+        Document doc = col.find(filter).projection(proj).first();
         
-        System.out.println(doc);
+        ArrayList<ArrayList> arra = doc.get(type, ArrayList.class);
         
-        Document arra = doc.first();
+        if(arra.size() != 0){
         
-        String json = arra.toJson();
-        Gson gson = new Gson();
+            int[] a = new int[2];
+            a[0] = (int) arra.get(0).get(0);
+            a[1] = (int) arra.get(0).get(1);
+
+            col.updateOne(eq("_id", -1), Updates.popLast(type));
         
-        System.out.println(json);
-        
-        ArrayList<int[]> array = gson.fromJson(json, ArrayList.class);
-        
-        System.out.println(array.get(0));
-        
-        col.updateOne(eq("_id", -1), Updates.popLast(type));
-        
-        return array.get(0);
-        
-        //return null;
+            return a;
+            
+        }else
+            
+            return null;
+ 
     }
     
-    public void guardarPartida(int id){
-    
+    public String guardarPartida(int id){
+        
+        Document doc = col.find(eq("_id", -1)).first();
+        
+        doc.put("_id", id);
+        
+        col.findOneAndReplace(eq("_id", id), doc);
+        
+        if(col.find(eq("_id", id)).first().get("movsdes").equals(doc.get("movsdes"))){
+            
+            return "Partida guardada correctamente";
+            
+        } else{
+            
+            return "No se pudo guardar la partida";
+            
+        }
+        
     }
     
-    public void cargarPartida(int id){
+    public PartidaCarga cargarPartida(int id){
+        Document doc = col.find(eq("_id", id)).first();
+
+        PartidaCarga party = new PartidaCarga(doc.getInteger("tamaño"), doc.getInteger("filas"), doc.getString("path"));
+        
+        doc.put("_id", -1);
+        
+        col.findOneAndReplace(eq("_id", -1), doc);
+        
+        return party;
+    }
+    
+    public void updatePartida(int filas, int tamaño, String path){
+       
+        Document partida = new Document();
+        ArrayList<int[]> a1 = new ArrayList<>();
+        partida.append("_id", -1)
+                    .append("tamaño", tamaño)
+                    .append("filas", filas)
+                    .append("path", path)
+                    .append("movsdes", a1)
+                    .append("rehacer", a1);
+        
+        col.findOneAndReplace(new Document("_id", -1), partida);
+        
     
     }
     
     public void limpiarStack(String type){
-        Bson filter = new Document("_id", -1);
-        col.replaceOne(filter, new Document().append(type, null));
+
+        Document doc = col.find(eq("_id", -1)).first();
+        ArrayList<int[]> a1 = new ArrayList<>();
+        doc.put(type, a1);
+        col.findOneAndReplace(eq("_id",-1), doc );
+        
     }
-    
-    /*
-    public void insertarPartida(PartidaXML party){
-        col = base.getCollection("pilas");
-        BasicDBObject document = new BasicDBObject();
-    }*/
     
     public ArrayList<int[]> recorridoInicio(){
         Bson filter = new Document("_id", -1);
-        Bson proj = Projections.fields(Projections.include("movsdes"), Projections.exclude("_id"));
+        Document doc = col.find(filter).first();
+
+        ArrayList<ArrayList> lista = doc.get("movsdes", ArrayList.class);
         
-        Document doc = col.find(filter).projection(proj).first();
-        
-        String json = doc.toJson();
-        Gson gson = new Gson();
-        ArrayList<int[]> lista = gson.fromJson(json, ArrayList.class);
+        ArrayList<int[]> aux = new ArrayList();
         
         
-        return lista;
+        for(ArrayList a : lista){
+        
+            int[] a1 = new int[2];
+            a1[0] = (int) a.toArray()[0];
+            a1[1] = (int) a.toArray()[1];
+            
+            aux.add(a1);
+
+        }
+  
+        return aux;
+        
     }
     
 }

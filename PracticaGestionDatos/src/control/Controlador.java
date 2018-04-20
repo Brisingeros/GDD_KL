@@ -177,7 +177,11 @@ public class Controlador extends AbstractController{
                    }
                 
                 }else if(base.equals("Mongo")){
+                    int[] posi = monager.tomarMovCommand("movsdes");
                     
+                    if(posi != null)
+
+                        monager.addMovCommand(deshacer(posi), "rehacer");
                 }
                 
                 
@@ -196,7 +200,11 @@ public class Controlador extends AbstractController{
                    }
                 
                 }else if(base.equals("Mongo")){
+                    int[] posi = monager.tomarMovCommand( "rehacer");
                     
+                    if(posi != null)
+
+                        monager.addMovCommand(rehacer(posi), "movsdes");
                 }
                 
             break;
@@ -209,6 +217,8 @@ public class Controlador extends AbstractController{
                 
                 }else if(base.equals("Mongo")){
                     
+                    panel = monager.guardarPartida(0);
+
                 }
                 
                 try {
@@ -227,6 +237,8 @@ public class Controlador extends AbstractController{
                 
                 }else if(base.equals("Mongo")){
                     
+                    panel = monager.guardarPartida(1);
+                    
                 }
                 try {
                     JOptionPane.showMessageDialog(PuzzleGUI.getInstance().getContentPane(), panel);
@@ -242,6 +254,8 @@ public class Controlador extends AbstractController{
                     panel = manager.guardarPartida(contexto, 2, view.getFilas(), view.getTamaño(), view.getPathImagenCompleta());
                 
                 }else if(base.equals("Mongo")){
+                    
+                    panel = monager.guardarPartida(2);
                 
                 }
                          
@@ -274,6 +288,18 @@ public class Controlador extends AbstractController{
 
                     }else if(base.equals("Mongo")){
                     
+                        p = monager.cargarPartida(0);
+                        if(p != null){
+
+                            this.cargarPartida(p);
+                            this.desordenInicio(monager.recorridoInicio());
+                            JOptionPane.showMessageDialog(PuzzleGUI.getInstance().getContentPane(), "Partida cargada correctamente");
+                            
+                        }else{
+
+                            JOptionPane.showMessageDialog(PuzzleGUI.getInstance().getContentPane(), "Error al cargar partida");
+
+                        }
                     }
                     
                 }catch(IOException ex) {
@@ -304,6 +330,19 @@ public class Controlador extends AbstractController{
 
                     }else if(base.equals("Mongo")){
                     
+                        p = monager.cargarPartida(1);
+                        if(p != null){
+
+                            this.cargarPartida(p);
+                            this.desordenInicio(monager.recorridoInicio());
+                            JOptionPane.showMessageDialog(PuzzleGUI.getInstance().getContentPane(), "Partida cargada correctamente");
+                            
+                        }else{
+
+                            JOptionPane.showMessageDialog(PuzzleGUI.getInstance().getContentPane(), "Error al cargar partida");
+
+                        }
+                        
                     }
                     
                 }catch(IOException ex) {
@@ -335,6 +374,18 @@ public class Controlador extends AbstractController{
 
                     }else if(base.equals("Mongo")){
                     
+                        p = monager.cargarPartida(2);
+                        if(p != null){
+
+                            this.cargarPartida(p);
+                            this.desordenInicio(monager.recorridoInicio());
+                            JOptionPane.showMessageDialog(PuzzleGUI.getInstance().getContentPane(), "Partida cargada correctamente");
+                            
+                        }else{
+
+                            JOptionPane.showMessageDialog(PuzzleGUI.getInstance().getContentPane(), "Error al cargar partida");
+
+                        }
                     }
                     
                 }catch(IOException ex) {
@@ -389,9 +440,11 @@ public class Controlador extends AbstractController{
                     manager.addMovCommand(move, contexto, "movsdes");
                     
                 } else if(base.equals("Mongo")){
+                    
                     monager.limpiarStack("rehacer");
                     
                     monager.addMovCommand(move, "movsdes");
+                    
                 }
                 
                 move.redoCommand();
@@ -433,9 +486,18 @@ public class Controlador extends AbstractController{
     
     public void emptyStacks(){
         
-        manager.limpiarMovCommand(contexto, "rehacer");
-        manager.limpiarMovCommand(contexto, "movsdes");
+        if(base.equals("XML")){
         
+            manager.limpiarMovCommand(contexto, "rehacer");
+            manager.limpiarMovCommand(contexto, "movsdes");
+            
+        }else if(base.equals("Mongo")){
+        
+            monager.limpiarStack("rehacer");
+            monager.limpiarStack("movsdes");
+            
+        }
+    
     }
     
     public void addModelo(Modelo m){
@@ -472,7 +534,7 @@ public class Controlador extends AbstractController{
     }
     
     private void desordenInicio(ArrayList<int[]> movimientos){ //PASAMOS LISTA DE INT[] DE PARAMETRO
-        
+
         for(int[] mov:movimientos){
         
             MovCommand move = new MovCommand(this, view, mov);
@@ -492,6 +554,10 @@ public class Controlador extends AbstractController{
         
         desordenes = view.getFilas()*view.getColumnas()*9;
         this.desordenar();
+        
+        if(base.equals("Mongo"))
+            
+            monager.updatePartida(view.getFilas(), view.getTamaño(), view.getPathImagenCompleta());
         
     }
 
