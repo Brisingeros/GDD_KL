@@ -214,6 +214,18 @@ public class BoardView extends JPanel implements Observer {
         }    
     
     }
+    
+    public void guardarImagen(int id) throws IOException{
+
+        BufferedImage f = ImageIO.read(new File(this.path));
+
+        char[] tip = path.toCharArray();
+        String tipo = String.valueOf(tip[tip.length-3]) + String.valueOf(tip[tip.length-2]) + String.valueOf(tip[tip.length-1]);
+        //System.out.println(tipo);
+        ImageIO.write(f,tipo, new File("resources/default/partida" + id + "." + tipo));
+        path = "resources/default/partida" + id + "." + tipo;
+
+    }
     public void update(int blankPos, int movedPos){ //Cambiamos de posición los PieceView
         
         PieceView p = iconArray.get(blankPos);

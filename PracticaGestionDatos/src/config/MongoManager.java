@@ -41,12 +41,13 @@ public class MongoManager {
         if(c == null){ //Comprobamos si existe la colección y la creamos si fuese necesario, con una estructura básica
         
             base.createCollection("games");
+            
             for(int i = -1; i < 3; i++){
                 partida = new Document();
                 partida.append("_id", i)
                         .append("tamaño", 0)
                         .append("filas", 1)
-                        .append("path", "abcd")
+                        .append("path", "nulo")
                         .append("movsdes", a1)
                         .append("rehacer", a1);
 
@@ -98,11 +99,12 @@ public class MongoManager {
  
     }
     
-    public String guardarPartida(int id){
+    public String guardarPartida(int id, String path){
         
         Document doc = col.find(eq("_id", -1)).first();
         
         doc.put("_id", id);
+        doc.put("path", path);
         
         col.findOneAndReplace(eq("_id", id), doc);
         
@@ -119,15 +121,23 @@ public class MongoManager {
     }
     
     public PartidaCarga cargarPartida(int id){
+        
         Document doc = col.find(eq("_id", id)).first();
 
-        PartidaCarga party = new PartidaCarga(doc.getInteger("tamaño"), doc.getInteger("filas"), doc.getString("path"));
+        if(!doc.get("path").equals("nulo")){
         
-        doc.put("_id", -1);
+            PartidaCarga party = new PartidaCarga(doc.getInteger("tamaño"), doc.getInteger("filas"), doc.getString("path"));
         
-        col.findOneAndReplace(eq("_id", -1), doc);
+            doc.put("_id", -1);
+
+            col.findOneAndReplace(eq("_id", -1), doc);
+
+            return party;
         
-        return party;
+        }else
+            
+            return null;
+        
     }
     
     public void updatePartida(int filas, int tamaño, String path){

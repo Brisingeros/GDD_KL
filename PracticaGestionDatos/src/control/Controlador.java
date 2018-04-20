@@ -232,18 +232,20 @@ public class Controlador extends AbstractController{
             break;
             
             case "guardaP0":
-                
-                if(base.equals("XML")){
-                    
-                    panel = manager.guardarPartida(contexto, 0, view.getFilas(), view.getTamaño(), view.getPathImagenCompleta());
-                
-                }else if(base.equals("Mongo")){
-                    
-                    panel = monager.guardarPartida(0);
 
-                }
-                
                 try {
+                    
+                    view.guardarImagen(0);
+                    
+                    if(base.equals("XML")){
+                        
+                        panel = manager.guardarPartida(contexto, 0, view.getFilas(), view.getTamaño(), view.getPathImagenCompleta());
+                
+                    }else if(base.equals("Mongo")){
+
+                        panel = monager.guardarPartida(0, view.getPathImagenCompleta());
+
+                    }
                     JOptionPane.showMessageDialog(PuzzleGUI.getInstance().getContentPane(), panel);
                 } catch (IOException ex) {
                     Logger.getLogger(Controlador.class.getName()).log(Level.SEVERE, null, ex);
@@ -253,16 +255,18 @@ public class Controlador extends AbstractController{
             
             case "guardaP1":
                 
-                if(base.equals("XML")){
-                    
-                    panel = manager.guardarPartida(contexto, 1, view.getFilas(), view.getTamaño(), view.getPathImagenCompleta());
-                
-                }else if(base.equals("Mongo")){
-                    
-                    panel = monager.guardarPartida(1);
-                    
-                }
                 try {
+                    view.guardarImagen(1);
+                    
+                    if(base.equals("XML")){
+                        
+                        panel = manager.guardarPartida(contexto, 1, view.getFilas(), view.getTamaño(), view.getPathImagenCompleta());
+                
+                    }else if(base.equals("Mongo")){
+
+                        panel = monager.guardarPartida(1, view.getPathImagenCompleta());
+
+                    }
                     JOptionPane.showMessageDialog(PuzzleGUI.getInstance().getContentPane(), panel);
                 } catch (IOException ex) {
                     Logger.getLogger(Controlador.class.getName()).log(Level.SEVERE, null, ex);
@@ -271,17 +275,18 @@ public class Controlador extends AbstractController{
             break;
             case "guardaP2": 
 
-                if(base.equals("XML")){
-                    
-                    panel = manager.guardarPartida(contexto, 2, view.getFilas(), view.getTamaño(), view.getPathImagenCompleta());
-                
-                }else if(base.equals("Mongo")){
-                    
-                    panel = monager.guardarPartida(2);
-                
-                }
-                         
                 try {
+                    view.guardarImagen(2);
+                    
+                    if(base.equals("XML")){
+                        
+                        panel = manager.guardarPartida(contexto, 2, view.getFilas(), view.getTamaño(), view.getPathImagenCompleta());
+                
+                    }else if(base.equals("Mongo")){
+
+                        panel = monager.guardarPartida(2, view.getPathImagenCompleta());
+
+                    }
                     JOptionPane.showMessageDialog(PuzzleGUI.getInstance().getContentPane(), panel);
                 } catch (IOException ex) {
                     Logger.getLogger(Controlador.class.getName()).log(Level.SEVERE, null, ex);
@@ -575,11 +580,13 @@ public class Controlador extends AbstractController{
         addModelo(model);
         
         desordenes = view.getFilas()*view.getColumnas()*9;
-        this.desordenar();
+        
         
         if(base.equals("Mongo"))
             
             monager.updatePartida(view.getFilas(), view.getTamaño(), view.getPathImagenCompleta());
+        
+        this.gestorAcciones("clutter");
         
     }
 
