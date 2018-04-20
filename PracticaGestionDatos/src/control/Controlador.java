@@ -101,6 +101,8 @@ public class Controlador extends AbstractController{
             
             case "clutter":
 
+                float time = System.currentTimeMillis();
+                
                 if(base.equals("XML")){
                 
                     manager.limpiarMovCommand(contexto, "rehacer");
@@ -133,6 +135,10 @@ public class Controlador extends AbstractController{
 
                     }
                 }
+                
+                time = System.currentTimeMillis() - time;
+                
+                System.out.println(time);
                 
             break;
             

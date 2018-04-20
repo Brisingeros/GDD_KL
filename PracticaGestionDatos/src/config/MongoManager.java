@@ -2,7 +2,7 @@ package config;
 
 import com.google.gson.Gson;
 import com.mongodb.MongoClient;
-import com.mongodb.client.FindIterable;
+import com.mongodb.MongoClientURI;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import static com.mongodb.client.model.Filters.eq;
@@ -11,7 +11,6 @@ import com.mongodb.client.model.Updates;
 import command.MovCommand;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import org.bson.conversions.Bson;
 import org.bson.Document;
 
@@ -21,14 +20,24 @@ public class MongoManager {
     MongoCollection<Document> col;
 
     public void createCollection(int filas, int tamaño, String path){
-        MongoClient mongoClient = new MongoClient("localhost", 27017);
-        base = mongoClient.getDatabase("miBD");
+        
+        //MongoClient mongoClient = new MongoClient("localhost", 27017);
+        
+        MongoClientURI uri = new MongoClientURI(
+        "mongodb+srv://Brisin:1234@gdd-tdtb1.mongodb.net/");
+
+        MongoClient mongoClient = new MongoClient(uri);
+        
+	base = mongoClient.getDatabase("miBD");
 
         col = base.getCollection("games");
         ArrayList<int[]> a1 = new ArrayList<>();
         Document partida = null;
         
-        if(col.find() == null){
+        String c = base.listCollectionNames().first();
+        //boolean creado = false;
+        
+        if(c == null){
         
             base.createCollection("games");
             for(int i = -1; i < 3; i++){
