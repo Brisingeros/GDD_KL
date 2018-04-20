@@ -101,7 +101,7 @@ public class Controlador extends AbstractController{
             
             case "clutter":
 
-                float time = System.currentTimeMillis();
+                double time = System.currentTimeMillis();
                 
                 if(base.equals("XML")){
                 
@@ -114,14 +114,13 @@ public class Controlador extends AbstractController{
                 
                             move.redoCommand();
                             manager.addMovCommand(move, contexto, "movsdes");
-                        
                         }
 
                     }
                     
                 } else if(base.equals("Mongo")){
                     
-                    //monager.limpiarStack("rehacer");
+                    monager.limpiarStack("rehacer");
                     
                     for(int i = 0; i < desordenes; i++){
                 
@@ -130,7 +129,6 @@ public class Controlador extends AbstractController{
                 
                             move.redoCommand();
                             monager.addMovCommand(move, "movsdes");
-                        
                         }
 
                     }
@@ -138,21 +136,30 @@ public class Controlador extends AbstractController{
                 
                 time = System.currentTimeMillis() - time;
                 
-                System.out.println(time);
+                System.out.println(time/desordenes);
                 
             break;
             
             case "solve":
+                
+                double timeSol = System.currentTimeMillis();
+                int resols = 0;
                 
                 if(base.equals("XML")){
                 
                     int[] posi = manager.tomarMovCommand(contexto, "movsdes");
                     
                     while(posi != null){
-                    
+                        int[] posiaux = manager.tomarMovCommand(contexto, "movsdes");
+                        
+                        if(posiaux == null){
+                            timeSol = System.currentTimeMillis() - timeSol;
+                        }
+                        
                         deshacer(posi);
-                        posi = manager.tomarMovCommand(contexto, "movsdes");
-                    
+                        posi = posiaux;
+                        resols++;
+                        
                     }
                 
                 }else if(base.equals("Mongo")){
@@ -160,12 +167,21 @@ public class Controlador extends AbstractController{
                     int[] posi = monager.tomarMovCommand("movsdes");
                     
                     while(posi != null){
+                        
+                        int[] posiaux = monager.tomarMovCommand("movsdes");
                     
+                        if(posiaux == null){
+                            timeSol = System.currentTimeMillis() - timeSol;
+                        }
+                        
                         deshacer(posi);
-                        posi = monager.tomarMovCommand("movsdes");
-                    
+                        posi = posiaux;
+                        resols++;
+
                     }
                 }
+                
+                System.out.println(timeSol/resols);
                 
                 
             break;

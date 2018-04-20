@@ -21,10 +21,11 @@ public class MongoManager {
 
     public void createCollection(int filas, int tamaño, String path){
         
-        //MongoClient mongoClient = new MongoClient("localhost", 27017);
+        //MongoClient mongoClient = new MongoClient("localhost", 27017); //Base de datos en local
+        
         
         MongoClientURI uri = new MongoClientURI(
-        "mongodb+srv://Brisin:1234@gdd-tdtb1.mongodb.net/");
+        "mongodb+srv://Brisin:1234@gdd-tdtb1.mongodb.net/"); //Base de datos cluster Frankfurt
 
         MongoClient mongoClient = new MongoClient(uri);
         
@@ -37,7 +38,7 @@ public class MongoManager {
         String c = base.listCollectionNames().first();
         //boolean creado = false;
         
-        if(c == null){
+        if(c == null){ //Comprobamos si existe la colección y la creamos si fuese necesario, con una estructura básica
         
             base.createCollection("games");
             for(int i = -1; i < 3; i++){
@@ -88,7 +89,7 @@ public class MongoManager {
             a[1] = (int) arra.get(0).get(1);
 
             col.updateOne(eq("_id", -1), Updates.popLast(type));
-        
+            
             return a;
             
         }else
