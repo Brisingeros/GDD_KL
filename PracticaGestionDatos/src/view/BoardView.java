@@ -8,6 +8,8 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 
 /**
@@ -215,15 +217,19 @@ public class BoardView extends JPanel implements Observer {
     
     }
     
-    public void guardarImagen(int id) throws IOException{
+    public void guardarImagen(int id){
 
-        BufferedImage f = ImageIO.read(new File(this.path));
-
-        char[] tip = path.toCharArray();
-        String tipo = String.valueOf(tip[tip.length-3]) + String.valueOf(tip[tip.length-2]) + String.valueOf(tip[tip.length-1]);
-        //System.out.println(tipo);
-        ImageIO.write(f,tipo, new File("resources/default/partida" + id + "." + tipo));
-        path = "resources/default/partida" + id + "." + tipo;
+        try {
+            BufferedImage f = ImageIO.read(new File(this.path));
+            
+            char[] tip = path.toCharArray();
+            String tipo = String.valueOf(tip[tip.length-3]) + String.valueOf(tip[tip.length-2]) + String.valueOf(tip[tip.length-1]);
+            //System.out.println(tipo);
+            ImageIO.write(f,tipo, new File("resources/default/partida" + id + "." + tipo));
+            path = "resources/default/partida" + id + "." + tipo;
+        } catch (IOException ex) {
+            Logger.getLogger(BoardView.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
     }
     public void update(int blankPos, int movedPos){ //Cambiamos de posición los PieceView
