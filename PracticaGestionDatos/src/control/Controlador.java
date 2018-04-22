@@ -5,8 +5,7 @@ import command.MovCommand;
 import config.BaseXManager;
 import config.Configuracion;
 import config.MongoManager;
-import config.PartidaCarga;
-import config.PartidaXML;
+import config.Partida;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
@@ -35,9 +34,9 @@ public class Controlador extends AbstractController{
     private Modelo model;
     private BoardView view;
     
-    private BaseXManager manager; // = new BaseXManager();
+    private BaseXManager manager;
     private MongoManager monager;
-    private Context contexto; // = new Context();
+    private Context contexto;
     
     private String base;
     
@@ -58,8 +57,6 @@ public class Controlador extends AbstractController{
     }
 
     public void gestorAcciones(String accion){
-
-        PartidaCarga p;
         
         switch (accion){
             
@@ -358,7 +355,6 @@ public class Controlador extends AbstractController{
     
     private void cargarCommand(int id){
     
-        PartidaCarga p = null;
         String panel = null;
         
         if(base.equals("XML")){
@@ -366,9 +362,8 @@ public class Controlador extends AbstractController{
             String query = manager.cargarPartida(contexto, id);
             if(query != null){
 
-                PartidaXML game = Configuracion.parseXML(query);
-                p = new PartidaCarga(game.getTamaño(),game.getFilas(),game.getPath());
-                this.cargarPartida(p);
+                Partida game = Configuracion.parseXML(query);
+                this.cargarPartida(game);
                 this.desordenInicio(manager.recorridoInicio(contexto));
                 panel = "Partida cargada correctamente";
 
@@ -380,7 +375,7 @@ public class Controlador extends AbstractController{
 
         }else if(base.equals("Mongo")){
 
-            p = monager.cargarPartida(id);
+            Partida p = monager.cargarPartida(id);
             if(p != null){
 
                 this.cargarPartida(p);
@@ -457,7 +452,7 @@ public class Controlador extends AbstractController{
     }
     
         
-    private void cargarPartida(PartidaCarga game){ //PASAMOS STRING DE PARAMETRO PARA EL JOPTIONPANE Y OBJETO DE PARTIDA
+    private void cargarPartida(Partida game){ //PASAMOS STRING DE PARAMETRO PARA EL JOPTIONPANE Y OBJETO DE PARTIDA
         try {
 
                 removeObserver(model);
@@ -466,7 +461,7 @@ public class Controlador extends AbstractController{
 
                 view = PuzzleGUI.getInstance().getBoardView();
 
-                model = new Modelo(game.getFilas(), game.getFilas(), game.getTamaño(), view.getPathsPiezas());
+                model = new Modelo(game.getFilas(), game.getFilas(), game.getTamaño());
 
                 this.addObserver(model);                         
                 
@@ -491,7 +486,7 @@ public class Controlador extends AbstractController{
     public void Restart(){
         
         removeObserver(model);
-        model = new Modelo(view.getFilas(), view.getColumnas(), view.getAltoImagen()*view.getColumnas(), view.getPathsPiezas());
+        model = new Modelo(view.getFilas(), view.getColumnas(), view.getAltoImagen()*view.getColumnas());
         
         addObserver(model);
         addModelo(model);

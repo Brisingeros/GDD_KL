@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlRootElement(name = "partida")
 @XmlType (propOrder = {"path", "filas", "tamaño"})
-public class PartidaXML {
+public class PartidaXML extends Partida{
     
     private String path;
     private int filas;

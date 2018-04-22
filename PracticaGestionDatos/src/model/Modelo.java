@@ -13,8 +13,8 @@ public class Modelo extends AbstractModel{
     private ArrayList<PieceModel> iconArray = null;
     private int blancaAnterior;
 
-    public Modelo(int rowNum, int columnNum, int pieceSize, String[] imageList) {
-        super(rowNum, columnNum, pieceSize, imageList);
+    public Modelo(int rowNum, int columnNum, int pieceSize) {
+        super(rowNum, columnNum, pieceSize);
         
         blancaAnterior = 0;
         iconArray = new ArrayList<PieceModel>();
@@ -23,7 +23,7 @@ public class Modelo extends AbstractModel{
             
             for(int j = 0; j < columnNum; j++){
                 
-                addNewPiece(i*columnNum + j, i, j, imageList[i*columnNum + j]);
+                addNewPiece(i*columnNum + j, i, j);
                 
             } 
             
@@ -32,31 +32,10 @@ public class Modelo extends AbstractModel{
     }
 
     @Override
-    public void addNewPiece(int id, int indexRow, int indexCol, String imagePath) {
-        
-        iconArray.add(new PieceModel(id, indexRow, indexCol, imagePath));
-        
-    }
-
-    public void setPaths(String[] newPaths){
-        
-        for(int i = 0; i < rowNum*columnNum; i++){
-        
-            for(PieceModel p:iconArray){
-                
-                if(p.getId() == i)
-                    
-                    p.setPath(newPaths[i]);
-            
-            }
-        
-        }
-    
-    }
-    
-    @Override
     public void addNewPiece(int id, int indexRow, int indexCol) {
-        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
+        iconArray.add(new PieceModel(id, indexRow, indexCol));
+        
     }
 
     @Override
@@ -148,10 +127,9 @@ public class Modelo extends AbstractModel{
         
     }
 
-    public ArrayList<PieceModel> getIconArray() {
-        
-        return iconArray;
-        
+    @Override
+    public void addNewPiece(int id, int indexRow, int indexCol, String imagePath) {
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }

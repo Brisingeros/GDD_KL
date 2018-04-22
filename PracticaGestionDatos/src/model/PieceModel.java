@@ -6,13 +6,10 @@ public class PieceModel {
     private int i;
     private int j;
     
-    private String path;
-    
-    public PieceModel(int identificador, int fila, int columna, String camino){
+    public PieceModel(int identificador, int fila, int columna){
         id = identificador;
         i = fila;
         j = columna;
-        path = camino;
     }
     
     public int getId() {
@@ -27,10 +24,6 @@ public class PieceModel {
         return j;
     }
 
-    public String getPath() {
-        return path;
-    }
-
     public void setId(int id) {
         this.id = id;
     }
@@ -41,10 +34,6 @@ public class PieceModel {
 
     public void setJ(int j) {
         this.j = j;
-    }
-
-    public void setPath(String path) {
-        this.path = path;
     }
 
 }

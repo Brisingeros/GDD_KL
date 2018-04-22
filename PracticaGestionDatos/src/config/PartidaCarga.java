@@ -9,7 +9,7 @@ package config;
  *
  * @author Laura
  */
-public class PartidaCarga {
+public class PartidaCarga extends Partida{
     
     private int tamaño;
     private String path;
@@ -23,14 +23,17 @@ public class PartidaCarga {
     
     }
 
+    @Override
     public int getTamaño() {
         return tamaño;
     }
 
+    @Override
     public String getPath() {
         return path;
     }
 
+    @Override
     public int getFilas() {
         return filas;
     }
