@@ -51,15 +51,7 @@ public class PuzzleGUI extends JFrame{
             this.setBounds((ancho / 2) - (this.getWidth() / 2), (alto / 2) - (this.getHeight() / 2), 530,600);
         }
         boardView.addMouseListener(controller);
-        
-        this.addWindowListener(new WindowAdapter() {
-            
-            @Override
-            public void windowClosing(WindowEvent e) {
-                boardView.borrarImagenes();
-            }
-            
-        });
+        addWindowListener(controller);
         this.getContentPane().setLayout(new BorderLayout());
         this.setJMenuBar(createMenuBar());
         this.getContentPane().add(boardView, BorderLayout.CENTER);
@@ -190,7 +182,7 @@ public class PuzzleGUI extends JFrame{
         partida.add(guardar);
         
         load.addActionListener(controller);
-        exit.addActionListener(controller);
+        exit.addActionListener(controller); 
         info.addActionListener(controller);
         //cargar.addActionListener(controller);
         p0.addActionListener(controller);

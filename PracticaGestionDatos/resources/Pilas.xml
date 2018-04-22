@@ -1,4 +1,27 @@
 <pilas>
-  <movsdes/>
+  <movsdes>
+    <array>0,1</array>
+    <array>1,2</array>
+    <array>2,7</array>
+    <array>7,12</array>
+    <array>12,13</array>
+    <array>13,18</array>
+    <array>18,19</array>
+    <array>19,24</array>
+    <array>24,23</array>
+    <array>23,22</array>
+    <array>22,17</array>
+    <array>17,18</array>
+    <array>18,23</array>
+    <array>23,24</array>
+    <array>24,19</array>
+    <array>19,14</array>
+    <array>14,9</array>
+    <array>9,8</array>
+    <array>8,3</array>
+    <array>3,2</array>
+    <array>2,7</array>
+    <array>7,12</array>
+  </movsdes>
   <rehacer/>
 </pilas>

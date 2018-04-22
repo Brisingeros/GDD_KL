@@ -1,11 +1,11 @@
 package control;
 
-import command.Command;
 import observer.Observable;
 import observer.Observer;
 
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
+import java.awt.event.WindowListener;
 import java.util.ArrayList;
 
 /**
@@ -13,7 +13,7 @@ import java.util.ArrayList;
  * @author Miguel Ángel
  * @version 1.0
  */
-public abstract class AbstractController extends MouseAdapter implements ActionListener, Observable {
+public abstract class AbstractController extends MouseAdapter implements ActionListener, WindowListener,Observable {
     protected ArrayList<Observer> observerList;
 
     public AbstractController(){

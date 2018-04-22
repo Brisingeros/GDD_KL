@@ -113,15 +113,7 @@ public class Modelo extends AbstractModel{
         
         if(isPuzzleSolve()){
             
-            try {
-                
-                JOptionPane.showMessageDialog(PuzzleGUI.getInstance().getContentPane(), "¡Has ganado!");
-                
-            } catch (IOException ex) {
-                
-                Logger.getLogger(Modelo.class.getName()).log(Level.SEVERE, null, ex);
-                
-            }
+            JOptionPane.showMessageDialog(PuzzleGUI.getInstance().getContentPane(), "¡Has ganado!");
             
         }
         
