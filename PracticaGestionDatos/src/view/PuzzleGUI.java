@@ -41,7 +41,7 @@ public class PuzzleGUI extends JFrame{
     /**
      * Constructor privado
      */
-    private PuzzleGUI() throws IOException{
+    private PuzzleGUI(){
         super("GMD PuzzleGUI");
         if(imagePath == null){
             boardView = new BoardView(rowNum,columnNum,imageSize,imageList);
@@ -76,7 +76,7 @@ public class PuzzleGUI extends JFrame{
     }
 
     //Singleton
-    public static PuzzleGUI getInstance() throws IOException{
+    public static PuzzleGUI getInstance(){
         if(instance==null){
             instance = new PuzzleGUI();
         }
@@ -243,25 +243,37 @@ public class PuzzleGUI extends JFrame{
 
     //Método para actualizar la imagen del tablero
     public void updateBoard(File imageFile) throws IOException{
-        
-        controller.removeObserver(boardView);
-        this.remove(boardView);
 
         int piezas = 0; 
-        
+        imageSize = 206;
         //Seleccionar tamaños
+        String opPiezas = null;
         do{
-            String opPiezas = JOptionPane.showInputDialog("Número de piezas (Minimo 9)");
-            piezas = Integer.parseInt(opPiezas);
+            opPiezas = JOptionPane.showInputDialog("Número de piezas (Minimo 9)");
+            
+            if(opPiezas != null)
+                
+                piezas = Integer.parseInt(opPiezas);
+            
         }while(piezas < 9);
         
+        String opTamaño = null;
+        
         do{
-            String opTamaño = JOptionPane.showInputDialog("Tamaño deseado de la imagen completa (Mínimo 206)");
-            imageSize = Integer.parseInt(opTamaño);
+            opTamaño = JOptionPane.showInputDialog("Tamaño deseado de la imagen completa (Mínimo 206)");
+
+            if(opTamaño != null)
+                
+                imageSize = Integer.parseInt(opTamaño);
+            
         }while(imageSize <= 206);
+        
         
         rowNum = (int) Math.sqrt(piezas);
         columnNum = rowNum;        
+
+        controller.removeObserver(boardView);
+        this.remove(boardView);
 
         this.boardView = new BoardView(rowNum,columnNum,imageSize, imageFile);
 

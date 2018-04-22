@@ -2,8 +2,8 @@ package control;
 
 import command.LoadCommand;
 import command.MovCommand;
+import config.BaseDatos;
 import config.BaseXManager;
-import config.Configuracion;
 import config.MongoManager;
 import config.Partida;
 import java.awt.event.ActionEvent;
@@ -27,38 +27,36 @@ public class Controlador extends AbstractController{
     private Stack<MovCommand> movsDes = new Stack<>(); //Atrás
     private Stack<MovCommand> movsRe = new Stack<>(); //Alante
     private Random aleatorio = new Random(System.currentTimeMillis());
-    private int desordenes = 200;
+    private int desordenes = 20;
     
     private final int megaBytes = 10241024;
     private Runtime gestor;
     private Modelo model;
     private BoardView view;
-    
-    private BaseXManager manager;
-    private MongoManager monager;
-    private Context contexto;
-    
+
+    private BaseDatos baseD;
     private String base;
     
     public void init(String b){
         base = b;
         
         if(base.equals("XML")){
-            manager = new BaseXManager();
-            contexto = new Context();
 
-            manager.createCollection("Pilas",contexto);
-
+            baseD = new BaseXManager(new Context(), view.getFilas(), view.getTamaño(), view.getPathImagenCompleta());
             emptyStacks();
+            
         } else{
-            monager = new MongoManager();
-            monager.createCollection(view.getFilas(), view.getTamaño(), view.getPathImagenCompleta());
+            
+            baseD = new MongoManager(view.getFilas(), view.getTamaño(), view.getPathImagenCompleta());
+
         }
     }
 
-    public void gestorAcciones(String accion){
-        
-        switch (accion){
+    @Override
+    public void actionPerformed(ActionEvent e) { //Método que maneja los eventos
+               
+        int[] posi;
+        switch (e.getActionCommand()){
             
             case "exit": 
                 
@@ -69,15 +67,7 @@ public class Controlador extends AbstractController{
             
             case "info": 
                 
-                try {
-                    
-                    InfoView info = new InfoView();
-                    
-                } catch (IOException ex) {
-                    
-                    Logger.getLogger(Controlador.class.getName()).log(Level.SEVERE, null, ex);
-                    
-                }
+                new InfoView();
         
             break;
             
@@ -101,37 +91,8 @@ public class Controlador extends AbstractController{
 
                 double time = System.currentTimeMillis();
                 
-                if(base.equals("XML")){
-                
-                    manager.limpiarMovCommand(contexto, "rehacer");
-                
-                    for(int i = 0; i < desordenes; i++){
-                
-                        MovCommand move = desordenar();
-                        if(move.getResul() != null){
-                
-                            move.redoCommand();
-                            manager.addMovCommand(move, contexto, "movsdes");
-                        }
+                desordenar();
 
-                    }
-                    
-                } else if(base.equals("Mongo")){
-                    
-                    monager.limpiarStack("rehacer");
-                    
-                    for(int i = 0; i < desordenes; i++){
-                
-                        MovCommand move = desordenar();
-                        if(move.getResul() != null){
-                
-                            move.redoCommand();
-                            monager.addMovCommand(move, "movsdes");
-                        }
-
-                    }
-                }
-                
                 time = System.currentTimeMillis() - time;
                 gestor = Runtime.getRuntime();
                 this.mostrarPanel("Memoria usada: " + ((gestor.maxMemory() - gestor.freeMemory())/megaBytes) + " MB \n" +
@@ -143,44 +104,8 @@ public class Controlador extends AbstractController{
             case "solve":
                 
                 double timeSol = System.currentTimeMillis();
-                int resols = 0;
-                
-                if(base.equals("XML")){
-                
-                    int[] posi = manager.tomarMovCommand(contexto, "movsdes");
-                    
-                    while(posi != null){
-                        int[] posiaux = manager.tomarMovCommand(contexto, "movsdes");
-                        
-                        if(posiaux == null){
-                            timeSol = System.currentTimeMillis() - timeSol;
-                        }
-                        
-                        deshacer(posi);
-                        posi = posiaux;
-                        resols++;
-                        
-                    }
-                
-                }else if(base.equals("Mongo")){
-                    
-                    int[] posi = monager.tomarMovCommand("movsdes");
-                    
-                    while(posi != null){
-                        
-                        int[] posiaux = monager.tomarMovCommand("movsdes");
-                    
-                        if(posiaux == null){
-                            timeSol = System.currentTimeMillis() - timeSol;
-                        }
-                        
-                        deshacer(posi);
-                        posi = posiaux;
-                        resols++;
-
-                    }
-                }
-
+                int resols = resolver();
+                timeSol = System.currentTimeMillis() - timeSol;
                 gestor = Runtime.getRuntime();       
                 this.mostrarPanel("Memoria usada: " + ((gestor.maxMemory() - gestor.freeMemory())/megaBytes) + " MB \n" +
                                   "Tiempo usado por movimiento: " + (timeSol/resols)/1000 + " s \n" + 
@@ -188,47 +113,22 @@ public class Controlador extends AbstractController{
             break;
             
             case "deshacer":
-                
-                if(base.equals("XML")){
-                
-                    int[] posi = manager.tomarMovCommand(contexto, "movsdes");
-                    
-                    if(posi != null){
 
-                        manager.addMovCommand(deshacer(posi), contexto, "rehacer");
-                    
-                   }
-                
-                }else if(base.equals("Mongo")){
-                    int[] posi = monager.tomarMovCommand("movsdes");
-                    
-                    if(posi != null)
+                posi = baseD.tomarMovCommand("movsdes");
 
-                        monager.addMovCommand(deshacer(posi), "rehacer");
-                }
-                
-                
+                if(posi != null)
+
+                    baseD.addMovCommand(deshacer(posi), "rehacer");
+
             break;
             
             case "rehacer":
                 
-                if(base.equals("XML")){
-                
-                    int[] posi = manager.tomarMovCommand(contexto, "rehacer");
-                    
-                    if(posi != null){
+                posi = baseD.tomarMovCommand("rehacer");
 
-                        manager.addMovCommand(rehacer(posi), contexto, "movsdes");
-                    
-                   }
-                
-                }else if(base.equals("Mongo")){
-                    int[] posi = monager.tomarMovCommand( "rehacer");
-                    
-                    if(posi != null)
+                if(posi != null)
 
-                        monager.addMovCommand(rehacer(posi), "movsdes");
-                }
+                    baseD.addMovCommand(rehacer(posi), "movsdes");
                 
             break;
             
@@ -267,11 +167,6 @@ public class Controlador extends AbstractController{
                 
             break;
         }
-    }
-    @Override
-    public void actionPerformed(ActionEvent e) { //Método que maneja los eventos
-        
-        this.gestorAcciones(e.getActionCommand());
         
     }
 
@@ -298,19 +193,9 @@ public class Controlador extends AbstractController{
                 
                 MovCommand move = new MovCommand(this, view, mov);
                 //Limpiar rehacer
-                if(base.equals("XML")){
-                    manager.limpiarMovCommand(contexto, "rehacer");
-                    //Añadir el movcommand al tipo movsdes
-                    manager.addMovCommand(move, contexto, "movsdes");
-                    
-                } else if(base.equals("Mongo")){
-                    
-                    monager.limpiarStack("rehacer");
-                    
-                    monager.addMovCommand(move, "movsdes");
-                    
-                }
-                
+                baseD.limpiarMovCommand("rehacer");
+                //Añadir el movcommand al tipo movsdes
+                baseD.addMovCommand(move, "movsdes");
                 move.redoCommand();
                 
             }
@@ -327,11 +212,11 @@ public class Controlador extends AbstractController{
 
         if(base.equals("XML")){
 
-            panel = manager.guardarPartida(contexto, id, view.getFilas(), view.getTamaño(), view.getPathImagenCompleta());
+            panel = baseD.guardarPartida(id, view.getPathImagenCompleta());
 
         }else if(base.equals("Mongo")){
 
-            panel = monager.guardarPartida(id, view.getPathImagenCompleta());
+            panel = baseD.guardarPartida(id, view.getPathImagenCompleta());
 
         }
             
@@ -340,53 +225,25 @@ public class Controlador extends AbstractController{
     }
     
     private void mostrarPanel(String p){
-    
-        try {
 
-            JOptionPane.showMessageDialog(PuzzleGUI.getInstance().getContentPane(), p);
-            
-        } catch (IOException ex) {
-            
-            Logger.getLogger(Controlador.class.getName()).log(Level.SEVERE, null, ex);
-            
-        }
+        JOptionPane.showMessageDialog(PuzzleGUI.getInstance().getContentPane(), p);
     
     }
     
     private void cargarCommand(int id){
     
-        String panel = null;
-        
-        if(base.equals("XML")){
+        String panel;
 
-            String query = manager.cargarPartida(contexto, id);
-            if(query != null){
+        Partida game = baseD.cargarPartida(id);
+        if(game != null){
 
-                Partida game = Configuracion.parseXML(query);
-                this.cargarPartida(game);
-                this.desordenInicio(manager.recorridoInicio(contexto));
-                panel = "Partida cargada correctamente";
+            cargarPartida(game);
+            desordenInicio(baseD.recorridoInicio());
+            panel = "Partida cargada correctamente";
 
-            }else{
+        }else{
 
-                panel = "Error al cargar partida";
-
-            }
-
-        }else if(base.equals("Mongo")){
-
-            Partida p = monager.cargarPartida(id);
-            if(p != null){
-
-                this.cargarPartida(p);
-                this.desordenInicio(monager.recorridoInicio());
-                panel = "Partida cargada correctamente";
-
-            }else{
-
-                panel = "Error al cargar partida";
-
-            }
+            panel = "Error al cargar partida";
 
         }
 
@@ -394,13 +251,23 @@ public class Controlador extends AbstractController{
     
     }
     
-    public MovCommand desordenar(){
+    public void desordenar(){
 
-        int[] mov = model.getRandomMovement(model.getBlancaAnterior(), view.getPiezaBlanca());
-        MovCommand move = new MovCommand(this,view,mov);
+        baseD.limpiarMovCommand("rehacer");
 
-        return move;
-        
+        for(int i = 0; i < desordenes; i++){
+
+            int[] mov = model.getRandomMovement(model.getBlancaAnterior(), view.getPiezaBlanca());
+            MovCommand move = new MovCommand(this,view,mov);
+
+            if(move.getResul() != null){
+
+                move.redoCommand();
+                baseD.addMovCommand(move,"movsdes");
+            }
+
+        }
+
     }
     
     public MovCommand deshacer(int[] posi){
@@ -424,18 +291,10 @@ public class Controlador extends AbstractController{
     }
     
     public void emptyStacks(){
-        
-        if(base.equals("XML")){
-        
-            manager.limpiarMovCommand(contexto, "rehacer");
-            manager.limpiarMovCommand(contexto, "movsdes");
-            
-        }else if(base.equals("Mongo")){
-        
-            monager.limpiarStack("rehacer");
-            monager.limpiarStack("movsdes");
-            
-        }
+
+        baseD.limpiarMovCommand("rehacer");
+        baseD.limpiarMovCommand("movsdes");
+
     
     }
     
@@ -451,7 +310,24 @@ public class Controlador extends AbstractController{
         
     }
     
+    
+    private int resolver() {
         
+        int[] posi = baseD.tomarMovCommand("movsdes");
+        int resols = 0;
+        
+        while(posi != null){
+            int[] posiaux = baseD.tomarMovCommand("movsdes");
+            deshacer(posi);
+            posi = posiaux;
+            resols++;
+
+        }
+
+        return resols;
+        
+    }
+    
     private void cargarPartida(Partida game){ //PASAMOS STRING DE PARAMETRO PARA EL JOPTIONPANE Y OBJETO DE PARTIDA
         try {
 
@@ -492,13 +368,10 @@ public class Controlador extends AbstractController{
         addModelo(model);
         
         desordenes = view.getFilas()*view.getColumnas()*9;
+
+        baseD.update(view.getFilas(), view.getTamaño(), view.getPathImagenCompleta());
         
-        
-        if(base.equals("Mongo"))
-            
-            monager.updatePartida(view.getFilas(), view.getTamaño(), view.getPathImagenCompleta());
-        
-        this.gestorAcciones("clutter");
+        desordenar();
         
     }
 
@@ -550,7 +423,5 @@ public class Controlador extends AbstractController{
         this.movsRe = movsRe;
         
     }
-    
-    
-    
+   
 }

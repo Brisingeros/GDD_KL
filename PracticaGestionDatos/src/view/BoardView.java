@@ -62,7 +62,7 @@ public class BoardView extends JPanel implements Observer {
         
     }
 
-    public BoardView(int rowNum, int columnNum, int imageSize, File imageFile) throws IOException{ //Constructor de boardview cuando le enviamos una imagen completa a dividir
+    public BoardView(int rowNum, int columnNum, int imageSize, File imageFile){ //Constructor de boardview cuando le enviamos una imagen completa a dividir
         
         super();
         
@@ -78,7 +78,7 @@ public class BoardView extends JPanel implements Observer {
         imageHeight = imageSize;
         paths = new String[rowNum*columnNum];
         tamaño = imageSize;
-        try{
+        
             
             BufferedImage img = this.resizeImage(imageFile);
             imagenes = this.splitImage(img);
@@ -96,15 +96,10 @@ public class BoardView extends JPanel implements Observer {
             anchoImagen = iconArray.get(0).getIconWidth();
             altoImagen = iconArray.get(0).getIconHeight();
 
-        }catch(IOException e){
-        
-            System.out.println("No se pudo establecer boardview: " + e.getMessage());
-        
-        }
         
     }
 
-    private BufferedImage resizeImage(File fileImage) throws IOException{ //Damos a la imagen el tamaño deseado, obteniendo un bufferedImage a ser spliteado
+    private BufferedImage resizeImage(File fileImage){ //Damos a la imagen el tamaño deseado, obteniendo un bufferedImage a ser spliteado
         
         BufferedImage resizedImage = null;
         BufferedImage bufim = null;
@@ -129,7 +124,7 @@ public class BoardView extends JPanel implements Observer {
         
     }
     
-    private BufferedImage resizeBlanca(File fileImage) throws IOException{
+    private BufferedImage resizeBlanca(File fileImage){
         
         BufferedImage resizedImage = null;
         BufferedImage bufim = null;
@@ -154,7 +149,7 @@ public class BoardView extends JPanel implements Observer {
     }
 
     //dividimos la imagen en el número de piezas necesarias
-    private BufferedImage[] splitImage(BufferedImage image) throws IOException{
+    private BufferedImage[] splitImage(BufferedImage image){
 
         int cuadrados = this.filas * this.columnas;
 

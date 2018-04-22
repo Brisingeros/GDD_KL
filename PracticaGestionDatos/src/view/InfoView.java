@@ -16,7 +16,7 @@ import java.io.IOException;
  */
 public class InfoView extends JDialog implements ActionListener {
 
-    public InfoView() throws IOException{
+    public InfoView(){
         super(PuzzleGUI.getInstance(), "Información de la aplicación", true);
         this.getContentPane().setLayout(new BorderLayout());
         this.getContentPane().add(buildCenter(), BorderLayout.CENTER);
@@ -28,7 +28,7 @@ public class InfoView extends JDialog implements ActionListener {
 
     }
 
-    private JTextPane buildCenter() throws IOException{
+    private JTextPane buildCenter(){
         JTextPane textPane = new JTextPane();
         textPane.setEditable(false);
         try {

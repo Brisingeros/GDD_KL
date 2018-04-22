@@ -1,210 +1,92 @@
 <partidas>
   <partida id="0">
-    <path>resources/default/partida0.jpg</path>
-    <filas>5</filas>
+    <path>resources/default/partida0.PNG</path>
+    <filas>3</filas>
     <tamaño>512</tamaño>
     <pilas>
       <movsdes>
-        <array>0,5</array>
-        <array>5,10</array>
-        <array>10,11</array>
-        <array>11,12</array>
-        <array>12,7</array>
-        <array>7,6</array>
-        <array>6,11</array>
-        <array>11,10</array>
-        <array>10,15</array>
-        <array>15,16</array>
-        <array>16,11</array>
-        <array>11,12</array>
-        <array>12,13</array>
-        <array>13,8</array>
-        <array>8,9</array>
-        <array>9,4</array>
+        <array>0,1</array>
+        <array>1,2</array>
+        <array>2,5</array>
+        <array>5,4</array>
+        <array>4,7</array>
+        <array>7,8</array>
+        <array>8,5</array>
+        <array>5,4</array>
         <array>4,3</array>
-        <array>3,8</array>
-        <array>8,7</array>
-        <array>7,6</array>
-        <array>6,1</array>
-        <array>1,0</array>
-        <array>0,5</array>
-        <array>5,6</array>
-        <array>6,1</array>
-        <array>1,2</array>
-        <array>2,7</array>
-        <array>7,6</array>
-        <array>6,1</array>
-        <array>1,2</array>
-        <array>2,3</array>
-        <array>3,4</array>
-        <array>4,9</array>
-        <array>9,8</array>
-        <array>8,7</array>
-        <array>7,2</array>
-        <array>2,1</array>
-        <array>1,0</array>
-        <array>0,5</array>
-        <array>5,6</array>
+        <array>3,6</array>
         <array>6,7</array>
         <array>7,8</array>
-        <array>8,9</array>
-        <array>9,14</array>
-        <array>14,13</array>
-        <array>13,8</array>
-        <array>8,3</array>
-        <array>3,2</array>
-        <array>2,7</array>
+        <array>8,5</array>
+        <array>5,4</array>
+        <array>4,7</array>
+        <array>7,8</array>
+        <array>8,5</array>
+        <array>5,4</array>
+        <array>4,7</array>
         <array>7,6</array>
-        <array>6,5</array>
-        <array>5,10</array>
-        <array>10,11</array>
-        <array>11,12</array>
-        <array>12,17</array>
-        <array>17,16</array>
-        <array>16,21</array>
-        <array>21,22</array>
-        <array>22,17</array>
-        <array>17,16</array>
-        <array>16,21</array>
-        <array>21,20</array>
-        <array>20,15</array>
-        <array>15,10</array>
-        <array>10,11</array>
-        <array>11,6</array>
-        <array>6,1</array>
-        <array>1,2</array>
-        <array>2,3</array>
+        <array>6,3</array>
+        <array>3,0</array>
+        <array>0,1</array>
+        <array>1,4</array>
+        <array>4,7</array>
+        <array>7,6</array>
+        <array>6,3</array>
         <array>3,4</array>
-        <array>4,9</array>
-        <array>9,8</array>
-        <array>8,7</array>
-        <array>7,12</array>
-        <array>12,11</array>
-        <array>11,10</array>
-        <array>10,15</array>
-        <array>15,16</array>
-        <array>16,11</array>
-        <array>11,12</array>
-        <array>12,7</array>
-        <array>7,6</array>
-        <array>6,1</array>
-        <array>1,2</array>
-        <array>2,3</array>
-        <array>3,8</array>
-        <array>8,9</array>
-        <array>9,4</array>
-        <array>4,3</array>
-        <array>3,2</array>
-        <array>2,1</array>
-        <array>1,6</array>
-        <array>6,5</array>
-        <array>5,0</array>
-        <array>0,1</array>
-        <array>1,2</array>
-        <array>2,3</array>
-        <array>3,8</array>
-        <array>8,13</array>
-        <array>13,18</array>
-        <array>18,19</array>
-        <array>19,14</array>
-        <array>14,13</array>
-        <array>13,8</array>
-        <array>8,7</array>
-        <array>7,6</array>
-        <array>6,5</array>
-        <array>5,10</array>
-        <array>10,15</array>
-        <array>15,20</array>
-        <array>20,21</array>
-        <array>21,22</array>
-        <array>22,17</array>
-        <array>17,16</array>
-        <array>16,15</array>
-        <array>15,20</array>
-        <array>20,21</array>
-        <array>21,22</array>
-        <array>22,23</array>
-        <array>23,24</array>
-        <array>24,19</array>
-        <array>19,18</array>
-        <array>18,17</array>
-        <array>17,12</array>
-        <array>12,7</array>
-        <array>7,6</array>
-        <array>6,1</array>
+        <array>4,1</array>
         <array>1,0</array>
-        <array>0,5</array>
-        <array>5,10</array>
-        <array>10,15</array>
-        <array>15,16</array>
-        <array>16,11</array>
-        <array>11,6</array>
-        <array>6,5</array>
-        <array>5,10</array>
-        <array>10,15</array>
-        <array>15,16</array>
-        <array>16,11</array>
-        <array>11,6</array>
+        <array>0,3</array>
+        <array>3,6</array>
         <array>6,7</array>
-        <array>7,12</array>
-        <array>12,11</array>
-        <array>11,10</array>
-        <array>10,5</array>
-        <array>5,0</array>
+        <array>7,8</array>
+        <array>8,5</array>
+        <array>5,4</array>
+        <array>4,7</array>
+        <array>7,6</array>
+        <array>6,3</array>
+        <array>3,0</array>
         <array>0,1</array>
-        <array>1,6</array>
-        <array>6,11</array>
-        <array>11,16</array>
-        <array>16,17</array>
-        <array>17,22</array>
-        <array>22,23</array>
-        <array>23,18</array>
-        <array>18,19</array>
-        <array>19,14</array>
-        <array>14,9</array>
-        <array>9,4</array>
-        <array>4,3</array>
-        <array>3,2</array>
-        <array>2,1</array>
-        <array>1,6</array>
-        <array>6,5</array>
-        <array>5,10</array>
-        <array>10,11</array>
-        <array>11,6</array>
-        <array>6,7</array>
-        <array>7,12</array>
-        <array>12,17</array>
-        <array>17,16</array>
-        <array>16,21</array>
-        <array>21,20</array>
-        <array>20,15</array>
-        <array>15,16</array>
-        <array>16,17</array>
-        <array>17,22</array>
-        <array>22,21</array>
-        <array>21,16</array>
-        <array>16,17</array>
-        <array>17,22</array>
-        <array>22,23</array>
-        <array>23,24</array>
-        <array>24,19</array>
-        <array>19,14</array>
-        <array>14,9</array>
-        <array>9,8</array>
+        <array>1,2</array>
+        <array>2,5</array>
+        <array>5,8</array>
         <array>8,7</array>
         <array>7,6</array>
-        <array>6,5</array>
-        <array>5,10</array>
-        <array>10,15</array>
-        <array>15,16</array>
-        <array>16,11</array>
-        <array>11,10</array>
-        <array>10,15</array>
-        <array>15,20</array>
-        <array>20,21</array>
-        <array>21,16</array>
-        <array>16,11</array>
-        <array>11,6</array>
+        <array>6,3</array>
+        <array>3,4</array>
+        <array>4,5</array>
+        <array>5,2</array>
+        <array>2,1</array>
+        <array>1,0</array>
+        <array>0,3</array>
+        <array>3,4</array>
+        <array>4,7</array>
+        <array>7,8</array>
+        <array>8,5</array>
+        <array>5,2</array>
+        <array>2,1</array>
+        <array>1,0</array>
+        <array>0,3</array>
+        <array>3,4</array>
+        <array>4,1</array>
+        <array>1,0</array>
+        <array>0,3</array>
+        <array>3,4</array>
+        <array>4,5</array>
+        <array>5,8</array>
+        <array>8,7</array>
+        <array>7,6</array>
+        <array>6,3</array>
+        <array>3,4</array>
+        <array>4,7</array>
+        <array>7,8</array>
+        <array>8,5</array>
+        <array>5,4</array>
+        <array>4,1</array>
+        <array>1,2</array>
+        <array>2,5</array>
+        <array>5,8</array>
+        <array>8,7</array>
+        <array>7,4</array>
       </movsdes>
       <rehacer/>
     </pilas>
@@ -215,47 +97,31 @@
     <tamaño>512</tamaño>
     <pilas>
       <movsdes>
-        <array>0,1</array>
+        <array>0,3</array>
+        <array>3,4</array>
+        <array>4,7</array>
+        <array>7,8</array>
+        <array>8,5</array>
+        <array>5,2</array>
+        <array>2,1</array>
+        <array>1,4</array>
+        <array>4,5</array>
+        <array>5,8</array>
+        <array>8,7</array>
+        <array>7,6</array>
+        <array>6,3</array>
+        <array>3,4</array>
+        <array>4,1</array>
         <array>1,2</array>
         <array>2,5</array>
         <array>5,8</array>
         <array>8,7</array>
-        <array>7,4</array>
-        <array>4,5</array>
-        <array>5,2</array>
-        <array>2,1</array>
-        <array>1,4</array>
-        <array>4,7</array>
-        <array>7,6</array>
-        <array>6,3</array>
-        <array>3,4</array>
-        <array>4,7</array>
-        <array>7,6</array>
-        <array>6,3</array>
-        <array>3,0</array>
-        <array>0,1</array>
-        <array>1,4</array>
-        <array>4,7</array>
         <array>7,6</array>
         <array>6,3</array>
         <array>3,4</array>
         <array>4,1</array>
         <array>1,0</array>
         <array>0,3</array>
-        <array>3,4</array>
-        <array>4,1</array>
-        <array>1,0</array>
-        <array>0,3</array>
-        <array>3,4</array>
-        <array>4,5</array>
-        <array>5,2</array>
-        <array>2,1</array>
-        <array>1,0</array>
-        <array>0,3</array>
-        <array>3,6</array>
-        <array>6,7</array>
-        <array>7,4</array>
-        <array>4,3</array>
         <array>3,6</array>
         <array>6,7</array>
         <array>7,8</array>
@@ -267,35 +133,51 @@
         <array>1,2</array>
         <array>2,5</array>
         <array>5,4</array>
-        <array>4,7</array>
-        <array>7,6</array>
-        <array>6,3</array>
-        <array>3,4</array>
-        <array>4,5</array>
-        <array>5,2</array>
-        <array>2,1</array>
+        <array>4,1</array>
         <array>1,0</array>
         <array>0,3</array>
         <array>3,4</array>
-        <array>4,7</array>
-        <array>7,6</array>
-        <array>6,3</array>
-        <array>3,4</array>
-        <array>4,7</array>
-        <array>7,8</array>
-        <array>8,5</array>
+        <array>4,1</array>
+        <array>1,2</array>
+        <array>2,5</array>
         <array>5,4</array>
-        <array>4,7</array>
+        <array>4,1</array>
+        <array>1,0</array>
+        <array>0,3</array>
+        <array>3,6</array>
+        <array>6,7</array>
+        <array>7,4</array>
+        <array>4,3</array>
+        <array>3,0</array>
+        <array>0,1</array>
+        <array>1,2</array>
+        <array>2,5</array>
+        <array>5,4</array>
+        <array>4,1</array>
+        <array>1,2</array>
+        <array>2,5</array>
+        <array>5,8</array>
+        <array>8,7</array>
         <array>7,6</array>
         <array>6,3</array>
         <array>3,4</array>
         <array>4,1</array>
         <array>1,2</array>
         <array>2,5</array>
+        <array>5,4</array>
+        <array>4,1</array>
+        <array>1,2</array>
+        <array>2,5</array>
+        <array>5,4</array>
+        <array>4,1</array>
+        <array>1,2</array>
+        <array>2,5</array>
         <array>5,8</array>
         <array>8,7</array>
-        <array>7,4</array>
-        <array>4,1</array>
+        <array>7,6</array>
+        <array>6,3</array>
+        <array>3,4</array>
+        <array>4,5</array>
       </movsdes>
       <rehacer/>
     </pilas>

@@ -1,6 +1,5 @@
 package config;
 
-import com.google.gson.Gson;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 import com.mongodb.client.MongoCollection;
@@ -14,16 +13,22 @@ import java.util.Arrays;
 import org.bson.conversions.Bson;
 import org.bson.Document;
 
-public class MongoManager {
+public class MongoManager extends BaseDatos{
     
     MongoDatabase base;
     MongoCollection<Document> col;
 
-    public void createCollection(int filas, int tamaño, String path){
+    public MongoManager(int filas, int tamaño, String path){
+    
+        super("Mongo", filas, tamaño, path);
+        CreateCollection();
+        
+    }
+
+    private void CreateCollection(){
         
         //MongoClient mongoClient = new MongoClient("localhost", 27017); //Base de datos en local
-        
-        
+
         MongoClientURI uri = new MongoClientURI(
         "mongodb+srv://Brisin:1234@gdd-tdtb1.mongodb.net/"); //Base de datos cluster Frankfurt
 
@@ -33,11 +38,10 @@ public class MongoManager {
 
         col = base.getCollection("games");
         ArrayList<int[]> a1 = new ArrayList<>();
-        Document partida = null;
+        Document partida;
         
         String c = base.listCollectionNames().first();
-        //boolean creado = false;
-        
+
         if(c == null){ //Comprobamos si existe la colección y la creamos si fuese necesario, con una estructura básica
         
             base.createCollection("games");
@@ -55,26 +59,20 @@ public class MongoManager {
             }
         }
         
-        this.updatePartida(filas, tamaño, path);
+        update(filas, tamaño, path);
         
     }
     
     //Going good
+    @Override
     public void addMovCommand(MovCommand mov, String type){
         col.updateOne(eq("_id", -1), Updates.push(type, Arrays.asList(mov.getResul()[0], mov.getResul()[1])));
     }
     
+    @Override
     public int[] tomarMovCommand(String type){
         
-        String opuesto;
-        
-        if(type.equals("movsdes"))
-            
-            opuesto = "rehacer";
-        
-        else
-            
-            opuesto = "movsdes";
+        String opuesto = type.equals("movsdes")?"rehacer" : "movsdes";
         
         Bson filter = new Document("_id", -1);
         Bson proj = Projections.fields(Projections.slice(type, -1), Projections.exclude("_id", "filas", "tamaño", "path", opuesto));
@@ -83,7 +81,7 @@ public class MongoManager {
         
         ArrayList<ArrayList> arra = doc.get(type, ArrayList.class);
         
-        if(arra.size() != 0){
+        if(!arra.isEmpty()){
         
             int[] a = new int[2];
             a[0] = (int) arra.get(0).get(0);
@@ -99,6 +97,7 @@ public class MongoManager {
  
     }
     
+    @Override
     public String guardarPartida(int id, String path){
         
         Document doc = col.find(eq("_id", -1)).first();
@@ -108,18 +107,12 @@ public class MongoManager {
         
         col.findOneAndReplace(eq("_id", id), doc);
         
-        if(col.find(eq("_id", id)).first().get("movsdes").equals(doc.get("movsdes"))){
-            
-            return "Partida guardada correctamente";
-            
-        } else{
-            
-            return "No se pudo guardar la partida";
-            
-        }
-        
+        return (col.find(eq("_id", id)).first().get("movsdes").equals(doc.get("movsdes")))?
+                "Partida guardada correctamente":"No se pudo guardar la partida";
+ 
     }
     
+    @Override
     public PartidaCarga cargarPartida(int id){
         
         Document doc = col.find(eq("_id", id)).first();
@@ -140,7 +133,8 @@ public class MongoManager {
         
     }
     
-    public void updatePartida(int filas, int tamaño, String path){
+    @Override
+    public void update(int filas, int tamaño, String path){
        
         Document partida = new Document();
         ArrayList<int[]> a1 = new ArrayList<>();
@@ -152,11 +146,11 @@ public class MongoManager {
                     .append("rehacer", a1);
         
         col.findOneAndReplace(new Document("_id", -1), partida);
-        
-    
+
     }
     
-    public void limpiarStack(String type){
+    @Override
+    public void limpiarMovCommand(String type){
 
         Document doc = col.find(eq("_id", -1)).first();
         ArrayList<int[]> a1 = new ArrayList<>();
@@ -165,6 +159,7 @@ public class MongoManager {
         
     }
     
+    @Override
     public ArrayList<int[]> recorridoInicio(){
         Bson filter = new Document("_id", -1);
         Document doc = col.find(filter).first();
@@ -172,8 +167,7 @@ public class MongoManager {
         ArrayList<ArrayList> lista = doc.get("movsdes", ArrayList.class);
         
         ArrayList<int[]> aux = new ArrayList();
-        
-        
+               
         for(ArrayList a : lista){
         
             int[] a1 = new int[2];

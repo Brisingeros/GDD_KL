@@ -40,7 +40,7 @@ public class PuzzleApp {
         int rowNum = 3;
         int columnNum= 3;
         String path = null;
-        String base = "XML";
+        String base = null;
         
         if(init != null){ //Si se ha leído correctamente
             imageSize = init.getImageSize();
@@ -56,9 +56,8 @@ public class PuzzleApp {
         
         String[] imageList={imagePath+"blank.gif",imagePath+"one.gif",imagePath+"two.gif",imagePath+"three.gif",imagePath+ "four.gif",
                 imagePath+"five.gif",imagePath+"six.gif",imagePath+"seven.gif",imagePath+"eight.gif"};
-        
+
         //Creamos el controlador
-        base = "Mongo";
         Controlador c  = new Controlador();
         
         if(path == null){ //Si el path está disponible
@@ -85,7 +84,7 @@ public class PuzzleApp {
         
         // Visualizamos la aplicación.
         PuzzleGUI.getInstance().setVisible(true);
-        c.gestorAcciones("clutter");
+        c.desordenar();
         
     }
 }
