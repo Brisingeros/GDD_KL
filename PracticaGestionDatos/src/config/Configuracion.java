@@ -38,7 +38,9 @@ public class Configuracion {
     }
     
     public static PartidaXML parseXML(String obj){
+        
         try {
+            
             JAXBContext jc = JAXBContext.newInstance(PartidaXML.class);
             
             Unmarshaller unmar = jc.createUnmarshaller();
@@ -50,10 +52,12 @@ public class Configuracion {
             return party;
             
         } catch (JAXBException ex) {
+            
             Logger.getLogger(Configuracion.class.getName()).log(Level.SEVERE, null, ex);
             
             return null;
         }
+        
     }
 
     public static boolean validate(String xml)throws ParserConfigurationException, IOException, org.xml.sax.SAXException{
@@ -69,15 +73,18 @@ public class Configuracion {
             XMLReader reader = parser.getXMLReader();
             reader.setErrorHandler(
                 new ErrorHandler() {
+                    @Override
                     public void warning(SAXParseException e) throws SAXException {
                       System.out.println("WARNING : " + e.getMessage()); // do nothing
                     }
 
+                    @Override
                     public void error(SAXParseException e) throws SAXException {
                       System.out.println("ERROR : " + e.getMessage());
                       throw e;
                     }
 
+                    @Override
                     public void fatalError(SAXParseException e) throws SAXException {
                       System.out.println("FATAL : " + e.getMessage());
                       throw e;
@@ -90,14 +97,9 @@ public class Configuracion {
             return true;
             
         }
-        catch (ParserConfigurationException pce) {
+        catch (ParserConfigurationException | IOException pce) {
             
             throw pce;
-          
-        } 
-        catch (IOException io) {
-            
-            throw io;
           
         }
         catch (SAXException se){

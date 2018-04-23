@@ -10,15 +10,14 @@ package config;
  * @author Brisin
  */
 public abstract class Partida {
-    
-    protected String path;
-    protected int filas;
-    protected int tamaño;
-    
+
+    //metodo para recuperar el path de la imagen completa
     public abstract String getPath();
     
+    //metodo para recuperar el numero de filas de la imagen
     public abstract int getFilas();
     
+    //metodo para recuperar el tamaño de la imagen
     public abstract int getTamaño();
     
 }

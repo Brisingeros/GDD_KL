@@ -1,7 +1,6 @@
 package config;
 
 import com.mongodb.MongoClient;
-import com.mongodb.MongoClientURI;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import static com.mongodb.client.model.Filters.eq;
@@ -46,7 +45,7 @@ public class MongoManager extends BaseDatos{
         
             base.createCollection("games");
             
-            for(int i = 0; i < 3; i++){
+            for(int i = 0; i < 3; i++){ //creamos los documentos de las partidas guardadas con estructura basica
                 partida = new Document();
                 partida.append("_id", i)
                         .append("tamaño", 0)
@@ -59,24 +58,24 @@ public class MongoManager extends BaseDatos{
             }
         }
         
+        //creamos el documento de la partida actual
         partida = new Document();
-                partida.append("_id", -1)
-                        .append("tamaño", tamaño)
-                        .append("filas", filas)
-                        .append("path", path)
-                        .append("movsdes", a1)
-                        .append("rehacer", a1);
+        partida.append("_id", -1)
+                .append("tamaño", tamaño)
+                .append("filas", filas)
+                .append("path", path)
+                .append("movsdes", a1)
+                .append("rehacer", a1);
 
-                col.insertOne(partida);
-        
-        //update(filas, tamaño, path);
+        col.insertOne(partida);
         
     }
-    
-    //Going good
+
     @Override
     public void addMovCommand(MovCommand mov, String type){
+        
         col.updateOne(eq("_id", -1), Updates.push(type, Arrays.asList(mov.getResul()[0], mov.getResul()[1])));
+        
     }
     
     @Override
@@ -156,7 +155,11 @@ public class MongoManager extends BaseDatos{
                     .append("rehacer", a1);
         
         col.findOneAndReplace(new Document("_id", -1), partida);
-
+        
+        this.filas = filas;
+        this.tamaño = tamaño;
+        this.path = path;
+        
     }
     
     @Override

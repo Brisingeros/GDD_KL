@@ -9,7 +9,7 @@ package config;
  *
  * @author Laura
  */
-public class PartidaCarga extends Partida{
+public class PartidaCarga extends Partida{ //clase para cargar partida desde mongo
     
     private int tamaño;
     private String path;

@@ -26,7 +26,7 @@ public class Controlador extends AbstractController{
     
     private Stack<MovCommand> movsDes = new Stack<>(); //Atrás
     private Stack<MovCommand> movsRe = new Stack<>(); //Alante
-    private int desordenes = 200;
+    private int desordenes;
     
     private final int megaBytes = 10241024;
     private Runtime gestor;
@@ -38,13 +38,15 @@ public class Controlador extends AbstractController{
     
     public void init(String b){
         base = b;
+        desordenes = view.getFilas()*view.getColumnas()*9;
         
+        //en funcion de la base de datos que se maneje, se creara un manejador de bdd de un tipo de hijo u otro
         if(base.equals("XML")){
 
             baseD = new BaseXManager(new Context(), view.getFilas(), view.getTamaño(), view.getPathImagenCompleta());
             emptyStacks();
             
-        } else{
+        } else if(base.equals("Mongo")){
             
             baseD = new MongoManager(view.getFilas(), view.getTamaño(), view.getPathImagenCompleta());
 
@@ -57,9 +59,10 @@ public class Controlador extends AbstractController{
         int[] posi;
         switch (e.getActionCommand()){
             
-            case "exit": 
+            case "exit": //borramos las imagenes divididas del directorio, y la partida actual de las bases de datos
                 
                 view.borrarImagenes();
+                baseD.vaciarActual();
                 System.exit(0);
             
             break;
@@ -107,7 +110,7 @@ public class Controlador extends AbstractController{
 
                 posi = baseD.tomarMovCommand("movsdes");
 
-                if(posi != null)
+                if(posi != null) //si no es nulo el array, ejecutamos el movimiento y lo cambiamos de nodo
 
                     baseD.addMovCommand(deshacer(posi), "rehacer");
 
@@ -117,7 +120,7 @@ public class Controlador extends AbstractController{
                 
                 posi = baseD.tomarMovCommand("rehacer");
 
-                if(posi != null)
+                if(posi != null) //si no es nulo el array, ejecutamos el movimiento y lo cambiamos de nodo
 
                     baseD.addMovCommand(rehacer(posi), "movsdes");
                 
@@ -125,18 +128,18 @@ public class Controlador extends AbstractController{
             
             case "guardaP0":
 
-                this.guardarCommand(0);
+                this.guardarCommand(0); //guardamos en el id 0
                 
             break;
             
             case "guardaP1":
 
-                this.guardarCommand(1);
+                this.guardarCommand(1); //guardamos en el id 1
                 
             break;
             case "guardaP2": 
 
-                this.guardarCommand(2);
+                this.guardarCommand(2); //guardamos en el id 2
   
             break;
             case "cargaP0": //Leemos un objeto partida y llamamos al método que maneja la creación de nuevo MVC en base a los datos recibidos
@@ -195,21 +198,13 @@ public class Controlador extends AbstractController{
         
     }
     
-    private void guardarCommand(int id ){
+    private void guardarCommand(int id ){ //Guardar partida actual en el id indicado
     
         String panel = null;
 
-        view.guardarImagen(id);
-
-        if(base.equals("XML")){
-
-            panel = baseD.guardarPartida(id, view.getPathImagenCompleta());
-
-        }else if(base.equals("Mongo")){
-
-            panel = baseD.guardarPartida(id, view.getPathImagenCompleta());
-
-        }
+        view.guardarImagen(id); //cambiamos el path de la imagen completa a la carpeta resources/default
+        
+        panel = baseD.guardarPartida(id, view.getPathImagenCompleta()); //guardamos la partida en la base de datos
             
         this.mostrarPanel(panel); 
     
@@ -221,15 +216,16 @@ public class Controlador extends AbstractController{
     
     }
     
-    private void cargarCommand(int id){
+    private void cargarCommand(int id){ //Cargar partida desde la base de datos
     
         String panel;
 
-        Partida game = baseD.cargarPartida(id);
-        if(game != null){
+        Partida game = baseD.cargarPartida(id); //datos de la partida con el id especificado
+        
+        if(!game.getPath().equals("")){ //si es distinto de null, la partida existe y se puede cargar
 
-            cargarPartida(game);
-            desordenInicio(baseD.recorridoInicio());
+            cargarPartida(game); //configuramos la partida para recuperar el estado de guardado
+            desordenInicio(baseD.recorridoInicio());//desordenamos segun lo movimientos realizados en la partida guardada
             panel = "Partida cargada correctamente";
 
         }else{
@@ -289,7 +285,7 @@ public class Controlador extends AbstractController{
 
     }
     
-    public void emptyStacks(){
+    public void emptyStacks(){ //limpiar pilas de movimientos
 
         baseD.limpiarMovCommand("rehacer");
         baseD.limpiarMovCommand("movsdes");
@@ -327,7 +323,7 @@ public class Controlador extends AbstractController{
         
     }
     
-    private void cargarPartida(Partida game){ //PASAMOS STRING DE PARAMETRO PARA EL JOPTIONPANE Y OBJETO DE PARTIDA
+    private void cargarPartida(Partida game){ //configuracion de la partida para recuperar el estado de guardado
         try {
 
                 removeObserver(model);
@@ -347,7 +343,7 @@ public class Controlador extends AbstractController{
         }
     }
     
-    private void desordenInicio(ArrayList<int[]> movimientos){ //PASAMOS LISTA DE INT[] DE PARAMETRO
+    private void desordenInicio(ArrayList<int[]> movimientos){ //desorden de la imagen de la partida cargada en funcion de los movimientos que almacena
 
         for(int[] mov:movimientos){
         
@@ -358,7 +354,7 @@ public class Controlador extends AbstractController{
         
     }
     
-    public void Restart(){
+    public void Restart(){ //actualizacion de la partida por carga de nueva imagen
         
         removeObserver(model);
         model = new Modelo(view.getFilas(), view.getColumnas(), view.getAltoImagen()*view.getColumnas());
@@ -368,9 +364,19 @@ public class Controlador extends AbstractController{
         
         desordenes = view.getFilas()*view.getColumnas()*9;
 
-        baseD.update(view.getFilas(), view.getTamaño(), view.getPathImagenCompleta());
+        baseD.update(view.getFilas(), view.getTamaño(), view.getPathImagenCompleta());//actualizamos los datos en la base de datos
         
         desordenar();
+        
+    }
+    
+    
+    //metodo para borrar las imagenes divididas y limpiar la partida actual de la base de datos una vez se cierre la ventana pulsando sobre la X
+    @Override
+    public void windowClosing(WindowEvent we) {
+        
+        view.borrarImagenes();
+        baseD.vaciarActual();
         
     }
 
@@ -428,13 +434,6 @@ public class Controlador extends AbstractController{
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    @Override
-    public void windowClosing(WindowEvent we) {
-        
-        view.borrarImagenes();
-        baseD.vaciarActual();
-        
-    }
 
     @Override
     public void windowClosed(WindowEvent we) {

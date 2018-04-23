@@ -11,7 +11,7 @@ import org.basex.core.cmd.XQuery;
 
 public class BaseXManager extends BaseDatos {
 
-    private final Context context;
+    private final Context context; //contexto de XML
     
     public BaseXManager(Context context,int filas, int tamaño, String path){
     
@@ -29,8 +29,8 @@ public class BaseXManager extends BaseDatos {
         try {
             
             new CreateDB("Pilas").execute(context);
-            new Add("Pilas.xml","resources/Pilas.xml").execute(context);   //System.getProperty("user.dir") + System.getProperty("file.separator") + "resources").execute(context);
-            new Add("Partidas.xml","resources/Partidas.xml").execute(context);    //System.getProperty("user.dir") + System.getProperty("file.separator") + "resources").execute(context);
+            new Add("Pilas.xml","resources/Pilas.xml").execute(context);  
+            new Add("Partidas.xml","resources/Partidas.xml").execute(context); 
 
         } catch (BaseXException ex) {
             
@@ -39,7 +39,8 @@ public class BaseXManager extends BaseDatos {
         }
         
     }
-    //
+    
+    //metodo para mostrar consultas
     public void queryCatalog(String query, Context context){
     
         try{
@@ -58,10 +59,10 @@ public class BaseXManager extends BaseDatos {
     public void addMovCommand(MovCommand com, String type){
         try {
 
-            //System.out.println("insert node " + com + " into /pilas/" + type);
             XQuery xQuery = new XQuery("insert node " + com + " into /pilas/" + type); //Almacenamos en el mismo XML ambos tipos de movcommand, separados en dos elementos
             xQuery.execute(context);
             updatePilas();
+            
         } catch (BaseXException ex) {
             
             Logger.getLogger(BaseXManager.class.getName()).log(Level.SEVERE, null, ex);
@@ -102,7 +103,7 @@ public class BaseXManager extends BaseDatos {
     
     }
     
-    private int[] StringToInt(String s){
+    private int[] StringToInt(String s){ //parseamos de String a un array de enteros
     
         int[] value = null;
         if(!s.equals("")){
@@ -113,8 +114,7 @@ public class BaseXManager extends BaseDatos {
             for(int i = 0; i < 2; i++)
 
                 value[i] = Integer.parseInt(aux[i]);
-
-
+            
         }
         
         return value;
@@ -157,8 +157,7 @@ public class BaseXManager extends BaseDatos {
     public String guardarPartida(int id, String path){
     
         try {
-            
-            XQuery query = new XQuery("doc('resources/Pilas.xml')/pilas/*");
+
             XQuery query1 = new XQuery("replace node /partidas/partida[@id='"+ id +"'] with element partida{attribute id{'" + id + "'}," +
                     "element path{'" + path + "'}," +
                             "element filas{'" + filas + "'}," +
@@ -182,6 +181,7 @@ public class BaseXManager extends BaseDatos {
     @Override
     public Partida cargarPartida(int id){
         try {
+            
             XQuery query = new XQuery("let $game := partidas/partida[@id='" + id +"'] \n return <partida>{$game/* except $game/pilas}</partida>");
             
             XQuery query2 = new XQuery("doc('resources/Partidas.xml')/partidas/partida[@id='"+ id +"']/pilas");
@@ -202,6 +202,7 @@ public class BaseXManager extends BaseDatos {
     
     @Override
     public ArrayList<int[]> recorridoInicio(){
+        
         try {
             
             String mov = new XQuery("for $mov in /pilas/movsdes/array/text() \n return $mov").execute(context);
@@ -240,8 +241,7 @@ public class BaseXManager extends BaseDatos {
     @Override
     public void vaciarActual(){
         try {
-            
-            
+
             XQuery q1 = new XQuery("for $a in /pilas/movsdes/array \n return delete node $a");
             XQuery q2 = new XQuery("for $a in /pilas/rehacer/array \n return delete node $a");
             q1.execute(context);

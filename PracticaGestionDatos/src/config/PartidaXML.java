@@ -16,13 +16,14 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlRootElement(name = "partida")
 @XmlType (propOrder = {"path", "filas", "tamaño"})
-public class PartidaXML extends Partida{
+public class PartidaXML extends Partida{ //clase para cargar partida desde xml
     
     private String path;
     private int filas;
     private int tamaño;
 
     @XmlElement (name = "path")
+    @Override
     public String getPath() {
         return path;
     }
@@ -32,6 +33,7 @@ public class PartidaXML extends Partida{
     }
 
     @XmlElement (name = "filas")
+    @Override
     public int getFilas() {
         return filas;
     }
@@ -41,6 +43,7 @@ public class PartidaXML extends Partida{
     }
 
     @XmlElement (name = "tamaño")
+    @Override
     public int getTamaño() {
         return tamaño;
     }
