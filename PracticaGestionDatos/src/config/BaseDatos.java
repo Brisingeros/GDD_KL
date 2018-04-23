@@ -41,5 +41,7 @@ public abstract class BaseDatos {
     public abstract ArrayList<int[]> recorridoInicio();
     
     public abstract void limpiarMovCommand(String type);
+    
+    public abstract void vaciarActual();
   
 }

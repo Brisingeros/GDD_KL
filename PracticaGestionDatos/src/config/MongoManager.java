@@ -27,12 +27,12 @@ public class MongoManager extends BaseDatos{
 
     private void CreateCollection(){
         
-        //MongoClient mongoClient = new MongoClient("localhost", 27017); //Base de datos en local
+        MongoClient mongoClient = new MongoClient("localhost", 27017); //Base de datos en local
 
-        MongoClientURI uri = new MongoClientURI(
+        /*MongoClientURI uri = new MongoClientURI(
         "mongodb+srv://Brisin:1234@gdd-tdtb1.mongodb.net/"); //Base de datos cluster Frankfurt
 
-        MongoClient mongoClient = new MongoClient(uri);
+        MongoClient mongoClient = new MongoClient(uri);*/
         
 	base = mongoClient.getDatabase("miBD");
 
@@ -46,7 +46,7 @@ public class MongoManager extends BaseDatos{
         
             base.createCollection("games");
             
-            for(int i = -1; i < 3; i++){
+            for(int i = 0; i < 3; i++){
                 partida = new Document();
                 partida.append("_id", i)
                         .append("tamaño", 0)
@@ -59,7 +59,17 @@ public class MongoManager extends BaseDatos{
             }
         }
         
-        update(filas, tamaño, path);
+        partida = new Document();
+                partida.append("_id", -1)
+                        .append("tamaño", tamaño)
+                        .append("filas", filas)
+                        .append("path", path)
+                        .append("movsdes", a1)
+                        .append("rehacer", a1);
+
+                col.insertOne(partida);
+        
+        //update(filas, tamaño, path);
         
     }
     
@@ -180,6 +190,11 @@ public class MongoManager extends BaseDatos{
   
         return aux;
         
+    }
+    
+    @Override
+    public void vaciarActual(){
+        col.deleteOne(eq("_id", -1));
     }
     
 }

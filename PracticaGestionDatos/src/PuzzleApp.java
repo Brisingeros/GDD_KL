@@ -80,6 +80,7 @@ public class PuzzleApp {
         c.addModelo(m);
         c.addView(v);
         
+        base = "Mongo";
         c.init(base);
         
         // Visualizamos la aplicación.

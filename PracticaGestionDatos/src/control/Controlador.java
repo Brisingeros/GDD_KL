@@ -11,7 +11,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Random;
 import java.util.Stack;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -27,8 +26,7 @@ public class Controlador extends AbstractController{
     
     private Stack<MovCommand> movsDes = new Stack<>(); //Atrás
     private Stack<MovCommand> movsRe = new Stack<>(); //Alante
-    private Random aleatorio = new Random(System.currentTimeMillis());
-    private int desordenes = 20;
+    private int desordenes = 200;
     
     private final int megaBytes = 10241024;
     private Runtime gestor;
@@ -90,16 +88,8 @@ public class Controlador extends AbstractController{
             
             case "clutter":
 
-                double time = System.currentTimeMillis();
-                
                 desordenar();
-
-                time = System.currentTimeMillis() - time;
-                gestor = Runtime.getRuntime();
-                this.mostrarPanel("Memoria usada: " + ((gestor.maxMemory() - gestor.freeMemory())/megaBytes) + " MB \n" +
-                                  "Tiempo usado por movimiento: " + (time/desordenes)/1000 + " s \n" + 
-                                  "Tiempo usado en la operación: " + (time/1000) + " s");
-                
+ 
             break;
             
             case "solve":
@@ -253,6 +243,8 @@ public class Controlador extends AbstractController{
     }
     
     public void desordenar(){
+        
+        double time = System.currentTimeMillis();
 
         baseD.limpiarMovCommand("rehacer");
 
@@ -268,6 +260,12 @@ public class Controlador extends AbstractController{
             }
 
         }
+        
+        time = System.currentTimeMillis() - time;
+        gestor = Runtime.getRuntime();
+        this.mostrarPanel("Memoria usada: " + ((gestor.maxMemory() - gestor.freeMemory())/megaBytes) + " MB \n" +
+                                  "Tiempo usado por movimiento: " + (time/desordenes)/1000 + " s \n" + 
+                                  "Tiempo usado en la operación: " + (time/1000) + " s");
 
     }
     
@@ -432,7 +430,10 @@ public class Controlador extends AbstractController{
 
     @Override
     public void windowClosing(WindowEvent we) {
+        
         view.borrarImagenes();
+        baseD.vaciarActual();
+        
     }
 
     @Override

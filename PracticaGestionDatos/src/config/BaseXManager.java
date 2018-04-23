@@ -61,7 +61,7 @@ public class BaseXManager extends BaseDatos {
             //System.out.println("insert node " + com + " into /pilas/" + type);
             XQuery xQuery = new XQuery("insert node " + com + " into /pilas/" + type); //Almacenamos en el mismo XML ambos tipos de movcommand, separados en dos elementos
             xQuery.execute(context);
-            updatePilas(context);
+            updatePilas();
         } catch (BaseXException ex) {
             
             Logger.getLogger(BaseXManager.class.getName()).log(Level.SEVERE, null, ex);
@@ -70,7 +70,7 @@ public class BaseXManager extends BaseDatos {
         
     }
     
-    private void updatePilas(Context context) throws BaseXException{
+    private void updatePilas() throws BaseXException{
     
         try{
             
@@ -86,7 +86,7 @@ public class BaseXManager extends BaseDatos {
     
     }
     
-    private void updatePartidaGuardada(Context context) throws BaseXException{
+    private void updatePartidaGuardada() throws BaseXException{
     
         try{
             
@@ -128,7 +128,7 @@ public class BaseXManager extends BaseDatos {
             String res = new XQuery("/pilas/" + type + "/array[last()]/text()").execute(context);
             XQuery query = new XQuery("delete node /pilas/" + type + "/array[last()]");
             query.execute(context);
-            updatePilas(context);
+            updatePilas();
 
             return StringToInt(res);
             
@@ -145,7 +145,7 @@ public class BaseXManager extends BaseDatos {
         try {
             XQuery query = new XQuery("delete nodes /pilas/" + type + "/array"); //Comprobar si está bien
             query.execute(context);
-            updatePilas(context);
+            updatePilas();
         } catch (BaseXException ex) {
             
             Logger.getLogger(BaseXManager.class.getName()).log(Level.SEVERE, null, ex);
@@ -166,7 +166,7 @@ public class BaseXManager extends BaseDatos {
                                             "element pilas{doc('resources/Pilas.xml')/pilas/*}}" );
             
             query1.execute(context);
-            updatePartidaGuardada(context);
+            updatePartidaGuardada();
             
             return "Partida guardada correctamente";
             
@@ -235,6 +235,22 @@ public class BaseXManager extends BaseDatos {
         this.tamaño = tamaño;
         this.path = path;
         
+    }
+    
+    @Override
+    public void vaciarActual(){
+        try {
+            
+            
+            XQuery q1 = new XQuery("for $a in /pilas/movsdes/array \n return delete node $a");
+            XQuery q2 = new XQuery("for $a in /pilas/rehacer/array \n return delete node $a");
+            q1.execute(context);
+            q2.execute(context);
+            updatePilas();
+
+        } catch (BaseXException ex) {
+            Logger.getLogger(BaseXManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
 }
